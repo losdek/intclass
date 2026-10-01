@@ -2,15 +2,109 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Видеоуроки — intclass</title><meta name="description" content="Справочник видеоуроков разных тем с текстовыми описаниями.">
+  <title>Видеоуроки — intclass</title><meta name="description" content="Видеоуроки по математике и русскому языку для 5–9 классов.">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header class="nav" id="nav"><div class="container nav-inner"><a class="logo" href="index.html">intclass<span class="logo-dot"></span></a><nav class="nav-links" id="navLinks" aria-label="Основная навигация"><a class="nav-link" href="index.html">Главная</a><a class="nav-link" href="index.html#topics">Темы</a><a class="nav-link active" href="lessons.html">Видеоуроки</a></nav><button class="btn btn-small register-open" type="button">Регистрация</button><button class="burger" id="burger" type="button" aria-label="Открыть меню" aria-expanded="false"><span></span><span></span></button></div></header>
   <main>
-    <section class="page-head"><div class="blob blob-1"></div><div class="container"><p class="section-label reveal-line"><span>Библиотека знаний</span></p><h1 class="page-title"><span class="reveal-line"><span>Видеоуроки</span></span></h1><p class="page-sub reveal-line"><span>Выберите предмет, откройте урок и прочитайте краткое описание перед просмотром.</span></p></div></section>
-    <section class="section lessons-section"><div class="container"><div class="filters reveal" id="filters"><button class="chip active" data-subject="all">Все темы</button><button class="chip" data-subject="math">Математика</button><button class="chip" data-subject="physics">Физика</button><button class="chip" data-subject="chemistry">Химия</button><button class="chip" data-subject="biology">Биология</button><button class="chip" data-subject="history">История</button><button class="chip" data-subject="english">Английский</button></div><div class="grid lessons-grid" id="lessonsGrid"></div><p class="lessons-empty" id="lessonsEmpty" hidden>В этой теме пока нет уроков.</p></div></section>
+    <section class="page-head"><div class="blob blob-1"></div><div class="container"><p class="section-label reveal-line"><span>Библиотека знаний</span></p><h1 class="page-title"><span class="reveal-line"><span>Выберите свой урок</span></span></h1><p class="page-sub reveal-line"><span>Предмет → класс → тема. Всё удобно даже с телефона.</span></p></div></section>
+    <section class="section lessons-section">
+      <div class="container lesson-flow">
+        <!-- Индикатор прогресса шагов для мобильных и десктопа -->
+        <div class="flow-progress" id="flowProgress" aria-label="Шаги подбора">
+          <div class="progress-step active" data-step-indicator="1">
+            <span class="step-dot">1</span>
+            <span class="step-text">Предмет</span>
+          </div>
+          <div class="progress-divider"></div>
+          <div class="progress-step" data-step-indicator="2">
+            <span class="step-dot">2</span>
+            <span class="step-text">Класс</span>
+          </div>
+          <div class="progress-divider"></div>
+          <div class="progress-step" data-step-indicator="3">
+            <span class="step-dot">3</span>
+            <span class="step-text">Тема</span>
+          </div>
+        </div>
+
+        <!-- Шаг 1: Предмет -->
+        <div class="flow-step reveal" id="subjectStep">
+          <div class="flow-heading">
+            <span class="flow-number">01</span>
+            <div>
+              <p class="section-label">Первый шаг</p>
+              <h2>Выберите предмет</h2>
+            </div>
+          </div>
+          <div class="choice-grid subject-choices">
+            <button class="choice-card" type="button" data-subject="math">
+              <span class="choice-icon">∑</span>
+              <div class="choice-info">
+                <strong>Математика</strong>
+                <small>Дроби, уравнения, проценты и геометрия 5–9</small>
+              </div>
+            </button>
+            <button class="choice-card" type="button" data-subject="russian">
+              <span class="choice-icon">А</span>
+              <div class="choice-info">
+                <strong>Русский язык</strong>
+                <small>Орфография, пунктуация, разборы и синтаксис 5–9</small>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Шаг 2: Класс -->
+        <div class="flow-step reveal is-locked" id="gradeStep">
+          <div class="flow-heading">
+            <span class="flow-number">02</span>
+            <div>
+              <p class="section-label">Второй шаг</p>
+              <h2>Выберите класс</h2>
+            </div>
+          </div>
+          <p class="flow-hint" id="gradeHint">Сначала выберите предмет выше</p>
+          <div class="choice-grid grade-choices">
+            <button class="choice-card compact" type="button" data-grade="5"><span>5 класс</span></button>
+            <button class="choice-card compact" type="button" data-grade="6"><span>6 класс</span></button>
+            <button class="choice-card compact" type="button" data-grade="7"><span>7 класс</span></button>
+            <button class="choice-card compact" type="button" data-grade="8"><span>8 класс</span></button>
+            <button class="choice-card compact" type="button" data-grade="9"><span>9 класс</span></button>
+          </div>
+        </div>
+
+        <!-- Шаг 3: Тема -->
+        <div class="flow-step reveal is-locked" id="topicStep">
+          <div class="flow-heading">
+            <span class="flow-number">03</span>
+            <div>
+              <p class="section-label">Третий шаг</p>
+              <h2>Выберите тему</h2>
+            </div>
+          </div>
+          <p class="flow-hint" id="topicHint">Сначала выберите предмет и класс</p>
+          <div class="choice-grid topic-choices" id="topicChoices"></div>
+        </div>
+
+        <!-- Результаты: Видеоуроки и Мини-тесты -->
+        <div class="results-panel is-locked" id="resultsPanel">
+          <div class="results-heading">
+            <div>
+              <p class="section-label">Видеоуроки и тест</p>
+              <h2 id="resultsTitle">Ваши уроки</h2>
+            </div>
+            <button class="reset-button" id="resetFlow" type="button" title="Выбрать заново">
+              <span aria-hidden="true">↺</span> Изменить выбор
+            </button>
+          </div>
+          <div class="grid lessons-grid" id="lessonsGrid"></div>
+          <p class="lessons-empty" id="lessonsEmpty" hidden>Для выбранной комбинации урок готовится к публикации.</p>
+        </div>
+      </div>
+    </section>
   </main>
   <footer class="footer"><div class="container footer-inner"><a class="logo" href="index.html">intclass<span class="logo-dot"></span></a><p class="footer-text">Видеоуроки и знания — проще.</p></div></footer>
   <div class="modal-backdrop" id="registerModal" hidden><section class="modal" role="dialog" aria-modal="true" aria-labelledby="registerTitle"><button class="modal-close" type="button" aria-label="Закрыть">×</button><p class="section-label">Ваш профиль</p><h2 id="registerTitle">Регистрация по желанию</h2><p class="modal-text">Имя и email сохраняются только в cookie этого браузера. Пароль не нужен.</p><form id="registerForm"><label>Имя<input name="name" required maxlength="60" autocomplete="name" placeholder="Как к вам обращаться?"></label><label>Email<input name="email" type="email" required maxlength="120" autocomplete="email" placeholder="you@example.com"></label><button class="btn" type="submit">Сохранить профиль</button></form><p class="form-status" id="formStatus" aria-live="polite"></p></section></div>
