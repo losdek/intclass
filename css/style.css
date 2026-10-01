@@ -257,43 +257,39 @@ body.modal-open {
   margin: 0.6rem 0 1.4rem;
 }
 
-/* Новый инверсированный текст вместо синей полоски */
+/* Инверсия текста при запуске сайта (без рамок и без hover) */
 .hero-invert {
   position: relative;
   display: inline-block;
-  padding: 0.04em 0.28em;
-  margin-top: 0.08em;
-  border-radius: 14px;
+  padding: 0 0.16em;
+  border-radius: 6px;
   color: var(--ink);
   background-color: transparent;
-  border: 2px solid transparent;
   vertical-align: baseline;
-  animation: heroInvertAnim 1.4s cubic-bezier(0.22, 1, 0.36, 1) 2.2s forwards;
+  animation: heroInvertLaunch 1.8s cubic-bezier(0.22, 1, 0.36, 1) 0.5s both;
+  pointer-events: none;
 }
 
-@keyframes heroInvertAnim {
+@keyframes heroInvertLaunch {
   0% {
     background-color: transparent;
     color: var(--ink);
-    border-color: transparent;
   }
-  35% {
+  25% {
     background-color: var(--ink);
     color: #ffffff;
-    border-color: var(--ink);
-    box-shadow: 0 10px 24px rgba(17, 17, 17, 0.18);
   }
-  65% {
-    background-color: #ffffff;
+  55% {
+    background-color: transparent;
     color: var(--ink);
-    border-color: var(--ink);
-    box-shadow: 0 4px 14px rgba(17, 17, 17, 0.08);
+  }
+  80% {
+    background-color: var(--ink);
+    color: #ffffff;
   }
   100% {
     background-color: var(--ink);
     color: #ffffff;
-    border-color: var(--ink);
-    box-shadow: 0 14px 32px rgba(17, 17, 17, 0.2);
   }
 }
 
@@ -1391,8 +1387,8 @@ body.modal-open {
   }
 
   .hero-invert {
-    padding: 0.04em 0.22em;
-    border-radius: 10px;
+    padding: 0 0.12em;
+    border-radius: 4px;
   }
 
   .nav-inner > .btn {
