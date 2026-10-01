@@ -474,6 +474,35 @@ const SUBJECT_LABELS = {
   russian: "Русский язык"
 };
 
+const SUBJECT_DESCRIPTIONS = {
+  math: {
+    title: "Математика — школьный курс 5–9 классов",
+    tags: ["Алгебра", "Геометрия", "Арифметика", "ОГЭ 2026", "20 видеоуроков и тестов"],
+    lead: "Математика в средней школе формирует фундамент логического и аналитического мышления. Наш курс структурирован по единым стандартам школьной программы без лишней воды: от обыкновенных дробей и пропорций до квадратных уравнений, свойств треугольников и функций. После каждого видеоурока вас ждёт интерактивный тест с подробным объяснением решения для моментального закрепления темы.",
+    curriculum: [
+      { grade: "5 класс", desc: "Обыкновенные и десятичные дроби, сложение и вычитание, текстовые задачи на движение и работу." },
+      { grade: "6 класс", desc: "Рациональные и отрицательные числа, основное свойство пропорции, проценты, модули и координатная прямая." },
+      { grade: "7 класс", desc: "Начало алгебры и наглядная геометрия: линейные уравнения, формулы сокращённого умножения, признаки равенства треугольников." },
+      { grade: "8 класс", desc: "Квадратные корни, квадратные уравнения (через дискриминант и теорему Виета), прямоугольные треугольники и теорема Пифагора." },
+      { grade: "9 класс", desc: "Квадратичная функция и графики парабол, арифметическая и геометрическая прогрессии, основы вероятностей, подготовка к ОГЭ." }
+    ],
+    tip: "💡 <strong>Совет по обучению:</strong> выберите нужный класс ниже для быстрой фильтрации либо изучайте все видеоуроки предмета подряд. После просмотра обязательно ответьте на проверочный вопрос мини-теста!"
+  },
+  russian: {
+    title: "Русский язык — школьный курс 5–9 классов",
+    tags: ["Орфография", "Пунктуация", "Синтаксис", "Морфология", "Подготовка к ОГЭ"],
+    lead: "Русский язык — не просто набор правил для зубрежки, а стройная логическая система. В наших видеоуроках сложные грамматические конструкции и правила орфографии объясняются через понятные опорные схемы и жизненные примеры. Программа помогает уверенно писать диктанты, сочинения и успешно сдать экзамен ОГЭ. Интерактивные мини-тесты позволяют за минуту проверить, насколько хорошо усвоено правило.",
+    curriculum: [
+      { grade: "5 класс", desc: "Фонетика, морфемика (корень, суффикс, приставка), безударные проверяемые гласные в корне, базовые части речи." },
+      { grade: "6 класс", desc: "Корни с чередованием гласных (-лаг-/-лож-, -раст-/-рос-), приставки ПРЕ- и ПРИ-, правописание суффиксов имён существительных и прилагательных." },
+      { grade: "7 класс", desc: "Особые формы глагола — причастия и деепричастия, слитное и раздельное написание НЕ с частями речи, служебные слова (предлоги, союзы, частицы)." },
+      { grade: "8 класс", desc: "Синтаксис простого предложения: обособленные определения и обстоятельства (обороты), вводные конструкции и обращения." },
+      { grade: "9 класс", desc: "Сложные предложения (ССП, СПП, БСП), синтаксический и пунктуационный анализ, комплексная подготовка к ОГЭ." }
+    ],
+    tip: "💡 <strong>Совет по обучению:</strong> переключайтесь между классами для повторения забытых правил прошлых лет. После каждого видео обязательно решите проверочный тест — в нём подробно объяснено, почему верен именно этот вариант."
+  }
+};
+
 // Состояние пошагового выбора
 const state = {
   subject: null,
@@ -483,6 +512,7 @@ const state = {
 
 // DOM элементы
 const subjectStep = document.getElementById("subjectStep");
+const subjectOverview = document.getElementById("subjectOverview");
 const gradeStep = document.getElementById("gradeStep");
 const topicStep = document.getElementById("topicStep");
 const gradeHint = document.getElementById("gradeHint");
@@ -496,6 +526,42 @@ const resetFlowBtn = document.getElementById("resetFlow");
 const flowProgress = document.getElementById("flowProgress");
 
 /**
+ * Отрисовка подробного текстового описания предмета
+ */
+function renderSubjectOverview(subjectKey) {
+  if (!subjectOverview) return;
+  const data = SUBJECT_DESCRIPTIONS[subjectKey];
+  if (!data) {
+    subjectOverview.hidden = true;
+    subjectOverview.innerHTML = "";
+    return;
+  }
+
+  const tagsHtml = data.tags.map((t) => `<span class="subject-overview-tag">${t}</span>`).join("");
+  const currHtml = data.curriculum
+    .map(
+      (item) => `
+      <div class="subject-curriculum-item">
+        <strong>${item.grade}</strong>
+        <p>${item.desc}</p>
+      </div>
+    `
+    )
+    .join("");
+
+  subjectOverview.innerHTML = `
+    <div class="subject-overview-head">
+      <h3>${data.title}</h3>
+      <div class="subject-overview-tags">${tagsHtml}</div>
+    </div>
+    <p class="subject-overview-lead">${data.lead}</p>
+    <div class="subject-curriculum-grid">${currHtml}</div>
+    <div class="subject-overview-tip">${data.tip}</div>
+  `;
+  subjectOverview.hidden = false;
+}
+
+/**
  * Обновление полосы шагов (индикатора прогресса)
  */
 function updateProgressIndicator() {
@@ -506,11 +572,11 @@ function updateProgressIndicator() {
 
   if (p1) {
     p1.classList.toggle("completed", Boolean(state.subject));
-    p1.classList.toggle("active", !state.subject || !state.grade);
+    p1.classList.toggle("active", !state.subject);
   }
   if (p2) {
     p2.classList.toggle("completed", Boolean(state.grade));
-    p2.classList.toggle("active", Boolean(state.subject) && !state.grade);
+    p2.classList.toggle("active", Boolean(state.subject));
   }
   if (p3) {
     p3.classList.toggle("completed", Boolean(state.topic));
@@ -587,21 +653,29 @@ function createCard(lesson, index) {
  * Динамическая генерация тем для выбранного предмета и класса
  */
 function renderTopics() {
-  if (!state.subject || !state.grade) return;
+  if (!state.subject) {
+    topicStep.classList.add("is-locked");
+    topicChoices.innerHTML = "";
+    if (topicHint) topicHint.hidden = false;
+    return;
+  }
 
-  // Находим все уникальные темы для пары (предмет, класс)
-  const availableLessons = LESSONS.filter(
-    (l) => l.subject === state.subject && l.grade === state.grade
-  );
+  // Находим подходящие уроки: для конкретного класса или для всех классов предмета
+  const availableLessons = LESSONS.filter((l) => {
+    const matchSub = l.subject === state.subject;
+    const matchGrade = !state.grade || l.grade === state.grade;
+    return matchSub && matchGrade;
+  });
+
   const uniqueTopics = [...new Set(availableLessons.map((l) => l.topic))];
 
   if (uniqueTopics.length === 0) {
-    topicChoices.innerHTML = `<p class="flow-hint">Для этого класса темы скоро появятся.</p>`;
+    topicChoices.innerHTML = `<p class="flow-hint">Для выбранного критерия темы скоро появятся.</p>`;
     return;
   }
 
   // Кнопка "Все темы" + кнопки каждой темы
-  const allChip = `<button class="topic-chip ${!state.topic ? "selected" : ""}" type="button" data-topic="__all__">Все темы (${uniqueTopics.length})</button>`;
+  const allChip = `<button class="topic-chip ${!state.topic ? "selected" : ""}" type="button" data-topic="__all__">Все темы (${availableLessons.length})</button>`;
   const topicChips = uniqueTopics
     .map(
       (topic) =>
@@ -618,19 +692,23 @@ function renderTopics() {
 /**
  * Отрисовка подходящих уроков и отображение панели результатов
  */
-function renderLessons() {
-  if (!state.subject || !state.grade) return;
+function renderLessons(shouldScroll = false) {
+  if (!state.subject) {
+    resultsPanel.classList.add("is-locked");
+    return;
+  }
 
   const filtered = LESSONS.filter((lesson) => {
     const matchSub = lesson.subject === state.subject;
-    const matchGrade = lesson.grade === state.grade;
+    const matchGrade = !state.grade || lesson.grade === state.grade;
     const matchTopic = !state.topic || lesson.topic === state.topic;
     return matchSub && matchGrade && matchTopic;
   });
 
   const subjectTitle = SUBJECT_LABELS[state.subject] || state.subject;
+  const gradeTitle = state.grade ? ` · ${state.grade} класс` : " · Все классы (5–9)";
   const topicTitle = state.topic ? ` · ${state.topic}` : " · Все темы";
-  resultsTitle.textContent = `${subjectTitle} · ${state.grade} класс${topicTitle}`;
+  resultsTitle.textContent = `${subjectTitle}${gradeTitle}${topicTitle}`;
 
   grid.innerHTML = "";
   filtered.forEach((lesson, index) => {
@@ -641,10 +719,11 @@ function renderLessons() {
   resultsPanel.classList.remove("is-locked");
   updateProgressIndicator();
 
-  // Плавный скролл к урокам на телефоне и десктопе
-  setTimeout(() => {
-    resultsPanel.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, 100);
+  if (shouldScroll) {
+    setTimeout(() => {
+      resultsPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
+  }
 }
 
 /**
@@ -779,61 +858,87 @@ function handleQuizInteraction(event) {
 // Слушатели событий интерфейса
 // ==========================================
 
+/**
+ * Выбор предмета (Математика / Русский язык)
+ */
+function selectSubject(subject, shouldScroll = false) {
+  state.subject = subject;
+  state.grade = null; // По умолчанию отображаются все классы
+  state.topic = null;
+
+  // Подсветка кнопок предметов
+  document.querySelectorAll("[data-subject]").forEach((button) => {
+    button.classList.toggle("selected", button.dataset.subject === subject);
+  });
+
+  // Отображаем подробный текст по предмету
+  renderSubjectOverview(subject);
+
+  // Разблокируем шаг 2 (Класс)
+  gradeStep?.classList.remove("is-locked");
+  if (gradeHint) gradeHint.hidden = true;
+
+  // Активируем кнопку "Все классы"
+  document.querySelectorAll("[data-grade]").forEach((btn) => {
+    btn.classList.toggle("selected", btn.dataset.grade === "all");
+  });
+
+  // Загружаем темы
+  renderTopics();
+
+  // Разблокируем результаты и сразу отображаем уроки!
+  renderLessons(false);
+
+  if (shouldScroll && window.innerWidth <= 768) {
+    setTimeout(() => {
+      subjectOverview?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
+  }
+}
+
+/**
+ * Выбор класса (Все классы, 5, 6, 7, 8, 9)
+ */
+function selectGrade(gradeVal, shouldScroll = false) {
+  if (!state.subject) return;
+
+  state.grade = (gradeVal === "all" || !gradeVal) ? null : gradeVal;
+  state.topic = null;
+
+  document.querySelectorAll("[data-grade]").forEach((btn) => {
+    const isSelected = (!state.grade && btn.dataset.grade === "all") || (btn.dataset.grade === state.grade);
+    btn.classList.toggle("selected", isSelected);
+  });
+
+  renderTopics();
+  renderLessons(shouldScroll);
+}
+
+/**
+ * Выбор конкретной темы
+ */
+function selectTopic(topicVal, shouldScroll = false) {
+  state.topic = (topicVal === "__all__" || !topicVal) ? null : topicVal;
+
+  topicChoices?.querySelectorAll(".topic-chip").forEach((btn) => {
+    const isSelected = (!state.topic && btn.dataset.topic === "__all__") || (btn.dataset.topic === state.topic);
+    btn.classList.toggle("selected", isSelected);
+  });
+
+  renderLessons(shouldScroll);
+}
+
 // Шаг 1: Выбор предмета
 document.querySelectorAll("[data-subject]").forEach((button) => {
   button.addEventListener("click", () => {
-    const subject = button.dataset.subject;
-    state.subject = subject;
-    state.grade = null;
-    state.topic = null;
-
-    // Снимаем выделение со всех предметов
-    document.querySelectorAll("[data-subject]").forEach((item) => {
-      item.classList.toggle("selected", item === button);
-    });
-
-    // Сбрасываем выбор классов и тем
-    document.querySelectorAll("[data-grade]").forEach((item) => {
-      item.classList.remove("selected");
-    });
-    topicChoices.innerHTML = "";
-    topicStep.classList.add("is-locked");
-    if (topicHint) topicHint.hidden = false;
-    resultsPanel.classList.add("is-locked");
-
-    // Разблокируем шаг 2 (Класс)
-    gradeStep.classList.remove("is-locked");
-    if (gradeHint) gradeHint.hidden = true;
-    updateProgressIndicator();
-
-    // Скролл к выбору класса на смартфонах
-    setTimeout(() => {
-      gradeStep.scrollIntoView({ behavior: "smooth", block: "center" });
-    }, 120);
+    selectSubject(button.dataset.subject, true);
   });
 });
 
 // Шаг 2: Выбор класса (5, 6, 7, 8, 9)
 document.querySelectorAll("[data-grade]").forEach((button) => {
   button.addEventListener("click", () => {
-    if (!state.subject) return;
-
-    state.grade = button.dataset.grade;
-    state.topic = null;
-
-    document.querySelectorAll("[data-grade]").forEach((item) => {
-      item.classList.toggle("selected", item === button);
-    });
-
-    resultsPanel.classList.add("is-locked");
-
-    // Загружаем темы для выбранного класса
-    renderTopics();
-
-    // Скролл к выбору темы
-    setTimeout(() => {
-      topicStep.scrollIntoView({ behavior: "smooth", block: "center" });
-    }, 120);
+    selectGrade(button.dataset.grade, false);
   });
 });
 
@@ -841,15 +946,7 @@ document.querySelectorAll("[data-grade]").forEach((button) => {
 topicChoices?.addEventListener("click", (event) => {
   const button = event.target.closest("[data-topic]");
   if (!button) return;
-
-  const topicVal = button.dataset.topic;
-  state.topic = topicVal === "__all__" ? null : topicVal;
-
-  topicChoices.querySelectorAll(".topic-chip").forEach((item) => {
-    item.classList.toggle("selected", item === button);
-  });
-
-  renderLessons();
+  selectTopic(button.dataset.topic, false);
 });
 
 // Клик по сетке уроков (запуск видео и мини-тест)
@@ -879,15 +976,21 @@ resetFlowBtn?.addEventListener("click", () => {
   document.querySelectorAll("[data-subject], [data-grade]").forEach((btn) => {
     btn.classList.remove("selected");
   });
+
+  if (subjectOverview) {
+    subjectOverview.hidden = true;
+    subjectOverview.innerHTML = "";
+  }
+
   topicChoices.innerHTML = "";
-  gradeStep.classList.add("is-locked");
-  topicStep.classList.add("is-locked");
-  resultsPanel.classList.add("is-locked");
+  gradeStep?.classList.add("is-locked");
+  topicStep?.classList.add("is-locked");
+  resultsPanel?.classList.add("is-locked");
   if (gradeHint) gradeHint.hidden = false;
   if (topicHint) topicHint.hidden = false;
 
   updateProgressIndicator();
-  subjectStep.scrollIntoView({ behavior: "smooth", block: "start" });
+  subjectStep?.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
 // ==========================================
@@ -896,10 +999,12 @@ resetFlowBtn?.addEventListener("click", () => {
 (function initFromUrl() {
   const params = new URLSearchParams(window.location.search);
   const initialSubject = params.get("subject");
+  const initialGrade = params.get("grade");
+
   if (initialSubject && SUBJECT_LABELS[initialSubject]) {
-    const targetBtn = document.querySelector(`[data-subject="${initialSubject}"]`);
-    if (targetBtn) {
-      targetBtn.click();
+    selectSubject(initialSubject, false);
+    if (initialGrade && ["5", "6", "7", "8", "9"].includes(initialGrade)) {
+      selectGrade(initialGrade, false);
     }
   } else {
     updateProgressIndicator();

@@ -56,23 +56,31 @@ body.modal-open {
    ========================================================================== */
 .nav {
   position: fixed;
-  inset: 0 0 auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
   z-index: 50;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid transparent;
+  border-bottom: 1px solid var(--line);
   transition: background 0.4s var(--ease), border-color 0.4s var(--ease), box-shadow 0.4s var(--ease);
 }
 
 .nav.scrolled {
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(255, 255, 255, 0.98);
   border-color: var(--line);
-  box-shadow: 0 10px 30px rgba(17, 17, 17, 0.04);
+  box-shadow: 0 10px 30px rgba(17, 17, 17, 0.05);
 }
 
+.nav .container,
 .nav-inner {
-  height: 72px;
+  width: 100%;
+  max-width: 1360px;
+  padding-inline: clamp(1.2rem, 3.5vw, 2.5rem);
+  margin-inline: auto;
+  height: 64px;
   display: flex;
   align-items: center;
   gap: 2rem;
@@ -257,16 +265,16 @@ body.modal-open {
   margin: 0.6rem 0 1.4rem;
 }
 
-/* Инверсия текста при запуске сайта (без рамок и без hover) */
+/* Инверсия текста при запуске сайта (медленная, плавная, без мигания и без рамок) */
 .hero-invert {
   position: relative;
   display: inline-block;
-  padding: 0 0.16em;
+  padding: 0.02em 0.18em;
   border-radius: 6px;
   color: var(--ink);
   background-color: transparent;
   vertical-align: baseline;
-  animation: heroInvertLaunch 1.8s cubic-bezier(0.22, 1, 0.36, 1) 0.5s both;
+  animation: heroInvertLaunch 2.8s cubic-bezier(0.4, 0, 0.2, 1) 0.5s both;
   pointer-events: none;
 }
 
@@ -274,18 +282,6 @@ body.modal-open {
   0% {
     background-color: transparent;
     color: var(--ink);
-  }
-  25% {
-    background-color: var(--ink);
-    color: #ffffff;
-  }
-  55% {
-    background-color: transparent;
-    color: var(--ink);
-  }
-  80% {
-    background-color: var(--ink);
-    color: #ffffff;
   }
   100% {
     background-color: var(--ink);
@@ -502,12 +498,22 @@ body.modal-open {
   letter-spacing: 0.1em;
 }
 
+.subject-card-body {
+  flex: 1;
+}
+
 .subject-card h3 {
   margin: 0;
-  font-size: 1.45rem;
+  font-size: 1.35rem;
   letter-spacing: -0.03em;
   font-weight: 800;
-  flex: 1;
+}
+
+.subject-card-desc {
+  margin: 0.35rem 0 0;
+  font-size: 0.86rem;
+  color: var(--soft);
+  line-height: 1.4;
 }
 
 .subject-card .card-arrow {
@@ -638,6 +644,110 @@ body.modal-open {
   box-shadow: var(--shadow-sm);
 }
 
+/* Подробный информационный блок о предмете */
+.subject-overview-card {
+  background: #ffffff;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.85rem;
+  box-shadow: var(--shadow-sm);
+  transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
+  animation: overviewFadeIn 0.35s var(--ease);
+}
+
+@keyframes overviewFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.subject-overview-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.subject-overview-head h3 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  margin: 0;
+}
+
+.subject-overview-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.subject-overview-tag {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.22rem 0.65rem;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-radius: 999px;
+  letter-spacing: 0.01em;
+}
+
+.subject-overview-lead {
+  font-size: 0.96rem;
+  line-height: 1.65;
+  color: var(--soft);
+  margin-bottom: 1.25rem;
+}
+
+.subject-curriculum-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.subject-curriculum-item {
+  background: #f8f8fa;
+  border: 1px solid #ededf2;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+}
+
+.subject-curriculum-item strong {
+  display: block;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.25rem;
+}
+
+.subject-curriculum-item p {
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: var(--soft);
+  margin: 0;
+}
+
+.subject-overview-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.85rem 1.1rem;
+  background: #fafafc;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 12px 12px 0;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
 .flow-heading {
   display: flex;
   align-items: center;
@@ -755,10 +865,10 @@ body.modal-open {
   color: #c0c0c8;
 }
 
-/* Выбор класса: 5, 6, 7, 8, 9 */
+/* Выбор класса: Все, 5, 6, 7, 8, 9 */
 .grade-choices {
-  grid-template-columns: repeat(5, 1fr);
-  gap: 0.75rem;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.65rem;
 }
 
 .choice-card.compact {
@@ -1391,6 +1501,12 @@ body.modal-open {
     border-radius: 4px;
   }
 
+  .nav .container,
+  .nav-inner {
+    height: 58px;
+    padding-inline: 1rem;
+  }
+
   .nav-inner > .btn {
     display: none;
   }
@@ -1401,7 +1517,7 @@ body.modal-open {
 
   .nav-links {
     position: fixed;
-    inset: 72px 0 auto;
+    inset: 58px 0 auto;
     display: flex;
     flex-direction: column;
     gap: 0;
@@ -1504,9 +1620,44 @@ body.modal-open {
     padding: 1.1rem;
   }
 
+  .subject-overview-card {
+    padding: 1.25rem 1.1rem;
+    border-radius: 16px;
+  }
+
+  .subject-overview-head h3 {
+    font-size: 1.18rem;
+  }
+
+  .subject-curriculum-grid {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+  }
+
+  .subject-curriculum-item {
+    padding: 0.75rem 0.85rem;
+  }
+
+  .subject-curriculum-item strong {
+    font-size: 0.88rem;
+  }
+
+  .subject-curriculum-item p {
+    font-size: 0.82rem;
+  }
+
+  .subject-overview-lead {
+    font-size: 0.9rem;
+  }
+
+  .subject-overview-tip {
+    font-size: 0.84rem;
+    padding: 0.75rem 0.85rem;
+  }
+
   .grade-choices {
-    grid-template-columns: repeat(5, 1fr);
-    gap: 0.4rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.45rem;
   }
 
   .choice-card.compact {
