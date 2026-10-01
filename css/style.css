@@ -190,25 +190,26 @@ body.modal-open {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--ink);
+  border: 2px solid var(--ink);
   border-radius: 999px;
   background: var(--ink);
-  color: #fff;
+  color: #ffffff;
   cursor: pointer;
-  font: 600 0.94rem 'Inter', sans-serif;
+  font: 700 0.94rem 'Inter', sans-serif;
   padding: 0.85rem 1.65rem;
   text-decoration: none;
-  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), background 0.3s var(--ease), color 0.3s var(--ease);
+  box-shadow: 0 4px 14px rgba(17, 17, 22, 0.16);
+  transition: transform 0.12s ease, background 0.12s ease, color 0.12s ease, box-shadow 0.12s ease;
   min-height: 48px;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.btn:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow);
-}
-
+/* Инверсия при нажатии пальцем на телефоне */
 .btn:active {
-  transform: translateY(-1px);
+  background: #ffffff !important;
+  color: var(--ink) !important;
+  transform: scale(0.97);
+  box-shadow: 0 2px 6px rgba(17, 17, 22, 0.1);
 }
 
 .btn-small {
@@ -218,13 +219,27 @@ body.modal-open {
 }
 
 .btn-ghost {
-  background: transparent;
+  background: #ffffff;
   color: var(--ink);
+  border: 2px solid var(--ink);
+  box-shadow: 0 2px 8px rgba(17, 17, 22, 0.08);
 }
 
-.btn-ghost:hover {
-  background: var(--ink);
-  color: #fff;
+.btn-ghost:active {
+  background: var(--ink) !important;
+  color: #ffffff !important;
+  transform: scale(0.97);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+  .btn-ghost:hover {
+    background: var(--ink);
+    color: #ffffff;
+  }
 }
 
 .btn-dark {
@@ -265,27 +280,40 @@ body.modal-open {
   margin: 0.6rem 0 1.4rem;
 }
 
-/* Инверсия текста при запуске сайта (медленная, плавная, без мигания и без рамок) */
+/* Инверсия текста у героя слева направо (без мигания) */
 .hero-invert {
   position: relative;
   display: inline-block;
-  padding: 0.02em 0.18em;
+  padding: 0.02em 0.22em;
   border-radius: 6px;
   color: var(--ink);
-  background-color: transparent;
   vertical-align: baseline;
-  animation: heroInvertLaunch 2.8s cubic-bezier(0.4, 0, 0.2, 1) 0.5s both;
+  overflow: hidden;
+}
+
+.hero-invert::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.02em 0.22em;
+  background-color: var(--ink);
+  color: #ffffff;
+  border-radius: 6px;
+  white-space: nowrap;
+  clip-path: inset(0 100% 0 0);
+  animation: heroInvertSweepLeft 2.4s cubic-bezier(0.33, 1, 0.68, 1) 0.5s forwards;
   pointer-events: none;
 }
 
-@keyframes heroInvertLaunch {
+@keyframes heroInvertSweepLeft {
   0% {
-    background-color: transparent;
-    color: var(--ink);
+    clip-path: inset(0 100% 0 0);
   }
   100% {
-    background-color: var(--ink);
-    color: #ffffff;
+    clip-path: inset(0 0% 0 0);
   }
 }
 
@@ -456,32 +484,22 @@ body.modal-open {
   position: relative;
   display: block;
   overflow: hidden;
-  border: 1px solid var(--line);
+  border: 2px solid var(--ink);
   border-radius: var(--radius);
   background: #ffffff;
   color: var(--ink);
   padding: 1.6rem 2rem;
   text-decoration: none;
-  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), border-color 0.35s var(--ease);
+  box-shadow: 0 4px 16px rgba(17, 17, 22, 0.08);
+  transition: transform 0.12s ease, background 0.12s ease, color 0.12s ease, box-shadow 0.12s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.card:before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, var(--accent-soft), transparent 60%);
-  opacity: 0;
-  transition: opacity 0.35s var(--ease);
-}
-
-.card:hover {
-  border-color: transparent;
-  transform: translateY(-4px);
-  box-shadow: var(--shadow);
-}
-
-.card:hover:before {
-  opacity: 1;
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+  }
 }
 
 .subject-card {
@@ -489,13 +507,25 @@ body.modal-open {
   align-items: center;
   justify-content: space-between;
   gap: 1.25rem;
+  border: 2px solid var(--ink);
+  border-radius: 20px;
+  background: #ffffff;
+  color: var(--ink);
+  cursor: pointer;
 }
 
 .subject-card .card-num {
-  color: var(--faint);
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ink);
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  transition: background 0.12s ease, color 0.12s ease;
 }
 
 .subject-card-body {
@@ -507,19 +537,235 @@ body.modal-open {
   font-size: 1.35rem;
   letter-spacing: -0.03em;
   font-weight: 800;
+  transition: color 0.12s ease;
 }
 
 .subject-card-desc {
   margin: 0.35rem 0 0;
   font-size: 0.86rem;
-  color: var(--soft);
+  color: #555562;
   line-height: 1.4;
+  transition: color 0.12s ease;
 }
 
 .subject-card .card-arrow {
   font-size: 1.4rem;
-  color: var(--soft);
-  transition: transform 0.3s var(--ease), color 0.3s var(--ease);
+  font-weight: 800;
+  color: var(--ink);
+  transition: transform 0.15s ease, color 0.12s ease;
+}
+
+/* Инверсия карточки предмета при нажатии пальцем на телефоне */
+.subject-card:active {
+  background: var(--ink) !important;
+  color: #ffffff !important;
+  border-color: var(--ink) !important;
+  transform: scale(0.98);
+  box-shadow: 0 8px 24px rgba(17, 17, 22, 0.24);
+}
+
+.subject-card:active .card-num {
+  background: #ffffff !important;
+  color: var(--ink) !important;
+}
+
+.subject-card:active .subject-card-desc {
+  color: #d0d0d8 !important;
+}
+
+.subject-card:active .card-arrow {
+  color: #ffffff !important;
+  transform: translateX(6px);
+}
+
+/* ==========================================================================
+   Секции с подробным описанием на главной (Curriculum, Grades, Method)
+   ========================================================================== */
+.subject-detail-grid {
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.subject-detail-card {
+  border: 2px solid var(--ink);
+  border-radius: 20px;
+  padding: 2rem 2.2rem;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(17, 17, 22, 0.06);
+}
+
+.subject-detail-badge {
+  display: inline-block;
+  background: var(--ink);
+  color: #ffffff;
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 0.84rem;
+  margin-bottom: 1.1rem;
+}
+
+.subject-detail-card h3 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.65rem;
+}
+
+.subject-detail-lead {
+  font-size: 0.98rem;
+  color: #555562;
+  line-height: 1.6;
+  margin-bottom: 1.35rem;
+}
+
+.subject-points-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.6rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.subject-points-list li {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #33333d;
+  padding-left: 1.2rem;
+  position: relative;
+}
+
+.subject-points-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--ink);
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.subject-points-list strong {
+  color: var(--ink);
+}
+
+.subject-card-footer {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+/* Программа по классам 5-9 */
+.grades-guide-grid {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.1rem;
+}
+
+.grade-guide-item {
+  border: 2px solid var(--ink);
+  border-radius: 18px;
+  padding: 1.35rem 1.4rem;
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(17, 17, 22, 0.06);
+  transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.grade-guide-item:active {
+  background: var(--ink);
+  color: #ffffff;
+  transform: scale(0.98);
+}
+
+.grade-guide-item:active .grade-tag {
+  background: #ffffff;
+  color: var(--ink);
+}
+
+.grade-guide-item:active p {
+  color: #d0d0d8;
+}
+
+.grade-guide-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.grade-tag {
+  display: inline-block;
+  background: var(--ink);
+  color: #ffffff;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 0.8rem;
+  padding: 3px 8px;
+  flex-shrink: 0;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.grade-guide-header strong {
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
+}
+
+.grade-guide-item p {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: #555562;
+  margin: 0;
+  transition: color 0.12s ease;
+}
+
+/* Карточки методики */
+.method-cards-grid {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.method-card {
+  border: 2px solid var(--ink);
+  border-radius: 18px;
+  padding: 1.6rem;
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(17, 17, 22, 0.06);
+}
+
+.method-step-num {
+  display: inline-flex;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  background: var(--ink);
+  color: #ffffff;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 0.85rem;
+  margin-bottom: 0.85rem;
+}
+
+.method-card h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.45rem;
+}
+
+.method-card p {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: #555562;
+  margin: 0;
+}
+
+.center-actions {
+  text-align: center;
+  margin-top: 2.5rem;
+  display: flex;
+  justify-content: center;
 }
 
 .subject-card:hover .card-arrow {
@@ -644,110 +890,6 @@ body.modal-open {
   box-shadow: var(--shadow-sm);
 }
 
-/* Подробный информационный блок о предмете */
-.subject-overview-card {
-  background: #ffffff;
-  border: 1.5px solid var(--line);
-  border-radius: var(--radius);
-  padding: 1.85rem;
-  box-shadow: var(--shadow-sm);
-  transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
-  animation: overviewFadeIn 0.35s var(--ease);
-}
-
-@keyframes overviewFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.subject-overview-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-bottom: 0.85rem;
-}
-
-.subject-overview-head h3 {
-  font-size: 1.35rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  color: var(--ink);
-  margin: 0;
-}
-
-.subject-overview-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-}
-
-.subject-overview-tag {
-  font-size: 0.78rem;
-  font-weight: 600;
-  padding: 0.22rem 0.65rem;
-  background: var(--accent-soft);
-  color: var(--accent);
-  border-radius: 999px;
-  letter-spacing: 0.01em;
-}
-
-.subject-overview-lead {
-  font-size: 0.96rem;
-  line-height: 1.65;
-  color: var(--soft);
-  margin-bottom: 1.25rem;
-}
-
-.subject-curriculum-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 0.75rem;
-  margin-bottom: 1.25rem;
-}
-
-.subject-curriculum-item {
-  background: #f8f8fa;
-  border: 1px solid #ededf2;
-  border-radius: 12px;
-  padding: 0.85rem 1rem;
-}
-
-.subject-curriculum-item strong {
-  display: block;
-  font-size: 0.92rem;
-  font-weight: 700;
-  color: var(--ink);
-  margin-bottom: 0.25rem;
-}
-
-.subject-curriculum-item p {
-  font-size: 0.84rem;
-  line-height: 1.45;
-  color: var(--soft);
-  margin: 0;
-}
-
-.subject-overview-tip {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  padding: 0.85rem 1.1rem;
-  background: #fafafc;
-  border-left: 3px solid var(--accent);
-  border-radius: 0 12px 12px 0;
-  font-size: 0.88rem;
-  line-height: 1.5;
-  color: var(--ink);
-}
-
 .flow-heading {
   display: flex;
   align-items: center;
@@ -761,8 +903,8 @@ body.modal-open {
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  background: var(--accent-soft);
-  color: var(--accent);
+  background: var(--ink);
+  color: #ffffff;
   font-size: 0.95rem;
   font-weight: 800;
   letter-spacing: -0.02em;
@@ -796,7 +938,7 @@ body.modal-open {
   display: flex;
   align-items: center;
   gap: 1.15rem;
-  border: 1.5px solid var(--line);
+  border: 2px solid var(--ink);
   border-radius: 16px;
   background: #ffffff;
   color: var(--ink);
@@ -804,27 +946,10 @@ body.modal-open {
   text-align: left;
   cursor: pointer;
   font-family: inherit;
-  transition: transform 0.25s var(--ease), border-color 0.25s, background 0.25s, box-shadow 0.25s, color 0.25s;
+  box-shadow: 0 4px 14px rgba(17, 17, 22, 0.08);
+  transition: transform 0.12s ease, background 0.12s ease, color 0.12s ease, box-shadow 0.12s ease;
   min-height: 56px;
   -webkit-tap-highlight-color: transparent;
-}
-
-.choice-card:hover {
-  border-color: var(--ink);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
-}
-
-.choice-card:active {
-  transform: scale(0.98);
-}
-
-.choice-card.selected {
-  background: var(--ink);
-  color: #ffffff;
-  border-color: var(--ink);
-  box-shadow: 0 10px 28px rgba(17, 17, 17, 0.18);
-  transform: translateY(-2px);
 }
 
 .choice-icon {
@@ -833,17 +958,12 @@ body.modal-open {
   width: 46px;
   height: 46px;
   border-radius: 12px;
-  background: #f4f4f7;
-  color: var(--ink);
+  background: var(--ink);
+  color: #ffffff;
   font-size: 1.3rem;
   font-weight: 800;
   flex-shrink: 0;
-  transition: background 0.25s, color 0.25s;
-}
-
-.choice-card.selected .choice-icon {
-  background: #27272c;
-  color: #ffffff;
+  transition: background 0.12s ease, color 0.12s ease;
 }
 
 .choice-info strong {
@@ -856,13 +976,30 @@ body.modal-open {
 .choice-info small {
   display: block;
   font-size: 0.84rem;
-  color: var(--soft);
+  color: #555562;
   line-height: 1.35;
-  transition: color 0.25s;
+  transition: color 0.12s ease;
 }
 
+/* Инверсия при нажатии пальцем и в активном состоянии */
+.choice-card:active,
+.choice-card.selected {
+  background: var(--ink) !important;
+  color: #ffffff !important;
+  border-color: var(--ink) !important;
+  box-shadow: 0 8px 24px rgba(17, 17, 22, 0.24);
+  transform: scale(0.98);
+}
+
+.choice-card:active .choice-icon,
+.choice-card.selected .choice-icon {
+  background: #ffffff !important;
+  color: var(--ink) !important;
+}
+
+.choice-card:active .choice-info small,
 .choice-card.selected .choice-info small {
-  color: #c0c0c8;
+  color: #d0d0d8 !important;
 }
 
 /* Выбор класса: Все, 5, 6, 7, 8, 9 */
@@ -877,8 +1014,22 @@ body.modal-open {
   text-align: center;
   font-size: 0.96rem;
   font-weight: 700;
+  border: 2px solid var(--ink);
   border-radius: 14px;
+  background: #ffffff;
+  color: var(--ink);
+  box-shadow: 0 2px 8px rgba(17, 17, 22, 0.06);
   min-height: 52px;
+  transition: transform 0.12s ease, background 0.12s ease, color 0.12s ease;
+}
+
+.choice-card.compact:active,
+.choice-card.compact.selected {
+  background: var(--ink) !important;
+  color: #ffffff !important;
+  border-color: var(--ink) !important;
+  transform: scale(0.96);
+  box-shadow: 0 4px 14px rgba(17, 17, 22, 0.2);
 }
 
 /* Выбор темы: интерактивные чипы */
@@ -889,36 +1040,29 @@ body.modal-open {
 }
 
 .topic-chip {
-  border: 1.5px solid var(--line);
+  border: 2px solid var(--ink);
   border-radius: 999px;
   background: #ffffff;
-  color: var(--soft);
+  color: var(--ink);
   cursor: pointer;
-  font: 600 0.9rem 'Inter', sans-serif;
+  font: 700 0.9rem 'Inter', sans-serif;
   padding: 0.65rem 1.25rem;
   min-height: 46px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.25s var(--ease), border-color 0.25s, background 0.25s, color 0.25s, box-shadow 0.25s;
+  box-shadow: 0 2px 8px rgba(17, 17, 22, 0.06);
+  transition: transform 0.12s ease, background 0.12s ease, color 0.12s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
-.topic-chip:hover {
-  border-color: var(--ink);
-  color: var(--ink);
-  transform: translateY(-2px);
-}
-
-.topic-chip:active {
-  transform: scale(0.97);
-}
-
+.topic-chip:active,
 .topic-chip.selected {
-  border-color: var(--ink);
-  background: var(--ink);
-  color: #ffffff;
-  box-shadow: 0 6px 18px rgba(17, 17, 17, 0.16);
+  border-color: var(--ink) !important;
+  background: var(--ink) !important;
+  color: #ffffff !important;
+  transform: scale(0.96);
+  box-shadow: 0 4px 14px rgba(17, 17, 22, 0.2);
 }
 
 /* Панель результатов */
@@ -1496,8 +1640,9 @@ body.modal-open {
     line-height: 1.1;
   }
 
-  .hero-invert {
-    padding: 0 0.12em;
+  .hero-invert,
+  .hero-invert::after {
+    padding: 0.02em 0.18em;
     border-radius: 4px;
   }
 
@@ -1620,39 +1765,24 @@ body.modal-open {
     padding: 1.1rem;
   }
 
-  .subject-overview-card {
-    padding: 1.25rem 1.1rem;
+  .subject-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+  }
+
+  .subject-detail-card {
+    padding: 1.4rem 1.25rem;
     border-radius: 16px;
   }
 
-  .subject-overview-head h3 {
-    font-size: 1.18rem;
-  }
-
-  .subject-curriculum-grid {
+  .grades-guide-grid {
     grid-template-columns: 1fr;
-    gap: 0.55rem;
+    gap: 0.85rem;
   }
 
-  .subject-curriculum-item {
-    padding: 0.75rem 0.85rem;
-  }
-
-  .subject-curriculum-item strong {
-    font-size: 0.88rem;
-  }
-
-  .subject-curriculum-item p {
-    font-size: 0.82rem;
-  }
-
-  .subject-overview-lead {
-    font-size: 0.9rem;
-  }
-
-  .subject-overview-tip {
-    font-size: 0.84rem;
-    padding: 0.75rem 0.85rem;
+  .method-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
   }
 
   .grade-choices {

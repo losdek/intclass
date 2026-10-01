@@ -474,35 +474,6 @@ const SUBJECT_LABELS = {
   russian: "Русский язык"
 };
 
-const SUBJECT_DESCRIPTIONS = {
-  math: {
-    title: "Математика — школьный курс 5–9 классов",
-    tags: ["Алгебра", "Геометрия", "Арифметика", "ОГЭ 2026", "20 видеоуроков и тестов"],
-    lead: "Математика в средней школе формирует фундамент логического и аналитического мышления. Наш курс структурирован по единым стандартам школьной программы без лишней воды: от обыкновенных дробей и пропорций до квадратных уравнений, свойств треугольников и функций. После каждого видеоурока вас ждёт интерактивный тест с подробным объяснением решения для моментального закрепления темы.",
-    curriculum: [
-      { grade: "5 класс", desc: "Обыкновенные и десятичные дроби, сложение и вычитание, текстовые задачи на движение и работу." },
-      { grade: "6 класс", desc: "Рациональные и отрицательные числа, основное свойство пропорции, проценты, модули и координатная прямая." },
-      { grade: "7 класс", desc: "Начало алгебры и наглядная геометрия: линейные уравнения, формулы сокращённого умножения, признаки равенства треугольников." },
-      { grade: "8 класс", desc: "Квадратные корни, квадратные уравнения (через дискриминант и теорему Виета), прямоугольные треугольники и теорема Пифагора." },
-      { grade: "9 класс", desc: "Квадратичная функция и графики парабол, арифметическая и геометрическая прогрессии, основы вероятностей, подготовка к ОГЭ." }
-    ],
-    tip: "💡 <strong>Совет по обучению:</strong> выберите нужный класс ниже для быстрой фильтрации либо изучайте все видеоуроки предмета подряд. После просмотра обязательно ответьте на проверочный вопрос мини-теста!"
-  },
-  russian: {
-    title: "Русский язык — школьный курс 5–9 классов",
-    tags: ["Орфография", "Пунктуация", "Синтаксис", "Морфология", "Подготовка к ОГЭ"],
-    lead: "Русский язык — не просто набор правил для зубрежки, а стройная логическая система. В наших видеоуроках сложные грамматические конструкции и правила орфографии объясняются через понятные опорные схемы и жизненные примеры. Программа помогает уверенно писать диктанты, сочинения и успешно сдать экзамен ОГЭ. Интерактивные мини-тесты позволяют за минуту проверить, насколько хорошо усвоено правило.",
-    curriculum: [
-      { grade: "5 класс", desc: "Фонетика, морфемика (корень, суффикс, приставка), безударные проверяемые гласные в корне, базовые части речи." },
-      { grade: "6 класс", desc: "Корни с чередованием гласных (-лаг-/-лож-, -раст-/-рос-), приставки ПРЕ- и ПРИ-, правописание суффиксов имён существительных и прилагательных." },
-      { grade: "7 класс", desc: "Особые формы глагола — причастия и деепричастия, слитное и раздельное написание НЕ с частями речи, служебные слова (предлоги, союзы, частицы)." },
-      { grade: "8 класс", desc: "Синтаксис простого предложения: обособленные определения и обстоятельства (обороты), вводные конструкции и обращения." },
-      { grade: "9 класс", desc: "Сложные предложения (ССП, СПП, БСП), синтаксический и пунктуационный анализ, комплексная подготовка к ОГЭ." }
-    ],
-    tip: "💡 <strong>Совет по обучению:</strong> переключайтесь между классами для повторения забытых правил прошлых лет. После каждого видео обязательно решите проверочный тест — в нём подробно объяснено, почему верен именно этот вариант."
-  }
-};
-
 // Состояние пошагового выбора
 const state = {
   subject: null,
@@ -512,7 +483,6 @@ const state = {
 
 // DOM элементы
 const subjectStep = document.getElementById("subjectStep");
-const subjectOverview = document.getElementById("subjectOverview");
 const gradeStep = document.getElementById("gradeStep");
 const topicStep = document.getElementById("topicStep");
 const gradeHint = document.getElementById("gradeHint");
@@ -524,42 +494,6 @@ const grid = document.getElementById("lessonsGrid");
 const empty = document.getElementById("lessonsEmpty");
 const resetFlowBtn = document.getElementById("resetFlow");
 const flowProgress = document.getElementById("flowProgress");
-
-/**
- * Отрисовка подробного текстового описания предмета
- */
-function renderSubjectOverview(subjectKey) {
-  if (!subjectOverview) return;
-  const data = SUBJECT_DESCRIPTIONS[subjectKey];
-  if (!data) {
-    subjectOverview.hidden = true;
-    subjectOverview.innerHTML = "";
-    return;
-  }
-
-  const tagsHtml = data.tags.map((t) => `<span class="subject-overview-tag">${t}</span>`).join("");
-  const currHtml = data.curriculum
-    .map(
-      (item) => `
-      <div class="subject-curriculum-item">
-        <strong>${item.grade}</strong>
-        <p>${item.desc}</p>
-      </div>
-    `
-    )
-    .join("");
-
-  subjectOverview.innerHTML = `
-    <div class="subject-overview-head">
-      <h3>${data.title}</h3>
-      <div class="subject-overview-tags">${tagsHtml}</div>
-    </div>
-    <p class="subject-overview-lead">${data.lead}</p>
-    <div class="subject-curriculum-grid">${currHtml}</div>
-    <div class="subject-overview-tip">${data.tip}</div>
-  `;
-  subjectOverview.hidden = false;
-}
 
 /**
  * Обновление полосы шагов (индикатора прогресса)
@@ -871,9 +805,6 @@ function selectSubject(subject, shouldScroll = false) {
     button.classList.toggle("selected", button.dataset.subject === subject);
   });
 
-  // Отображаем подробный текст по предмету
-  renderSubjectOverview(subject);
-
   // Разблокируем шаг 2 (Класс)
   gradeStep?.classList.remove("is-locked");
   if (gradeHint) gradeHint.hidden = true;
@@ -891,7 +822,7 @@ function selectSubject(subject, shouldScroll = false) {
 
   if (shouldScroll && window.innerWidth <= 768) {
     setTimeout(() => {
-      subjectOverview?.scrollIntoView({ behavior: "smooth", block: "start" });
+      gradeStep?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 100);
   }
 }
@@ -976,11 +907,6 @@ resetFlowBtn?.addEventListener("click", () => {
   document.querySelectorAll("[data-subject], [data-grade]").forEach((btn) => {
     btn.classList.remove("selected");
   });
-
-  if (subjectOverview) {
-    subjectOverview.hidden = true;
-    subjectOverview.innerHTML = "";
-  }
 
   topicChoices.innerHTML = "";
   gradeStep?.classList.add("is-locked");

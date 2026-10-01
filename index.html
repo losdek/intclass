@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=20261001_5">
+  <link rel="stylesheet" href="css/style.css?v=20261001_6">
 </head>
 <body>
   <header class="nav" id="nav">
@@ -16,7 +16,9 @@
       <a class="logo" href="index.html">intclass<span class="logo-dot"></span></a>
       <nav class="nav-links" id="navLinks" aria-label="Основная навигация">
         <a class="nav-link active" href="index.html">Главная</a>
-        <a class="nav-link" href="index.html#topics">Темы</a>
+        <a class="nav-link" href="#topics">Предметы</a>
+        <a class="nav-link" href="#curriculum">Программа</a>
+        <a class="nav-link" href="#grades">Классы</a>
         <a class="nav-link" href="lessons.html">Видеоуроки</a>
       </nav>
       <button class="btn btn-small register-open" type="button">Регистрация</button>
@@ -31,7 +33,7 @@
         <p class="hero-eyebrow reveal-line"><span>Справочник знаний</span></p>
         <h1 class="hero-title">
           <span class="reveal-line"><span>Видеоуроки</span></span>
-          <span class="reveal-line"><span><span class="hero-invert">наглядно</span></span></span>
+          <span class="reveal-line"><span><span class="hero-invert" data-text="наглядно">наглядно</span></span></span>
         </h1>
         <p class="hero-sub reveal-line"><span>Короткие уроки и мини-тесты по темам. Ничего лишнего.</span></p>
         <div class="hero-actions reveal-line"><span>
@@ -53,7 +55,7 @@
     <section class="section" id="topics">
       <div class="container">
         <div class="section-head reveal">
-          <p class="section-label">01 — Предметы</p>
+          <p class="section-label">01 — Доступные предметы</p>
           <h2 class="section-title">Выберите предмет</h2>
         </div>
         <div class="grid subjects-grid">
@@ -73,6 +75,136 @@
             </div>
             <span class="card-arrow">→</span>
           </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02: Подробно о предметах -->
+    <section class="section section-alt" id="curriculum">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="section-label">02 — Содержание программ</p>
+          <h2 class="section-title">Что изучается в каждом курсе</h2>
+          <p class="section-desc">Школьная программа 5–9 классов с фокусом на практические навыки, понимание сути формул и уверенную сдачу ОГЭ.</p>
+        </div>
+
+        <div class="grid subject-detail-grid">
+          <article class="card subject-detail-card reveal">
+            <div class="subject-detail-badge">∑ Математика</div>
+            <h3>Алгебра, геометрия и арифметика</h3>
+            <p class="subject-detail-lead">Пошаговый разбор ключевых тем без перегрузки терминологией. Учим видеть логику в числах и геометрических фигурах.</p>
+            <ul class="subject-points-list">
+              <li><strong>Дроби и вычисления:</strong> обыкновенные, смешанные и десятичные дроби, действия с рациональными и отрицательными числами.</li>
+              <li><strong>Уравнения и выражения:</strong> линейные и квадратные уравнения, формулы сокращённого умножения, дискриминант и теорема Виета.</li>
+              <li><strong>Наглядная геометрия:</strong> углы, свойства и признаки равенства треугольников, теорема Пифагора, четырёхугольники и площади фигур.</li>
+              <li><strong>Функции и анализ:</strong> квадратичная функция (парабола), свойства функций, чтение графиков, арифметическая и геометрическая прогрессии.</li>
+              <li><strong>Подготовка к ОГЭ:</strong> текстовые прикладные задачи (движение, работа, сплавы), основы теории вероятностей и статистика.</li>
+            </ul>
+            <div class="subject-card-footer">
+              <a class="btn btn-small" href="lessons.html?subject=math">Уроки по математике →</a>
+            </div>
+          </article>
+
+          <article class="card subject-detail-card reveal">
+            <div class="subject-detail-badge">А Русский язык</div>
+            <h3>Орфография, синтаксис и пунктуация</h3>
+            <p class="subject-detail-lead">Чёткие схемы и алгоритмы применения правил вместо утомительной зубрежки справочников. Помогает писать грамотно и сдать ОГЭ на максимум.</p>
+            <ul class="subject-points-list">
+              <li><strong>Орфография корней:</strong> проверяемые и непроверяемые безударные гласные, корни с чередованием (-лаг-/-лож-, -раст-/-рос-, -бер-/-бир-).</li>
+              <li><strong>Приставки и суффиксы:</strong> правописание приставок ПРЕ- и ПРИ-, приставок на -З/-С; Н и НН в суффиксах частей речи; слитное и раздельное написание НЕ.</li>
+              <li><strong>Осложнённое предложение:</strong> обособленные определения и обстоятельства (причастные и деепричастные обороты), вводные слова, обращения.</li>
+              <li><strong>Сложные синтаксические конструкции:</strong> сложносочинённые (ССП), сложноподчинённые (СПП) с разными придаточными и бессоюзные (БСП) предложения.</li>
+              <li><strong>Практика к ОГЭ:</strong> пунктуационный анализ текста, поиск грамматической основы, синтаксические нормы и средства выразительности.</li>
+            </ul>
+            <div class="subject-card-footer">
+              <a class="btn btn-small" href="lessons.html?subject=russian">Уроки по русскому языку →</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03: Программа по классам (5-9) -->
+    <section class="section" id="grades">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="section-label">03 — Школьные параллели</p>
+          <h2 class="section-title">Ориентир по 5–9 классам</h2>
+          <p class="section-desc">Удобно выбрать свой класс и сразу закрыть пробелы по текущей четверти или повторить материал прошлых лет.</p>
+        </div>
+
+        <div class="grid grades-guide-grid">
+          <div class="grade-guide-item reveal">
+            <div class="grade-guide-header">
+              <span class="grade-tag">5 класс</span>
+              <strong>Фундамент и переход в среднюю школу</strong>
+            </div>
+            <p>Дроби, базовые текстовые задачи, разбор слова по составу, фонетика, проверяемые гласные в корне и начальные части речи.</p>
+          </div>
+
+          <div class="grade-guide-item reveal">
+            <div class="grade-guide-header">
+              <span class="grade-tag">6 класс</span>
+              <strong>Отрицательные числа и чередование корней</strong>
+            </div>
+            <p>Координатная прямая, пропорции и проценты. В русском — корни с чередованием гласных, приставки ПРЕ/ПРИ, морфология существительных и прилагательных.</p>
+          </div>
+
+          <div class="grade-guide-item reveal">
+            <div class="grade-guide-header">
+              <span class="grade-tag">7 класс</span>
+              <strong>Старт алгебры, геометрии и причастий</strong>
+            </div>
+            <p>Линейные уравнения, формулы сокращённого умножения, признаки равенства треугольников. Причастия, деепричастия, слитное и раздельное написание НЕ.</p>
+          </div>
+
+          <div class="grade-guide-item reveal">
+            <div class="grade-guide-header">
+              <span class="grade-tag">8 класс</span>
+              <strong>Квадратные уравнения и обособленные обороты</strong>
+            </div>
+            <p>Дискриминант, теорема Виета, квадратные корни, теорема Пифагора. Синтаксис простого предложения, причастные и деепричастные обороты, вводные слова.</p>
+          </div>
+
+          <div class="grade-guide-item reveal">
+            <div class="grade-guide-header">
+              <span class="grade-tag">9 класс</span>
+              <strong>Сложные предложения, функции и экзамен ОГЭ</strong>
+            </div>
+            <p>Квадратичная функция, параболы, числовые прогрессии, вероятность. Сложносочинённые, сложноподчинённые и бессоюзные предложения, итоговый тренинг к ОГЭ.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04: Методика микро-уроков -->
+    <section class="section section-alt" id="method">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="section-label">04 — Как это устроено</p>
+          <h2 class="section-title">Методика быстрого обучения</h2>
+        </div>
+
+        <div class="grid method-cards-grid">
+          <div class="card method-card reveal">
+            <span class="method-step-num">01</span>
+            <h3>Короткое видео по теме</h3>
+            <p>Никакой воды и часовых лекций. Только концентрированное объяснение формулы, правила или способа решения за 5–8 минут.</p>
+          </div>
+          <div class="card method-card reveal">
+            <span class="method-step-num">02</span>
+            <h3>Мини-тест в один клик</h3>
+            <p>Прямо под видео расположен проверочный вопрос. Нажимаете вариант, жмёте «Проверить» и сразу видите свой результат.</p>
+          </div>
+          <div class="card method-card reveal">
+            <span class="method-step-num">03</span>
+            <h3>Разбор логики ответа</h3>
+            <p>Если допущена ошибка — тест наглядно объясняет, почему правилен другой вариант. Можно пройти снова и закрепить навык.</p>
+          </div>
+        </div>
+
+        <div class="hero-actions center-actions reveal">
+          <a class="btn" href="lessons.html">Перейти к видеоурокам</a>
         </div>
       </div>
     </section>
