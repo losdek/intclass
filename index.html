@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>intclass — study, simplified</title>
+ <meta name="description" content="A minimal study hub: school subjects, notes and video lessons." />
+ <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='00100100'><circle cx='50' cy='50' r='40' fill='%23111'/></svg>" />
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+ <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+ <!-- Navigation -->
+ <header class="nav" id="nav">
+ <div class="container nav-inner">
+ <a href="index.html" class="logo">intclass<span class="logo-dot"></span></a>
+ <nav class="nav-links" id="navLinks">
+ <a href="index.html" class="nav-link active">Home</a>
+ <a href="index.html#subjects" class="nav-link">Subjects</a>
+ <a href="lessons.html" class="nav-link">Video lessons</a>
+ </nav>
+ <a href="lessons.html" class="btn btn-small">Start learning</a>
+ <button class="burger" id="burger" aria-label="Menu">
+ <span></span><span></span>
+ </button>
+ </div>
+ </header>
+
+ <!-- Hero -->
+ <section class="hero">
+ <div class="blob blob-1"></div>
+ <div class="blob blob-2"></div>
+ <div class="container hero-inner">
+ <p class="hero-eyebrow reveal-line"><span>School, organized.</span></p>
+ <h1 class="hero-title">
+ <span class="reveal-line"><span>Study with</span></span>
+ <span class="reveal-line"><span class="accent-line">clarity<span class="scribble"></span></span></span>
+ </h1>
+ <p class="hero-sub reveal-line"><span>One clean place for your subjects, notes and video lessons.
+ No clutter, no noise — just learning.</span></p>
+ <div class="hero-actions reveal-line">
+ <span>
+ <a href="lessons.html" class="btn">Watch lessons</a>
+ <a href="#subjects" class="btn btn-ghost">Browse subjects</a>
+ </span>
+ </div>
+ </div>
+ <div class="scroll-hint" aria-hidden="true"><span></span></div>
+ </section>
+
+ <!-- Subjects -->
+ <section class="section" id="subjects">
+ <div class="container">
+ <div class="section-head reveal">
+ <p class="section-label">01 — Subjects</p>
+ <h2 class="section-title">Everything in one place</h2>
+ <p class="section-text">Pick a subject to see materials and hand-picked video lessons.</p>
+ </div>
+ <div class="grid subjects-grid">
+ <a href="lessons.html?subject=math" class="card subject-card reveal">
+ <span class="card-num">01</span>
+ <h3>Mathematics</h3>
+ <p>Algebra, geometry, calculus — from basics to exam prep.</p>
+ <span class="card-arrow">→</span>
+ </a>
+ <a href="lessons.html?subject=physics" class="card subject-card reveal">
+ <span class="card-num">02</span>
+ <h3>Physics</h3>
+ <p>Mechanics, waves, electricity — intuition first, formulas second.</p>
+ <span class="card-arrow">→</span>
+ </a>
+ <a href="lessons.html?subject=chemistry" class="card subject-card reveal">
+ <span class="card-num">03</span>
+ <h3>Chemistry</h3>
+ <p>Atoms, reactions and the periodic table, made visual.</p>
+ <span class="card-arrow">→</span>
+ </a>
+ <a href="lessons.html?subject=biology" class="card subject-card reveal">
+ <span class="card-num">04</span>
+ <h3>Biology</h3>
+ <p>Cells, genetics and ecosystems explained simply.</p>
+ <span class="card-arrow">→</span>
+ </a>
+ <a href="lessons.html?subject=history" class="card subject-card reveal">
+ <span class="card-num">05</span>
+ <h3>History</h3>
+ <p>Timelines, causes and consequences — the big picture.</p>
+ <span class="card-arrow">→</span>
+ </a>
+ <a href="lessons.html?subject=english" class="card subject-card reveal">
+ <span class="card-num">06</span>
+ <h3>English</h3>
+ <p>Grammar, literature and essay writing skills.</p>
+ <span class="card-arrow">→</span>
+ </a>
+ </div>
+ </div>
+ </section>
+
+ <!-- How it works -->
+ <section class="section section-alt">
+ <div class="container">
+ <div class="section-head reveal">
+ <p class="section-label">02 — How it works</p>
+ <h2 class="section-title">Simple by design</h2>
+ </div>
+ <div class="grid steps-grid">
+ <div class="step reveal">
+ <div class="step-num">1</div>
+ <h3>Choose a subject</h3>
+ <p>Everything is grouped by subject so you always know where to go.</p>
+ </div>
+ <div class="step reveal">
+ <div class="step-num">2</div>
+ <h3>Watch a lesson</h3>
+ <p>Short, focused video lessons embedded right on the page.</p>
+ </div>
+ <div class="step reveal">
+ <div class="step-num">3</div>
+ <h3>Review &amp; repeat</h3>
+ <p>Come back anytime — your materials stay organized and waiting.</p>
+ </div>
+ </div>
+ </div>
+ </section>
+
+ <!-- CTA -->
+ <section class="section cta-section">
+ <div class="container cta-inner reveal">
+ <h2>Ready to start?</h2>
+ <p>Jump into the video library and pick your first lesson.</p>
+ <a href="lessons.html" class="btn btn-dark">Open video lessons</a>
+ </div>
+ </section>
+
+ <footer class="footer">
+ <div class="container footer-inner">
+ <a href="index.html" class="logo">intclass<span class="logo-dot"></span></a>
+ <p class="footer-text">Study, simplified.</p>
+ </div>
+ </footer>
+
+ <script src="js/main.js"></script>
+</body>
+</html>

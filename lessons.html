@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Video lessons — intclass</title>
+ <meta name="description" content="Video lessons library: math, physics, chemistry, biology, history and english." />
+ <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='00100100'><circle cx='50' cy='50' r='40' fill='%23111'/></svg>" />
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+ <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+ <!-- Navigation -->
+ <header class="nav" id="nav">
+ <div class="container nav-inner">
+ <a href="index.html" class="logo">intclass<span class="logo-dot"></span></a>
+ <nav class="nav-links" id="navLinks">
+ <a href="index.html" class="nav-link">Home</a>
+ <a href="index.html#subjects" class="nav-link">Subjects</a>
+ <a href="lessons.html" class="nav-link active">Video lessons</a>
+ </nav>
+ <a href="lessons.html" class="btn btn-small">Start learning</a>
+ <button class="burger" id="burger" aria-label="Menu">
+ <span></span><span></span>
+ </button>
+ </div>
+ </header>
+
+ <!-- Page head -->
+ <section class="page-head">
+ <div class="blob blob-1"></div>
+ <div class="container">
+ <p class="section-label reveal-line"><span>Video library</span></p>
+ <h1 class="page-title">
+ <span class="reveal-line"><span>Video lessons</span></span>
+ </h1>
+ <p class="page-sub reveal-line"><span>Click a subject to filter. Click a lesson to play it right here.</span></p>
+ </div>
+ </section>
+
+ <!-- Filters -->
+ <section class="section lessons-section">
+ <div class="container">
+ <div class="filters reveal" id="filters">
+ <button class="chip active" data-subject="all">All</button>
+ <button class="chip" data-subject="math">Mathematics</button>
+ <button class="chip" data-subject="physics">Physics</button>
+ <button class="chip" data-subject="chemistry">Chemistry</button>
+ <button class="chip" data-subject="biology">Biology</button>
+ <button class="chip" data-subject="history">History</button>
+ <button class="chip" data-subject="english">English</button>
+ </div>
+
+ <div class="grid lessons-grid" id="lessonsGrid"><!-- rendered by js/lessons.js --></div>
+
+ <p class="lessons-empty" id="lessonsEmpty" hidden>
+ No lessons here yet — check back soon.
+ </p>
+ </div>
+ </section>
+
+ <footer class="footer">
+ <div class="container footer-inner">
+ <a href="index.html" class="logo">intclass<span class="logo-dot"></span></a>
+ <p class="footer-text">Study, simplified.</p>
+ </div>
+ </footer>
+
+ <script src="js/main.js"></script>
+ <script src="js/lessons.js"></script>
+</body>
+</html>
