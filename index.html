@@ -1,147 +1,81 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="ru">
 <head>
- <meta charset="UTF-8" />
- <meta name="viewport" content="width=device-width, initial-scale=1.0" />
- <title>intclass — study, simplified</title>
- <meta name="description" content="A minimal study hub: school subjects, notes and video lessons." />
- <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='00100100'><circle cx='50' cy='50' r='40' fill='%23111'/></svg>" />
- <link rel="preconnect" href="https://fonts.googleapis.com" />
- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
- <link rel="stylesheet" href="css/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>intclass — справочник видеоуроков</title>
+  <meta name="description" content="Справочник видеоуроков и текстовых материалов по разным темам.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
- <!-- Navigation -->
- <header class="nav" id="nav">
- <div class="container nav-inner">
- <a href="index.html" class="logo">intclass<span class="logo-dot"></span></a>
- <nav class="nav-links" id="navLinks">
- <a href="index.html" class="nav-link active">Home</a>
- <a href="index.html#subjects" class="nav-link">Subjects</a>
- <a href="lessons.html" class="nav-link">Video lessons</a>
- </nav>
- <a href="lessons.html" class="btn btn-small">Start learning</a>
- <button class="burger" id="burger" aria-label="Menu">
- <span></span><span></span>
- </button>
- </div>
- </header>
+  <header class="nav" id="nav">
+    <div class="container nav-inner">
+      <a class="logo" href="index.html">intclass<span class="logo-dot"></span></a>
+      <nav class="nav-links" id="navLinks" aria-label="Основная навигация">
+        <a class="nav-link active" href="index.html">Главная</a>
+        <a class="nav-link" href="index.html#topics">Темы</a>
+        <a class="nav-link" href="lessons.html">Видеоуроки</a>
+      </nav>
+      <button class="btn btn-small register-open" type="button">Регистрация</button>
+      <button class="burger" id="burger" type="button" aria-label="Открыть меню" aria-expanded="false"><span></span><span></span></button>
+    </div>
+  </header>
 
- <!-- Hero -->
- <section class="hero">
- <div class="blob blob-1"></div>
- <div class="blob blob-2"></div>
- <div class="container hero-inner">
- <p class="hero-eyebrow reveal-line"><span>School, organized.</span></p>
- <h1 class="hero-title">
- <span class="reveal-line"><span>Study with</span></span>
- <span class="reveal-line"><span class="accent-line">clarity<span class="scribble"></span></span></span>
- </h1>
- <p class="hero-sub reveal-line"><span>One clean place for your subjects, notes and video lessons.
- No clutter, no noise — just learning.</span></p>
- <div class="hero-actions reveal-line">
- <span>
- <a href="lessons.html" class="btn">Watch lessons</a>
- <a href="#subjects" class="btn btn-ghost">Browse subjects</a>
- </span>
- </div>
- </div>
- <div class="scroll-hint" aria-hidden="true"><span></span></div>
- </section>
+  <main>
+    <section class="hero">
+      <div class="blob blob-1"></div><div class="blob blob-2"></div>
+      <div class="container hero-inner">
+        <p class="hero-eyebrow reveal-line"><span>Справочник знаний</span></p>
+        <h1 class="hero-title">
+          <span class="reveal-line"><span>Видеоуроки</span></span>
+          <span class="reveal-line"><span class="accent-line">разных тем<span class="scribble"></span></span></span>
+        </h1>
+        <p class="hero-sub reveal-line"><span>Собрали понятные видео и текстовые описания в одном спокойном пространстве. Выбирайте тему, смотрите и возвращайтесь к нужному материалу.</span></p>
+        <div class="hero-actions reveal-line"><span>
+          <a class="btn" href="lessons.html">Смотреть видеоуроки</a>
+          <a class="btn btn-ghost" href="#topics">Выбрать тему</a>
+        </span></div>
+      </div>
+      <div class="scroll-hint" aria-hidden="true"><span></span></div>
+    </section>
 
- <!-- Subjects -->
- <section class="section" id="subjects">
- <div class="container">
- <div class="section-head reveal">
- <p class="section-label">01 — Subjects</p>
- <h2 class="section-title">Everything in one place</h2>
- <p class="section-text">Pick a subject to see materials and hand-picked video lessons.</p>
- </div>
- <div class="grid subjects-grid">
- <a href="lessons.html?subject=math" class="card subject-card reveal">
- <span class="card-num">01</span>
- <h3>Mathematics</h3>
- <p>Algebra, geometry, calculus — from basics to exam prep.</p>
- <span class="card-arrow">→</span>
- </a>
- <a href="lessons.html?subject=physics" class="card subject-card reveal">
- <span class="card-num">02</span>
- <h3>Physics</h3>
- <p>Mechanics, waves, electricity — intuition first, formulas second.</p>
- <span class="card-arrow">→</span>
- </a>
- <a href="lessons.html?subject=chemistry" class="card subject-card reveal">
- <span class="card-num">03</span>
- <h3>Chemistry</h3>
- <p>Atoms, reactions and the periodic table, made visual.</p>
- <span class="card-arrow">→</span>
- </a>
- <a href="lessons.html?subject=biology" class="card subject-card reveal">
- <span class="card-num">04</span>
- <h3>Biology</h3>
- <p>Cells, genetics and ecosystems explained simply.</p>
- <span class="card-arrow">→</span>
- </a>
- <a href="lessons.html?subject=history" class="card subject-card reveal">
- <span class="card-num">05</span>
- <h3>History</h3>
- <p>Timelines, causes and consequences — the big picture.</p>
- <span class="card-arrow">→</span>
- </a>
- <a href="lessons.html?subject=english" class="card subject-card reveal">
- <span class="card-num">06</span>
- <h3>English</h3>
- <p>Grammar, literature and essay writing skills.</p>
- <span class="card-arrow">→</span>
- </a>
- </div>
- </div>
- </section>
+    <section class="section" id="topics">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="section-label">01 — Темы</p>
+          <h2 class="section-title">Найдите нужное объяснение</h2>
+          <p class="section-text">Каждая карточка ведёт к подборке видеоуроков и коротких текстовых описаний.</p>
+        </div>
+        <div class="grid subjects-grid">
+          <a class="card subject-card reveal" href="lessons.html?subject=math"><span class="card-num">01</span><h3>Математика</h3><p>Алгебра, геометрия и математический анализ без лишней сложности.</p><span class="card-arrow">→</span></a>
+          <a class="card subject-card reveal" href="lessons.html?subject=physics"><span class="card-num">02</span><h3>Физика</h3><p>Механика, волны и электричество через понятные примеры.</p><span class="card-arrow">→</span></a>
+          <a class="card subject-card reveal" href="lessons.html?subject=chemistry"><span class="card-num">03</span><h3>Химия</h3><p>Атомы, реакции и периодическая система в наглядной форме.</p><span class="card-arrow">→</span></a>
+          <a class="card subject-card reveal" href="lessons.html?subject=biology"><span class="card-num">04</span><h3>Биология</h3><p>Клетки, генетика и экосистемы с краткими пояснениями.</p><span class="card-arrow">→</span></a>
+          <a class="card subject-card reveal" href="lessons.html?subject=history"><span class="card-num">05</span><h3>История</h3><p>События, даты и связи между ними — всё в одном контексте.</p><span class="card-arrow">→</span></a>
+          <a class="card subject-card reveal" href="lessons.html?subject=english"><span class="card-num">06</span><h3>Английский язык</h3><p>Грамматика, лексика и полезные навыки для практики.</p><span class="card-arrow">→</span></a>
+        </div>
+      </div>
+    </section>
 
- <!-- How it works -->
- <section class="section section-alt">
- <div class="container">
- <div class="section-head reveal">
- <p class="section-label">02 — How it works</p>
- <h2 class="section-title">Simple by design</h2>
- </div>
- <div class="grid steps-grid">
- <div class="step reveal">
- <div class="step-num">1</div>
- <h3>Choose a subject</h3>
- <p>Everything is grouped by subject so you always know where to go.</p>
- </div>
- <div class="step reveal">
- <div class="step-num">2</div>
- <h3>Watch a lesson</h3>
- <p>Short, focused video lessons embedded right on the page.</p>
- </div>
- <div class="step reveal">
- <div class="step-num">3</div>
- <h3>Review &amp; repeat</h3>
- <p>Come back anytime — your materials stay organized and waiting.</p>
- </div>
- </div>
- </div>
- </section>
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-head reveal"><p class="section-label">02 — Как пользоваться</p><h2 class="section-title">Учитесь в своём темпе</h2></div>
+        <div class="grid steps-grid">
+          <div class="step reveal"><div class="step-num">1</div><h3>Выберите тему</h3><p>Фильтруйте библиотеку по предмету и сразу переходите к нужному разделу.</p></div>
+          <div class="step reveal"><div class="step-num">2</div><h3>Посмотрите урок</h3><p>Урок открывается прямо на странице, а под ним есть короткое описание.</p></div>
+          <div class="step reveal"><div class="step-num">3</div><h3>Сохраните профиль</h3><p>Регистрация необязательна. Если захотите, имя и email сохранятся в cookie этого браузера.</p></div>
+        </div>
+      </div>
+    </section>
 
- <!-- CTA -->
- <section class="section cta-section">
- <div class="container cta-inner reveal">
- <h2>Ready to start?</h2>
- <p>Jump into the video library and pick your first lesson.</p>
- <a href="lessons.html" class="btn btn-dark">Open video lessons</a>
- </div>
- </section>
+    <section class="section cta-section"><div class="container cta-inner reveal"><h2>Начните с одной темы</h2><p>Никаких обязательных аккаунтов — просто откройте библиотеку и учитесь.</p><a class="btn btn-dark" href="lessons.html">Открыть видеоуроки</a></div></section>
+  </main>
 
- <footer class="footer">
- <div class="container footer-inner">
- <a href="index.html" class="logo">intclass<span class="logo-dot"></span></a>
- <p class="footer-text">Study, simplified.</p>
- </div>
- </footer>
-
- <script src="js/main.js"></script>
+  <footer class="footer"><div class="container footer-inner"><a class="logo" href="index.html">intclass<span class="logo-dot"></span></a><p class="footer-text">Видеоуроки и знания — проще.</p></div></footer>
+  <div class="modal-backdrop" id="registerModal" hidden><section class="modal" role="dialog" aria-modal="true" aria-labelledby="registerTitle"><button class="modal-close" type="button" aria-label="Закрыть">×</button><p class="section-label">Ваш профиль</p><h2 id="registerTitle">Регистрация по желанию</h2><p class="modal-text">Заполнив форму, вы сохраните имя и email в cookie этого браузера. Пароль не нужен и никуда не отправляется.</p><form id="registerForm"><label>Имя<input name="name" required maxlength="60" autocomplete="name" placeholder="Как к вам обращаться?"></label><label>Email<input name="email" type="email" required maxlength="120" autocomplete="email" placeholder="you@example.com"></label><button class="btn" type="submit">Сохранить профиль</button></form><p class="form-status" id="formStatus" aria-live="polite"></p></section></div>
+  <script src="js/main.js"></script>
 </body>
 </html>

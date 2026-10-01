@@ -1,34 +1,38 @@
 # intclass
 
-A minimal, plain-white study website. General subject hub + video lessons library, hosted on GitHub Pages.
+Русскоязычный справочник видеоуроков разных тем, размещённый на GitHub Pages.
 
 **Live site:** https://losdek.github.io/intclass/
 
-## Structure
+## Что есть на сайте
 
 ```
-index.html # General part: hero, subjects, how it works
-lessons.html # Video lessons library (YouTube embeds)
-css/style.css # Styles + animations
-js/main.js # Nav, mobile menu, scroll-reveal animations
-js/lessons.js # Lesson data, subject filters, lazy YouTube embeds
+index.html # Главная: герой, темы и сценарий обучения
+lessons.html # Библиотека видеоуроков с фильтрами
+css/style.css # Белая минималистичная тема и анимации
+js/main.js # Шапка, reveal-анимации и необязательный профиль
+js/lessons.js # Данные уроков, фильтры и YouTube-видео
 ```
 
-## Add a video lesson
+## Добавить видеоурок
 
-Open `js/lessons.js` and copy an entry in the `LESSONS` array:
+Откройте `js/lessons.js` и добавьте объект в массив `LESSONS`:
 
 ```js
 {
- title: "My lesson title",
- description: "Short description.",
+ title: "Название урока",
+ description: "Краткое текстовое описание.",
  subject: "math", // math | physics | chemistry | biology | history | english
  videoId: "WUvTyaaNkzM", // the part after watch?v= in the YouTube URL
 },
 ```
 
-Commit and push — GitHub Pages redeploys automatically.
+После push GitHub Pages автоматически обновит сайт.
 
-## Rename the project
+## Профиль и cookies
 
-The site title is in the `<title>` tags and the `.logo` elements in both HTML files. If you rename the repository on GitHub, the Pages URL changes accordingly (`https://<user>.github.io/<repo>/`).
+Регистрация необязательна. Если посетитель заполнит форму, имя и email сохраняются в cookie `intclass_profile` только в его браузере на один год. Пароль не запрашивается и данные не отправляются на сервер. Для полноценной авторизации нужен отдельный backend.
+
+## Переименовать проект
+
+Название сайта находится в `<title>` и элементах `.logo` в HTML-файлах. При переименовании репозитория URL GitHub Pages также изменится.
