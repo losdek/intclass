@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>intclass — справочник видеоуроков</title>
-  <meta name="description" content="Справочник видеоуроков и текстовых материалов по разным темам.">
+  <title>intclass — видеоуроки</title>
+  <meta name="description" content="Видеоуроки и мини-тесты по темам.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -31,43 +31,45 @@
         <p class="hero-eyebrow reveal-line"><span>Справочник знаний</span></p>
         <h1 class="hero-title">
           <span class="reveal-line"><span>Видеоуроки</span></span>
-          <span class="reveal-line"><span class="hero-invert">для 5–9 классов</span></span>
+          <span class="reveal-line"><span class="hero-invert">наглядно</span></span>
         </h1>
-        <p class="hero-sub reveal-line"><span>Собрали понятные видео, краткие конспекты и мини-тесты в одном пространстве. Выбирайте предмет, класс и тему без лишней сложности.</span></p>
+        <p class="hero-sub reveal-line"><span>Короткие уроки и мини-тесты по темам. Ничего лишнего.</span></p>
         <div class="hero-actions reveal-line"><span>
           <a class="btn" href="lessons.html">Смотреть видеоуроки</a>
-          <a class="btn btn-ghost" href="#topics">Выбрать тему</a>
+          <a class="btn btn-ghost" href="#topics">Выбрать предмет</a>
         </span></div>
       </div>
-      <div class="scroll-hint" aria-hidden="true"><span></span></div>
+      <div class="scroll-hint" aria-label="Листайте вниз">
+        <svg class="hand-swipe-svg" width="28" height="40" viewBox="0 0 32 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 4C14.9 4 14 4.9 14 6V19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M14 11C13.2 10.4 12.1 10.6 11.5 11.4C11.2 11.8 11 12.4 11 13V20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M11 15C10.2 14.5 9.1 14.7 8.5 15.5C8.2 15.9 8 16.4 8 17V23C8 28.5 12.5 33 18 33C23.5 33 28 28.5 28 23V16C28 14.9 27.1 14 26 14C24.9 14 24 14.9 24 16V18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M16 4C17.1 4 18 4.9 18 6V18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M16 36L16 41M13 38.5L16 41.5L19 38.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
     </section>
 
     <section class="section" id="topics">
       <div class="container">
         <div class="section-head reveal">
           <p class="section-label">01 — Предметы</p>
-          <h2 class="section-title">Найдите нужное объяснение</h2>
-          <p class="section-text">Выберите предмет, чтобы перейти к урокам по классам с 5 по 9.</p>
+          <h2 class="section-title">Выберите предмет</h2>
         </div>
         <div class="grid subjects-grid">
-          <a class="card subject-card reveal" href="lessons.html?subject=math"><span class="card-num">01</span><h3>Математика</h3><p>Уроки по 5–9 классам: дроби, уравнения, проценты и геометрия.</p><span class="card-arrow">→</span></a>
-          <a class="card subject-card reveal" href="lessons.html?subject=russian"><span class="card-num">02</span><h3>Русский язык</h3><p>Уроки по 5–9 классам: орфография, синтаксис, части речи и разборы.</p><span class="card-arrow">→</span></a>
+          <a class="card subject-card reveal" href="lessons.html?subject=math">
+            <span class="card-num">01</span>
+            <h3>Математика</h3>
+            <span class="card-arrow">→</span>
+          </a>
+          <a class="card subject-card reveal" href="lessons.html?subject=russian">
+            <span class="card-num">02</span>
+            <h3>Русский язык</h3>
+            <span class="card-arrow">→</span>
+          </a>
         </div>
       </div>
     </section>
-
-    <section class="section section-alt">
-      <div class="container">
-        <div class="section-head reveal"><p class="section-label">02 — Как пользоваться</p><h2 class="section-title">Учитесь в своём темпе</h2></div>
-        <div class="grid steps-grid">
-          <div class="step reveal"><div class="step-num">1</div><h3>Предмет и класс</h3><p>Сначала выберите предмет, затем класс от 5 до 9 — легко и быстро с телефона.</p></div>
-          <div class="step reveal"><div class="step-num">2</div><h3>Тема и видеоурок</h3><p>Откройте подходящую тему с наглядным видеообъяснением без лишней воды.</p></div>
-          <div class="step reveal"><div class="step-num">3</div><h3>Мини-тест по теме</h3><p>После просмотра закрепите знания коротким тестом прямо под видео.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section cta-section"><div class="container cta-inner reveal"><h2>Начните с одной темы</h2><p>Никаких обязательных аккаунтов — просто откройте библиотеку и учитесь.</p><a class="btn btn-dark" href="lessons.html">Открыть видеоуроки</a></div></section>
   </main>
 
   <footer class="footer"><div class="container footer-inner"><a class="logo" href="index.html">intclass<span class="logo-dot"></span></a><p class="footer-text">Видеоуроки и знания — проще.</p></div></footer>
