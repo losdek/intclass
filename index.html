@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>intclass — видеоуроки</title>
-  <meta name="description" content="Видеоуроки и мини-тесты по темам.">
+  <title>за минуту — видеоуроки</title>
+  <meta name="description" content="Видеоуроки и мини-тесты за минуту.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=20261001_6">
+  <link rel="stylesheet" href="css/style.css?v=20261001_8">
 </head>
 <body>
   <header class="nav" id="nav">
     <div class="container nav-inner">
-      <a class="logo" href="index.html">intclass<span class="logo-dot"></span></a>
+      <a class="logo" href="index.html">за минуту<span class="logo-dot"></span></a>
       <nav class="nav-links" id="navLinks" aria-label="Основная навигация">
         <a class="nav-link active" href="index.html">Главная</a>
         <a class="nav-link" href="#topics">Предметы</a>
@@ -30,12 +30,12 @@
     <section class="hero">
       <div class="blob blob-1"></div><div class="blob blob-2"></div>
       <div class="container hero-inner">
-        <p class="hero-eyebrow reveal-line"><span>Справочник знаний</span></p>
+        <p class="hero-eyebrow reveal-line"><span>Тема понятна быстро</span></p>
         <h1 class="hero-title">
-          <span class="reveal-line"><span>Видеоуроки</span></span>
-          <span class="reveal-line"><span><span class="hero-invert" data-text="наглядно">наглядно</span></span></span>
+          <span class="reveal-line"><span>Разбери тему</span></span>
+          <span class="reveal-line"><span><span class="hero-invert" data-text="за минуту">за минуту</span></span></span>
         </h1>
-        <p class="hero-sub reveal-line"><span>Короткие уроки и мини-тесты по темам. Ничего лишнего.</span></p>
+        <p class="hero-sub reveal-line"><span>Короткий урок, ясное объяснение и мини-тест сразу после просмотра.</span></p>
         <div class="hero-actions reveal-line"><span>
           <a class="btn" href="lessons.html">Смотреть видеоуроки</a>
           <a class="btn btn-ghost" href="#topics">Выбрать предмет</a>
@@ -59,19 +59,19 @@
           <h2 class="section-title">Выберите предмет</h2>
         </div>
         <div class="grid subjects-grid">
-          <a class="card subject-card reveal" href="lessons.html?subject=math">
-            <span class="card-num">01</span>
+          <a class="card subject-card subject-math reveal" href="lessons.html?subject=math" aria-label="Перейти к урокам по математике">
+            <span class="subject-icon">∑</span>
             <div class="subject-card-body">
               <h3>Математика</h3>
               <p class="subject-card-desc">Алгебра, геометрия, дроби, уравнения и видеоразборы</p>
             </div>
             <span class="card-arrow">→</span>
           </a>
-          <a class="card subject-card reveal" href="lessons.html?subject=russian">
-            <span class="card-num">02</span>
+          <a class="card subject-card subject-russian reveal" href="lessons.html?subject=russian" aria-label="Перейти к урокам по русскому языку">
+            <span class="subject-icon">А</span>
             <div class="subject-card-body">
               <h3>Русский язык</h3>
-              <p class="subject-card-desc">Орфография, пунктуация, правила и подготовка к ОГЭ</p>
+              <p class="subject-card-desc">Орфография, пунктуация, правила и подготовка к экзаменам и ОРТ</p>
             </div>
             <span class="card-arrow">→</span>
           </a>
@@ -85,7 +85,7 @@
         <div class="section-head reveal">
           <p class="section-label">02 — Содержание программ</p>
           <h2 class="section-title">Что изучается в каждом курсе</h2>
-          <p class="section-desc">Школьная программа 5–9 классов с фокусом на практические навыки, понимание сути формул и уверенную сдачу ОГЭ.</p>
+          <p class="section-desc">Школьная программа 5–9 классов с фокусом на практические навыки, понимание сути формул и успешную сдачу экзаменов и ОРТ.</p>
         </div>
 
         <div class="grid subject-detail-grid">
@@ -98,7 +98,7 @@
               <li><strong>Уравнения и выражения:</strong> линейные и квадратные уравнения, формулы сокращённого умножения, дискриминант и теорема Виета.</li>
               <li><strong>Наглядная геометрия:</strong> углы, свойства и признаки равенства треугольников, теорема Пифагора, четырёхугольники и площади фигур.</li>
               <li><strong>Функции и анализ:</strong> квадратичная функция (парабола), свойства функций, чтение графиков, арифметическая и геометрическая прогрессии.</li>
-              <li><strong>Подготовка к ОГЭ:</strong> текстовые прикладные задачи (движение, работа, сплавы), основы теории вероятностей и статистика.</li>
+              <li><strong>Подготовка к экзаменам и ОРТ:</strong> текстовые прикладные задачи (движение, работа, сплавы), основы теории вероятностей и статистика.</li>
             </ul>
             <div class="subject-card-footer">
               <a class="btn btn-small" href="lessons.html?subject=math">Уроки по математике →</a>
@@ -108,13 +108,13 @@
           <article class="card subject-detail-card reveal">
             <div class="subject-detail-badge">А Русский язык</div>
             <h3>Орфография, синтаксис и пунктуация</h3>
-            <p class="subject-detail-lead">Чёткие схемы и алгоритмы применения правил вместо утомительной зубрежки справочников. Помогает писать грамотно и сдать ОГЭ на максимум.</p>
+            <p class="subject-detail-lead">Чёткие схемы и алгоритмы применения правил вместо утомительной зубрежки справочников. Помогает писать грамотно и сдать экзамены и ОРТ на максимум.</p>
             <ul class="subject-points-list">
               <li><strong>Орфография корней:</strong> проверяемые и непроверяемые безударные гласные, корни с чередованием (-лаг-/-лож-, -раст-/-рос-, -бер-/-бир-).</li>
               <li><strong>Приставки и суффиксы:</strong> правописание приставок ПРЕ- и ПРИ-, приставок на -З/-С; Н и НН в суффиксах частей речи; слитное и раздельное написание НЕ.</li>
               <li><strong>Осложнённое предложение:</strong> обособленные определения и обстоятельства (причастные и деепричастные обороты), вводные слова, обращения.</li>
               <li><strong>Сложные синтаксические конструкции:</strong> сложносочинённые (ССП), сложноподчинённые (СПП) с разными придаточными и бессоюзные (БСП) предложения.</li>
-              <li><strong>Практика к ОГЭ:</strong> пунктуационный анализ текста, поиск грамматической основы, синтаксические нормы и средства выразительности.</li>
+              <li><strong>Экзаменационная практика:</strong> пунктуационный анализ текста, поиск грамматической основы, синтаксические нормы и средства выразительности.</li>
             </ul>
             <div class="subject-card-footer">
               <a class="btn btn-small" href="lessons.html?subject=russian">Уроки по русскому языку →</a>
@@ -169,37 +169,9 @@
           <div class="grade-guide-item reveal">
             <div class="grade-guide-header">
               <span class="grade-tag">9 класс</span>
-              <strong>Сложные предложения, функции и экзамен ОГЭ</strong>
+              <strong>Сложные предложения, функции и итоговая аттестация</strong>
             </div>
-            <p>Квадратичная функция, параболы, числовые прогрессии, вероятность. Сложносочинённые, сложноподчинённые и бессоюзные предложения, итоговый тренинг к ОГЭ.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 04: Методика микро-уроков -->
-    <section class="section section-alt" id="method">
-      <div class="container">
-        <div class="section-head reveal">
-          <p class="section-label">04 — Как это устроено</p>
-          <h2 class="section-title">Методика быстрого обучения</h2>
-        </div>
-
-        <div class="grid method-cards-grid">
-          <div class="card method-card reveal">
-            <span class="method-step-num">01</span>
-            <h3>Короткое видео по теме</h3>
-            <p>Никакой воды и часовых лекций. Только концентрированное объяснение формулы, правила или способа решения за 5–8 минут.</p>
-          </div>
-          <div class="card method-card reveal">
-            <span class="method-step-num">02</span>
-            <h3>Мини-тест в один клик</h3>
-            <p>Прямо под видео расположен проверочный вопрос. Нажимаете вариант, жмёте «Проверить» и сразу видите свой результат.</p>
-          </div>
-          <div class="card method-card reveal">
-            <span class="method-step-num">03</span>
-            <h3>Разбор логики ответа</h3>
-            <p>Если допущена ошибка — тест наглядно объясняет, почему правилен другой вариант. Можно пройти снова и закрепить навык.</p>
+            <p>Квадратичная функция, параболы, числовые прогрессии, вероятность. Сложносочинённые, сложноподчинённые и бессоюзные предложения, итоговый тренинг к экзаменам и ОРТ.</p>
           </div>
         </div>
 
@@ -210,7 +182,7 @@
     </section>
   </main>
 
-  <footer class="footer"><div class="container footer-inner"><a class="logo" href="index.html">intclass<span class="logo-dot"></span></a><p class="footer-text">Видеоуроки и знания — проще.</p></div></footer>
+  <footer class="footer"><div class="container footer-inner"><a class="logo" href="index.html">за минуту<span class="logo-dot"></span></a><p class="footer-text">Тема — за минуту.</p></div></footer>
   <div class="modal-backdrop" id="registerModal" hidden><section class="modal" role="dialog" aria-modal="true" aria-labelledby="registerTitle"><button class="modal-close" type="button" aria-label="Закрыть">×</button><p class="section-label">Ваш профиль</p><h2 id="registerTitle">Регистрация по желанию</h2><p class="modal-text">Заполнив форму, вы сохраните имя и email в cookie этого браузера. Пароль не нужен и никуда не отправляется.</p><form id="registerForm"><label>Имя<input name="name" required maxlength="60" autocomplete="name" placeholder="Как к вам обращаться?"></label><label>Email<input name="email" type="email" required maxlength="120" autocomplete="email" placeholder="you@example.com"></label><button class="btn" type="submit">Сохранить профиль</button></form><p class="form-status" id="formStatus" aria-live="polite"></p></section></div>
   <script src="js/main.js"></script>
 </body>

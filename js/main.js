@@ -68,3 +68,16 @@ form?.addEventListener("submit", (event) => {
   form.querySelector("button").textContent = "Сохранено";
   setTimeout(closeModal, 1200);
 });
+
+const pressable = ".subject-card, .card, .btn, .nav-link, .modal-close, .choice-card, .topic-chip, .quiz-unlock-btn, .quiz-toggle-btn, .quiz-check-btn, .quiz-retry-btn, .reset-button, .lesson-media";
+function pressOn(event) {
+  const target = event.target.closest(pressable);
+  if (target) target.classList.add("is-pressed");
+}
+function pressOff(event) {
+  const target = event.target.closest(pressable);
+  if (target) target.classList.remove("is-pressed");
+}
+document.addEventListener("pointerdown", pressOn);
+document.addEventListener("pointerup", pressOff);
+document.addEventListener("pointercancel", pressOff);

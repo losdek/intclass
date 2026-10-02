@@ -451,7 +451,7 @@ const LESSONS = [
     subject: "russian",
     grade: "9",
     topic: "Подготовка к сочинению",
-    title: "Структура сочинения-рассуждения (ОГЭ)",
+    title: "Структура сочинения-рассуждения (экзамены и ОРТ)",
     description: "Как сформулировать тезис, привести аргумент из прочитанного текста, аргумент из жизненного опыта и сделать вывод.",
     videoId: "WUvTyaaNkzM",
     quiz: [
@@ -529,10 +529,19 @@ function createCard(lesson, index) {
   const quizData = lesson.quiz || [];
   const hasQuiz = quizData.length > 0;
 
-  // Формирование блока мини-теста
+  // Формирование блока мини-теста (скрыт по умолчанию, открывается ПОСЛЕ просмотра видео)
   const quizHtml = hasQuiz
     ? `
-      <div class="lesson-quiz" data-lesson-id="${lesson.id}">
+      <div class="quiz-lock-status" id="quiz-status-${lesson.id}">
+        <div class="quiz-lock-badge">
+          <span class="quiz-lock-icon">🔒</span>
+          <span class="quiz-lock-text">Мини-тест откроется после просмотра видеоурока</span>
+        </div>
+        <button class="quiz-unlock-btn" type="button" data-lesson-id="${lesson.id}">
+          Я посмотрел видео
+        </button>
+      </div>
+      <div class="lesson-quiz" data-lesson-id="${lesson.id}" hidden>
         <div class="quiz-header">
           <span class="quiz-tag">Мини-тест по теме</span>
           <button class="quiz-toggle-btn" type="button" aria-expanded="true">
@@ -666,8 +675,45 @@ function renderLessons(shouldScroll = false) {
 function playVideo(media) {
   const videoId = media.dataset.video;
   if (!videoId) return;
-  media.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0" title="Видеоурок YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+
+  const card = media.closest(".lesson-card");
+  const statusBox = card?.querySelector(".quiz-lock-status");
+
+  // YouTube плеер с поддержкой API для отслеживания окончания
+  media.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&enablejsapi=1&rel=0" title="Видеоурок YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
   media.style.cursor = "default";
+
+  if (statusBox) {
+    statusBox.classList.add("is-watching");
+    const textElem = statusBox.querySelector(".quiz-lock-text");
+    const iconElem = statusBox.querySelector(".quiz-lock-icon");
+    if (textElem) textElem.textContent = "Идёт видеоурок. Тест откроется по окончании";
+    if (iconElem) iconElem.textContent = "▶";
+  }
+}
+
+/**
+ * Разблокировка и плавный показ теста после просмотра видео
+ */
+function unlockQuiz(lessonId, smoothScroll = false) {
+  const quizElem = document.querySelector(`.lesson-quiz[data-lesson-id="${lessonId}"]`);
+  if (!quizElem) return;
+
+  const card = quizElem.closest(".lesson-card");
+  const statusBox = card?.querySelector(".quiz-lock-status");
+
+  if (statusBox) {
+    statusBox.hidden = true;
+  }
+  if (quizElem.hidden) {
+    quizElem.hidden = false;
+    quizElem.classList.add("quiz-unlocked");
+    if (smoothScroll) {
+      setTimeout(() => {
+        quizElem.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }, 100);
+    }
+  }
 }
 
 /**
@@ -842,7 +888,10 @@ function selectGrade(gradeVal, shouldScroll = false) {
   });
 
   renderTopics();
-  renderLessons(shouldScroll);
+  renderLessons(false);
+  if (shouldScroll && window.innerWidth <= 768) {
+    setTimeout(() => topicStep?.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
+  }
 }
 
 /**
@@ -869,7 +918,7 @@ document.querySelectorAll("[data-subject]").forEach((button) => {
 // Шаг 2: Выбор класса (5, 6, 7, 8, 9)
 document.querySelectorAll("[data-grade]").forEach((button) => {
   button.addEventListener("click", () => {
-    selectGrade(button.dataset.grade, false);
+    selectGrade(button.dataset.grade, true);
   });
 });
 
@@ -877,7 +926,7 @@ document.querySelectorAll("[data-grade]").forEach((button) => {
 topicChoices?.addEventListener("click", (event) => {
   const button = event.target.closest("[data-topic]");
   if (!button) return;
-  selectTopic(button.dataset.topic, false);
+  selectTopic(button.dataset.topic, window.innerWidth <= 768);
 });
 
 // Клик по сетке уроков (запуск видео и мини-тест)
@@ -909,6 +958,7 @@ resetFlowBtn?.addEventListener("click", () => {
   });
 
   topicChoices.innerHTML = "";
+  grid.replaceChildren();
   gradeStep?.classList.add("is-locked");
   topicStep?.classList.add("is-locked");
   resultsPanel?.classList.add("is-locked");
@@ -936,3 +986,44 @@ resetFlowBtn?.addEventListener("click", () => {
     updateProgressIndicator();
   }
 })();
+
+// ==========================================
+// Обработка разблокировки тестов после просмотра видео
+// ==========================================
+
+// Разблокировка по кнопке "Я посмотрел видео"
+document.addEventListener("click", (event) => {
+  const unlockBtn = event.target.closest(".quiz-unlock-btn");
+  if (unlockBtn) {
+    const lessonId = unlockBtn.dataset.lessonId;
+    if (lessonId) {
+      unlockQuiz(lessonId, true);
+    }
+  }
+});
+
+// Отслеживание окончания видео в плеере YouTube через postMessage
+window.addEventListener("message", (event) => {
+  try {
+    let data = event.data;
+    if (typeof data === "string") {
+      data = JSON.parse(data);
+    }
+    // YouTube IFrame API отправляет события { event: "onStateChange", info: 0 } (0 = Ended)
+    if (data && (data.event === "onStateChange" || data.info !== undefined)) {
+      if (data.info === 0) {
+        document.querySelectorAll(".lesson-card").forEach((card) => {
+          const iframe = card.querySelector("iframe");
+          if (iframe) {
+            const quiz = card.querySelector(".lesson-quiz");
+            if (quiz && quiz.hidden) {
+              unlockQuiz(quiz.dataset.lessonId, true);
+            }
+          }
+        });
+      }
+    }
+  } catch (err) {}
+});
+
+
