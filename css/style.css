@@ -328,6 +328,16 @@ body.modal-open {
   margin-top: 2.25rem;
 }
 
+.hero-actions-bw .btn {
+  border: 2px solid #111115;
+  background: #111115;
+  color: #ffffff;
+  box-shadow: none;
+}
+.hero-actions-bw .btn-ghost {
+  background: #ffffff;
+  color: #111115;
+}
 .hero-actions > span {
   display: inline-flex;
   flex-wrap: wrap;
@@ -500,6 +510,11 @@ body.modal-open {
   box-shadow: var(--shadow);
 }
 
+.subject-card,
+.subject-detail-card,
+.grade-guide-item {
+  background: linear-gradient(145deg, #ffffff 0%, #eef3ff 58%, #d9e4ff 100%);
+}
 .subject-card {
   display: flex;
   align-items: center;

@@ -607,23 +607,19 @@ function renderTopics() {
     return matchSub && matchGrade;
   });
 
-  const uniqueTopics = [...new Set(availableLessons.map((l) => l.topic))];
-
-  if (uniqueTopics.length === 0) {
-    topicChoices.innerHTML = `<p class="flow-hint">Для выбранного критерия темы скоро появятся.</p>`;
+  if (availableLessons.length === 0) {
+    topicChoices.innerHTML = `<p class="flow-hint">Для выбранного класса видео скоро появятся.</p>`;
     return;
   }
 
-  // Кнопка "Все темы" + кнопки каждой темы
-  const allChip = `<button class="topic-chip ${!state.topic ? "selected" : ""}" type="button" data-topic="__all__">Все темы (${availableLessons.length})</button>`;
-  const topicChips = uniqueTopics
+  const topicChips = availableLessons
     .map(
-      (topic) =>
-        `<button class="topic-chip ${state.topic === topic ? "selected" : ""}" type="button" data-topic="${topic}">${topic}</button>`
+      (lesson) =>
+        `<button class="topic-chip ${state.topic === lesson.id ? "selected" : ""}" type="button" data-topic="${lesson.id}">${lesson.title}</button>`
     )
     .join("");
 
-  topicChoices.innerHTML = allChip + topicChips;
+  topicChoices.innerHTML = topicChips;
   topicStep.classList.remove("is-locked");
   if (topicHint) topicHint.hidden = true;
   updateProgressIndicator();
@@ -641,13 +637,14 @@ function renderLessons(shouldScroll = false) {
   const filtered = LESSONS.filter((lesson) => {
     const matchSub = lesson.subject === state.subject;
     const matchGrade = !state.grade || lesson.grade === state.grade;
-    const matchTopic = !state.topic || lesson.topic === state.topic;
+    const matchTopic = !state.topic || lesson.id === state.topic;
     return matchSub && matchGrade && matchTopic;
   });
 
   const subjectTitle = SUBJECT_LABELS[state.subject] || state.subject;
   const gradeTitle = state.grade ? ` · ${state.grade} класс` : " · Все классы (5–9)";
-  const topicTitle = state.topic ? ` · ${state.topic}` : " · Все темы";
+  const selectedLesson = LESSONS.find((lesson) => lesson.id === state.topic);
+  const topicTitle = selectedLesson ? ` · ${selectedLesson.title}` : "";
   resultsTitle.textContent = `${subjectTitle}${gradeTitle}${topicTitle}`;
 
   grid.innerHTML = "";
