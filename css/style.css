@@ -818,6 +818,13 @@ body.modal-open {
   justify-content: center;
 }
 
+.center-actions .btn {
+  background: linear-gradient(135deg, #1d2435 0%, #2b344b 54%, #4a566e 100%);
+  border-color: #3d485e;
+  color: #f4f5f8;
+  box-shadow: 0 7px 18px rgba(29, 36, 53, 0.18);
+}
+
 .subject-card:active .card-arrow {
   transform: translateX(6px);
   color: #ffffff;
@@ -831,6 +838,52 @@ body.modal-open {
   overflow: hidden;
   padding: 148px 0 68px;
   background: linear-gradient(180deg, #f8faff 0%, #e9eef8 100%);
+}
+
+/* The library uses the homepage's quieter lower-page palette. */
+.lessons-page {
+  background: #e7ecf5;
+}
+
+.lessons-page .nav {
+  background: rgba(239, 242, 248, 0.94);
+}
+
+.lessons-page .nav.scrolled {
+  background: rgba(232, 237, 246, 0.98);
+}
+
+.lessons-page .page-head {
+  background: linear-gradient(180deg, #e9edf5 0%, #dfe6f1 100%);
+}
+
+.lessons-page .page-head .blob-1 {
+  background: #cbd4e5;
+  opacity: 0.42;
+}
+
+.lessons-page .flow-progress,
+.lessons-page .flow-step,
+.lessons-page .results-panel {
+  background: linear-gradient(145deg, #eef1f7 0%, #dfe5ef 100%);
+  border-color: #cbd4e4;
+}
+
+.lessons-page .choice-card,
+.lessons-page .choice-card.compact,
+.lessons-page .topic-chip,
+.lessons-page .lesson-card {
+  background: linear-gradient(145deg, #f1f3f7 0%, #e2e7f0 100%);
+  border-color: #cbd4e4;
+}
+
+.lessons-page .flow-step.is-locked {
+  background: #dfe4ed;
+  border-color: #c6cfdf;
+}
+
+.lessons-page .lesson-media {
+  background: linear-gradient(135deg, #bfc9de 0%, #dce3ef 100%);
 }
 
 .page-head-inner {
