@@ -257,7 +257,7 @@ body.modal-open {
 }
 
 .hero {
-  background: linear-gradient(180deg, #ffffff 0%, #f0f3fa 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #eef2f9 100%);
 }
 .hero .blob { opacity: 0.35; }
 .hero-eyebrow span {
@@ -465,11 +465,20 @@ body.modal-open {
    ========================================================================== */
 .section {
   padding: 5.5rem 0;
+  scroll-margin-top: 78px;
 }
 
 .section-alt {
-  background: #f4f6fb;
+  background: linear-gradient(180deg, #edf1f8 0%, #e7ecf5 100%);
   border-block: 1px solid var(--line);
+}
+
+#topics {
+  background: linear-gradient(180deg, #f4f6fb 0%, #edf1f8 100%);
+}
+
+#grades {
+  background: linear-gradient(180deg, #e7ecf5 0%, #dfe6f1 100%);
 }
 
 .section-head {
@@ -821,6 +830,44 @@ body.modal-open {
   background: linear-gradient(180deg, #f8faff 0%, #e9eef8 100%);
 }
 
+.page-head-inner {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.page-head-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid rgba(64, 88, 173, 0.18);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.52);
+  color: var(--soft);
+  font-size: 0.74rem;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.page-head-note strong {
+  color: var(--ink);
+  font-size: 0.82rem;
+}
+
+.page-head-note-mark {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #354b91, #7188df);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 1rem;
+}
+
 .page-title {
   font-size: clamp(2.6rem, 6.5vw, 4.8rem);
   font-weight: 800;
@@ -848,6 +895,7 @@ body.modal-open {
 
 /* Индикатор шагов */
 .flow-progress {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -856,6 +904,17 @@ body.modal-open {
   border-radius: 999px;
   padding: 0.65rem 1.4rem;
   box-shadow: var(--shadow-sm);
+}
+
+.progress-caption {
+  position: absolute;
+  top: -1.45rem;
+  left: 0.2rem;
+  color: var(--faint);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
 }
 
 .progress-step {
@@ -916,6 +975,17 @@ body.modal-open {
   border-radius: var(--radius);
   padding: 1.85rem;
   transition: opacity 0.35s var(--ease), border-color 0.35s var(--ease), transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+
+.flow-step:not(.is-locked) {
+  border-color: #cfd9ef;
+}
+
+.flow-description {
+  max-width: 34rem;
+  margin: -0.35rem 0 1.15rem 3.55rem;
+  color: var(--soft);
+  font-size: 0.9rem;
 }
 
 .flow-step.is-locked {
@@ -1127,6 +1197,10 @@ body.modal-open {
   padding-bottom: 1.25rem;
   border-bottom: 1px solid var(--line);
   flex-wrap: wrap;
+}
+
+.results-heading-copy {
+  min-width: 0;
 }
 
 .results-heading h2 {
@@ -1753,6 +1827,16 @@ body.modal-open {
     padding-bottom: 45px;
   }
 
+  .page-head-inner {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .page-head-note {
+    align-self: flex-start;
+  }
+
   /* Телефонный интерфейс урока */
   .lesson-flow {
     gap: 1.4rem;
@@ -1760,6 +1844,10 @@ body.modal-open {
 
   .flow-progress {
     padding: 0.55rem 0.95rem;
+  }
+
+  .progress-caption {
+    top: -1.3rem;
   }
 
   .progress-step {
@@ -1785,6 +1873,11 @@ body.modal-open {
   .flow-heading {
     gap: 0.75rem;
     margin-bottom: 1rem;
+  }
+
+  .flow-description {
+    margin-left: 0;
+    margin-top: -0.35rem;
   }
 
   .flow-number {

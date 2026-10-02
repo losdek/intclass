@@ -4,16 +4,17 @@
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Видеоуроки — за минуту</title><meta name="description" content="Видеоуроки по математике и русскому языку для 5–9 классов.">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="../css/style.css?v=20261002_7">
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="../css/style.css?v=20261002_8">
 </head>
 <body>
   <header class="nav" id="nav"><div class="container nav-inner"><a class="logo" href="../">за минуту<span class="logo-dot"></span></a><nav class="nav-links" id="navLinks" aria-label="Основная навигация"><a class="nav-link" href="../">Главная</a><a class="nav-link" href="../#topics">Темы</a><a class="nav-link active" href="./">Видеоуроки</a></nav><button class="btn btn-small register-open" type="button">Регистрация</button><button class="burger" id="burger" type="button" aria-label="Открыть меню" aria-expanded="false"><span></span><span></span></button></div></header>
   <main>
-    <section class="page-head"><div class="blob blob-1"></div><div class="container"><p class="section-label reveal-line"><span>Библиотека знаний</span></p><h1 class="page-title"><span class="reveal-line"><span>Выберите урок</span></span></h1><p class="page-sub reveal-line"><span>Предмет → класс → видео.</span></p></div></section>
+     <section class="page-head"><div class="blob blob-1"></div><div class="container page-head-inner"><div><p class="section-label reveal-line"><span>Библиотека знаний</span></p><h1 class="page-title"><span class="reveal-line"><span>Выберите урок</span></span></h1><p class="page-sub reveal-line"><span>Соберите короткий маршрут до нужного объяснения.</span></p></div><div class="page-head-note"><span class="page-head-note-mark">3</span><span>простых шага<br><strong>до видео</strong></span></div></div></section>
     <section class="section lessons-section">
       <div class="container lesson-flow">
         <!-- Индикатор прогресса шагов для мобильных и десктопа -->
-        <div class="flow-progress" id="flowProgress" aria-label="Шаги подбора">
+         <div class="flow-progress" id="flowProgress" aria-label="Шаги подбора">
+           <span class="progress-caption">Ваш маршрут</span>
           <div class="progress-step active" data-step-indicator="1">
             <span class="step-dot">1</span>
             <span class="step-text">Предмет</span>
@@ -31,7 +32,7 @@
         </div>
 
         <!-- Шаг 1: Предмет -->
-        <div class="flow-step reveal" id="subjectStep">
+         <div class="flow-step reveal" id="subjectStep">
           <div class="flow-heading">
             <span class="flow-number">01</span>
             <div>
@@ -39,7 +40,8 @@
               <h2>Выберите предмет</h2>
             </div>
           </div>
-          <div class="choice-grid subject-choices">
+           <p class="flow-description">Начните с предмета, который хотите разобрать сегодня.</p>
+           <div class="choice-grid subject-choices">
             <button class="choice-card" type="button" data-subject="math">
               <span class="choice-icon">∑</span>
               <div class="choice-info">
@@ -58,7 +60,7 @@
         </div>
 
         <!-- Шаг 2: Класс -->
-        <div class="flow-step reveal is-locked" id="gradeStep">
+         <div class="flow-step reveal is-locked" id="gradeStep">
           <div class="flow-heading">
             <span class="flow-number">02</span>
             <div>
@@ -66,7 +68,7 @@
               <h2>Выберите класс</h2>
             </div>
           </div>
-          <p class="flow-hint" id="gradeHint">Сначала выберите предмет выше</p>
+           <p class="flow-hint" id="gradeHint">Сначала выберите предмет выше</p>
           <div class="choice-grid grade-choices">
             <button class="choice-card compact selected" type="button" data-grade="all"><span>Все классы</span></button>
             <button class="choice-card compact" type="button" data-grade="5"><span>5 класс</span></button>
@@ -78,7 +80,7 @@
         </div>
 
         <!-- Шаг 3: Тема -->
-        <div class="flow-step reveal is-locked" id="topicStep">
+         <div class="flow-step reveal is-locked" id="topicStep">
           <div class="flow-heading">
             <span class="flow-number">03</span>
             <div>
@@ -86,18 +88,18 @@
               <h2>Выберите видео</h2>
             </div>
           </div>
-          <p class="flow-hint" id="topicHint">Выберите видео, чтобы открыть урок и мини-тест</p>
+           <p class="flow-hint" id="topicHint">Выберите видео, чтобы открыть урок и мини-тест</p>
           <div class="choice-grid topic-choices" id="topicChoices"></div>
         </div>
 
         <!-- Результаты: Видеоуроки и Мини-тесты -->
-        <div class="results-panel is-locked" id="resultsPanel">
+         <div class="results-panel is-locked" id="resultsPanel">
           <div class="results-heading">
-            <div>
+             <div class="results-heading-copy">
               <p class="section-label">Видеоуроки и тест</p>
               <h2 id="resultsTitle">Ваши уроки</h2>
             </div>
-            <button class="reset-button" id="resetFlow" type="button" title="Выбрать заново">
+             <button class="reset-button" id="resetFlow" type="button" title="Выбрать заново">
               <span aria-hidden="true">↺</span> Изменить выбор
             </button>
           </div>
