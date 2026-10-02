@@ -1,11 +1,11 @@
 :root {
-  --bg: #ffffff;
-  --ink: #111115;
-  --soft: #5b5b63;
-  --faint: #92929a;
-  --line: #e9e9ee;
-  --accent: #554be8;
-  --accent-soft: #eef0ff;
+  --bg: #f7f9ff;
+  --ink: #243056;
+  --soft: #5d6b8f;
+  --faint: #8b97b8;
+  --line: #dbe4fb;
+  --accent: #4d6dff;
+  --accent-soft: #e8eeff;
   --success: #10b981;
   --success-soft: #ecfdf5;
   --danger: #ef4444;
@@ -47,7 +47,7 @@ body.modal-open {
 }
 
 ::selection {
-  background: var(--ink);
+  background: var(--accent);
   color: #ffffff;
 }
 
@@ -142,7 +142,7 @@ body.modal-open {
   width: 100%;
   height: 2px;
   border-radius: 2px;
-  background: var(--ink);
+  background: var(--accent);
   transform: scaleX(0);
   transform-origin: right;
   transition: transform 0.4s var(--ease);
@@ -173,7 +173,7 @@ body.modal-open {
   display: block;
   width: 23px;
   height: 2px;
-  background: var(--ink);
+  background: var(--accent);
   transition: transform 0.35s var(--ease);
 }
 
@@ -196,10 +196,10 @@ body.modal-open {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #c9d4ff;
+  border: 1px solid #8aa0ff;
   border-radius: 999px;
-  background: linear-gradient(135deg, #6f86ff 0%, #dfe6ff 58%, #ffffff 100%);
-  color: #24306b;
+  background: linear-gradient(135deg, #3d5bff 0%, #8aa4ff 46%, #eef3ff 100%);
+  color: #ffffff;
   cursor: pointer;
   font: 700 0.94rem 'Inter', sans-serif;
   padding: 0.85rem 1.65rem;
@@ -224,10 +224,10 @@ body.modal-open {
 }
 
 .btn-ghost {
-  background: linear-gradient(135deg, #ffffff 0%, #eef2ff 62%, #d7e0ff 100%);
-  color: #31408a;
-  border: 1px solid #d5defc;
-  box-shadow: 0 6px 16px rgba(85, 75, 232, 0.1);
+  background: linear-gradient(135deg, #edf2ff 0%, #ffffff 100%);
+  color: #3550c8;
+  border: 1px solid #b9c8ff;
+  box-shadow: 0 6px 16px rgba(61, 91, 255, 0.12);
 }
 
 .btn-ghost:active {
@@ -236,8 +236,8 @@ body.modal-open {
 }
 
 .btn-dark {
-  background: linear-gradient(135deg, #5d74f8 0%, #cfd9ff 55%, #ffffff 100%);
-  color: #24306b;
+  background: linear-gradient(135deg, #3554ff 0%, #7f9cff 48%, #f4f7ff 100%);
+  color: #ffffff;
 }
 
 /* ==========================================================================
@@ -484,7 +484,7 @@ body.modal-open {
   position: relative;
   display: block;
   overflow: hidden;
-  border: 2px solid var(--ink);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
   background: #ffffff;
   color: var(--ink);
@@ -505,7 +505,7 @@ body.modal-open {
   align-items: center;
   justify-content: space-between;
   gap: 1.25rem;
-  border: 2px solid var(--ink);
+  border: 1px solid var(--line);
   border-radius: 20px;
   background: #ffffff;
   color: var(--ink);
@@ -516,7 +516,7 @@ body.modal-open {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--ink);
+  background: var(--accent);
   color: #ffffff;
   border-radius: 8px;
   padding: 4px 10px;
@@ -555,9 +555,9 @@ body.modal-open {
 
 /* Инверсия карточки предмета при нажатии пальцем на телефоне */
 .subject-card:active {
-  background: var(--ink) !important;
+  background: var(--accent) !important;
   color: #ffffff !important;
-  border-color: var(--ink) !important;
+  border-color: var(--accent) !important;
   transform: scale(0.98);
   box-shadow: 0 8px 24px rgba(17, 17, 22, 0.24);
 }
@@ -585,7 +585,7 @@ body.modal-open {
 }
 
 .subject-detail-card {
-  border: 2px solid var(--ink);
+  border: 1px solid var(--line);
   border-radius: 20px;
   padding: 2rem 2.2rem;
   background: #ffffff;
@@ -594,7 +594,7 @@ body.modal-open {
 
 .subject-detail-badge {
   display: inline-block;
-  background: var(--ink);
+  background: var(--accent);
   color: #ffffff;
   padding: 5px 14px;
   border-radius: 999px;
@@ -660,7 +660,7 @@ body.modal-open {
 }
 
 .grade-guide-item {
-  border: 2px solid var(--ink);
+  border: 1px solid var(--line);
   border-radius: 18px;
   padding: 1.35rem 1.4rem;
   background: #ffffff;
@@ -670,7 +670,7 @@ body.modal-open {
 }
 
 .grade-guide-item:active {
-  background: var(--ink);
+  background: var(--accent);
   color: #ffffff;
   transform: scale(0.98);
 }
@@ -694,7 +694,7 @@ body.modal-open {
 
 .grade-tag {
   display: inline-block;
-  background: var(--ink);
+  background: var(--accent);
   color: #ffffff;
   border-radius: 8px;
   font-weight: 800;
@@ -724,7 +724,7 @@ body.modal-open {
 }
 
 .method-card {
-  border: 2px solid var(--ink);
+  border: 1px solid var(--line);
   border-radius: 18px;
   padding: 1.6rem;
   background: #ffffff;
@@ -737,7 +737,7 @@ body.modal-open {
   height: 36px;
   align-items: center;
   justify-content: center;
-  background: var(--ink);
+  background: var(--accent);
   color: #ffffff;
   border-radius: 10px;
   font-weight: 800;
@@ -850,7 +850,7 @@ body.modal-open {
 }
 
 .progress-step.active .step-dot {
-  background: var(--ink);
+  background: var(--accent);
   color: #fff;
   border-color: var(--ink);
 }
@@ -901,7 +901,7 @@ body.modal-open {
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  background: var(--ink);
+  background: var(--accent);
   color: #ffffff;
   font-size: 0.95rem;
   font-weight: 800;
@@ -936,7 +936,7 @@ body.modal-open {
   display: flex;
   align-items: center;
   gap: 1.15rem;
-  border: 2px solid var(--ink);
+  border: 1px solid var(--line);
   border-radius: 16px;
   background: #ffffff;
   color: var(--ink);
@@ -956,7 +956,7 @@ body.modal-open {
   width: 46px;
   height: 46px;
   border-radius: 12px;
-  background: var(--ink);
+  background: var(--accent);
   color: #ffffff;
   font-size: 1.3rem;
   font-weight: 800;
@@ -982,9 +982,9 @@ body.modal-open {
 /* Инверсия при нажатии пальцем и в активном состоянии */
 .choice-card:active,
 .choice-card.selected {
-  background: var(--ink) !important;
+  background: var(--accent) !important;
   color: #ffffff !important;
-  border-color: var(--ink) !important;
+  border-color: var(--accent) !important;
   box-shadow: 0 8px 24px rgba(17, 17, 22, 0.24);
   transform: scale(0.98);
 }
@@ -1012,7 +1012,7 @@ body.modal-open {
   text-align: center;
   font-size: 0.96rem;
   font-weight: 700;
-  border: 2px solid var(--ink);
+  border: 1px solid var(--line);
   border-radius: 14px;
   background: #ffffff;
   color: var(--ink);
@@ -1023,9 +1023,9 @@ body.modal-open {
 
 .choice-card.compact:active,
 .choice-card.compact.selected {
-  background: var(--ink) !important;
+  background: var(--accent) !important;
   color: #ffffff !important;
-  border-color: var(--ink) !important;
+  border-color: var(--accent) !important;
   transform: scale(0.96);
   box-shadow: 0 4px 14px rgba(17, 17, 22, 0.2);
 }
@@ -1038,7 +1038,7 @@ body.modal-open {
 }
 
 .topic-chip {
-  border: 2px solid var(--ink);
+  border: 1px solid var(--line);
   border-radius: 999px;
   background: #ffffff;
   color: var(--ink);
@@ -1056,8 +1056,8 @@ body.modal-open {
 
 .topic-chip:active,
 .topic-chip.selected {
-  border-color: var(--ink) !important;
-  background: var(--ink) !important;
+  border-color: var(--accent) !important;
+  background: var(--accent) !important;
   color: #ffffff !important;
   transform: scale(0.96);
   box-shadow: 0 4px 14px rgba(17, 17, 22, 0.2);
@@ -1315,7 +1315,7 @@ body.modal-open {
 }
 
 .quiz-toggle-btn:active {
-  background: var(--ink);
+  background: var(--accent);
   color: #fff;
   border-color: var(--ink);
   transform: scale(0.97);
@@ -1413,7 +1413,7 @@ body.modal-open {
 .quiz-check-btn {
   border: 1px solid var(--ink);
   border-radius: 999px;
-  background: var(--ink);
+  background: var(--accent);
   color: #ffffff;
   font: 600 0.85rem 'Inter', sans-serif;
   padding: 0.65rem 1.3rem;
