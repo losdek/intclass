@@ -1,4 +1,6 @@
-/* Общие интерактивные элементы: шапка, анимации и необязательный профиль. */
+if (location.pathname.endsWith("/index.html")) {
+  location.replace(location.pathname.replace(/index\.html$/, "") + location.search + location.hash);
+}
 const nav = document.getElementById("nav");
 const burger = document.getElementById("burger");
 const navLinks = document.getElementById("navLinks");
