@@ -360,6 +360,62 @@ body.modal-open {
   filter: brightness(0.9) saturate(0.92);
   box-shadow: 0 3px 12px rgba(35, 52, 111, 0.2);
 }
+
+.press-ripple {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.28);
+  pointer-events: none;
+  transform: scale(0);
+  animation: press-ripple 0.55s var(--ease) forwards;
+}
+
+.nav-link,
+.btn,
+.card,
+.choice-card,
+.topic-chip,
+.modal-close,
+.quiz-toggle-btn,
+.quiz-check-btn,
+.quiz-retry-btn,
+.reset-button,
+.lesson-media,
+.quiz-option-label,
+.grade-guide-item {
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes press-ripple {
+  0% {
+    opacity: 0.6;
+    transform: scale(0);
+  }
+  65% {
+    opacity: 0.24;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+.nav-link.is-pressed {
+  transform: translateY(1px) scale(0.96);
+  color: var(--ink);
+}
+
+.burger {
+  transition: transform 0.25s var(--ease), background 0.25s ease;
+}
+
+.burger:active {
+  transform: scale(0.88) rotate(-4deg);
+  background: var(--accent-soft);
+}
 .hero-actions > span {
   display: inline-flex;
   flex-wrap: wrap;
@@ -606,6 +662,16 @@ body.modal-open {
   border-color: var(--accent) !important;
   transform: scale(0.98);
   box-shadow: 0 8px 24px rgba(17, 17, 22, 0.24);
+}
+
+.grade-guide-item.is-pressed {
+  background: linear-gradient(145deg, #31478b 0%, #5269b1 100%);
+  color: #ffffff;
+  transform: translateY(2px) scale(0.975);
+}
+
+.grade-guide-item.is-pressed p {
+  color: #dce4fa;
 }
 
 .subject-card.is-pressed {
@@ -1544,6 +1610,12 @@ body.modal-open {
   border-color: var(--ink);
   background: #f7f7f9;
   transform: scale(0.985);
+}
+
+.quiz-option-label.is-pressed {
+  transform: translateY(1px) scale(0.985);
+  border-color: var(--accent);
+  background: #e8edf9;
 }
 
 .quiz-option-label.checked {

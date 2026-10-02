@@ -78,12 +78,25 @@ form?.addEventListener("submit", (event) => {
   setTimeout(closeModal, 1200);
 });
 
-const pressable = ".subject-card, .card, .btn, .nav-link, .modal-close, .choice-card, .topic-chip, .quiz-unlock-btn, .quiz-toggle-btn, .quiz-check-btn, .quiz-retry-btn, .reset-button, .lesson-media";
+const pressable = ".subject-card, .card, .grade-guide-item, .btn, .nav-link, .modal-close, .choice-card, .topic-chip, .quiz-option-label, .quiz-unlock-btn, .quiz-toggle-btn, .quiz-check-btn, .quiz-retry-btn, .reset-button, .lesson-media";
+function addRipple(target, event) {
+  const rect = target.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height) * 1.35;
+  const ripple = document.createElement("span");
+  ripple.className = "press-ripple";
+  ripple.style.width = `${size}px`;
+  ripple.style.height = `${size}px`;
+  ripple.style.left = `${(event.clientX || rect.left + rect.width / 2) - rect.left - size / 2}px`;
+  ripple.style.top = `${(event.clientY || rect.top + rect.height / 2) - rect.top - size / 2}px`;
+  target.appendChild(ripple);
+  ripple.addEventListener("animationend", () => ripple.remove(), { once: true });
+}
 function pressOn(event) {
   const target = event.target.closest(pressable);
   if (!target) return;
   target.classList.add("is-pressed");
   clearTimeout(target.pressTimer);
+  addRipple(target, event);
 }
 function pressOff(event) {
   const target = event.target.closest(pressable);
@@ -95,3 +108,17 @@ document.addEventListener("pointerdown", pressOn);
 document.addEventListener("pointerup", pressOff);
 document.addEventListener("pointercancel", pressOff);
 document.addEventListener("pointerleave", pressOff);
+
+document.addEventListener("keydown", (event) => {
+  if (!['Enter', ' '].includes(event.key)) return;
+  const target = event.target.closest(pressable);
+  if (!target || event.repeat) return;
+  target.classList.add("is-pressed");
+  clearTimeout(target.pressTimer);
+  addRipple(target, { clientX: target.getBoundingClientRect().left + target.offsetWidth / 2, clientY: target.getBoundingClientRect().top + target.offsetHeight / 2 });
+});
+document.addEventListener("keyup", (event) => {
+  if (!['Enter', ' '].includes(event.key)) return;
+  const target = event.target.closest(pressable);
+  if (target) pressOff({ target });
+});
