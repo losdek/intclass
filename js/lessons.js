@@ -537,9 +537,6 @@ function createCard(lesson, index) {
           <span class="quiz-lock-icon">🔒</span>
           <span class="quiz-lock-text">Мини-тест откроется после просмотра видеоурока</span>
         </div>
-        <button class="quiz-unlock-btn" type="button" data-lesson-id="${lesson.id}">
-          Я посмотрел видео
-        </button>
       </div>
       <div class="lesson-quiz" data-lesson-id="${lesson.id}" hidden>
         <div class="quiz-header">
@@ -680,7 +677,7 @@ function playVideo(media) {
   const statusBox = card?.querySelector(".quiz-lock-status");
 
   // YouTube плеер с поддержкой API для отслеживания окончания
-  media.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&enablejsapi=1&rel=0" title="Видеоурок YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+  media.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&enablejsapi=1&rel=0&origin=${encodeURIComponent(location.origin)}" title="Видеоурок YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
   media.style.cursor = "default";
 
   if (statusBox) {
@@ -991,39 +988,17 @@ resetFlowBtn?.addEventListener("click", () => {
 // Обработка разблокировки тестов после просмотра видео
 // ==========================================
 
-// Разблокировка по кнопке "Я посмотрел видео"
-document.addEventListener("click", (event) => {
-  const unlockBtn = event.target.closest(".quiz-unlock-btn");
-  if (unlockBtn) {
-    const lessonId = unlockBtn.dataset.lessonId;
-    if (lessonId) {
-      unlockQuiz(lessonId, true);
-    }
-  }
-});
-
-// Отслеживание окончания видео в плеере YouTube через postMessage
 window.addEventListener("message", (event) => {
+  if (event.origin !== "https://www.youtube-nocookie.com") return;
   try {
-    let data = event.data;
-    if (typeof data === "string") {
-      data = JSON.parse(data);
-    }
-    // YouTube IFrame API отправляет события { event: "onStateChange", info: 0 } (0 = Ended)
-    if (data && (data.event === "onStateChange" || data.info !== undefined)) {
-      if (data.info === 0) {
-        document.querySelectorAll(".lesson-card").forEach((card) => {
-          const iframe = card.querySelector("iframe");
-          if (iframe) {
-            const quiz = card.querySelector(".lesson-quiz");
-            if (quiz && quiz.hidden) {
-              unlockQuiz(quiz.dataset.lessonId, true);
-            }
-          }
-        });
-      }
-    }
-  } catch (err) {}
+    const data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
+    if (data?.event !== "onStateChange" || data.info !== 0) return;
+    document.querySelectorAll(".lesson-card iframe").forEach((iframe) => {
+      if (iframe.contentWindow !== event.source) return;
+      const quiz = iframe.closest(".lesson-card")?.querySelector(".lesson-quiz");
+      if (quiz?.hidden) unlockQuiz(quiz.dataset.lessonId, true);
+    });
+  } catch {}
 });
 
 
