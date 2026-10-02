@@ -1,20 +1,66 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Видеоуроки — за минуту</title><meta name="description" content="Видеоуроки по математике и русскому языку для 5–9 классов.">
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="../css/style.css?v=20261002_13">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Видеоуроки и мини-тесты — за минуту</title>
+  <meta name="description" content="Каталог видеоуроков и интерактивных мини-тестов по математике и русскому языку для 5–9 классов.">
+  <meta name="theme-color" content="#fbfbfa">
+
+  <!-- Favicon SVG -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%233b5bf5'/><text x='50%' y='68%' font-family='sans-serif' font-weight='800' font-size='60' fill='white' text-anchor='middle'>м</text></svg>">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css?v=20261002_20">
 </head>
 <body class="lessons-page">
-  <header class="nav" id="nav"><div class="container nav-inner"><a class="logo" href="../">за минуту<span class="logo-dot"></span></a><nav class="nav-links" id="navLinks" aria-label="Основная навигация"><a class="nav-link" href="../">Главная</a><a class="nav-link" href="../#topics">Темы</a><a class="nav-link active" href="./">Видеоуроки</a></nav><button class="btn btn-small register-open" type="button">Регистрация</button><button class="burger" id="burger" type="button" aria-label="Открыть меню" aria-expanded="false"><span></span><span></span></button></div></header>
+  <!-- Header / Navigation -->
+  <header class="nav" id="nav">
+    <div class="container nav-inner">
+      <a class="logo" href="../">
+        за минуту<span class="logo-dot"></span>
+      </a>
+      <nav class="nav-links" id="navLinks" aria-label="Основная навигация">
+        <a class="nav-link" href="../">Главная</a>
+        <a class="nav-link" href="../#topics">Предметы</a>
+        <a class="nav-link" href="../#curriculum">Программа</a>
+        <a class="nav-link" href="../#grades">Классы</a>
+        <a class="nav-link active" href="./">Видеоуроки</a>
+      </nav>
+      <button class="btn btn-small register-open" type="button">Регистрация</button>
+      <button class="burger" id="burger" type="button" aria-label="Открыть меню" aria-expanded="false">
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
   <main>
-     <section class="page-head"><div class="blob blob-1"></div><div class="container page-head-inner"><div><p class="section-label reveal-line"><span>Библиотека знаний</span></p><h1 class="page-title"><span class="reveal-line"><span>Выберите урок</span></span></h1><p class="page-sub reveal-line"><span>Соберите короткий маршрут до нужного объяснения.</span></p></div><div class="page-head-note"><span class="page-head-note-mark">3</span><span>простых шага<br><strong>до видео</strong></span></div></div></section>
+    <!-- Page Header -->
+    <section class="page-head">
+      <div class="blob blob-1"></div>
+      <div class="container page-head-inner">
+        <div>
+          <p class="section-label reveal-line"><span>Библиотека знаний</span></p>
+          <h1 class="page-title"><span class="reveal-line"><span>Выберите урок</span></span></h1>
+          <p class="page-sub reveal-line"><span>Соберите короткий маршрут до нужного объяснения за 3 простых шага.</span></p>
+        </div>
+        <div class="page-head-note">
+          <span class="page-head-note-mark">3</span>
+          <span>простых шага<br><strong>до видео и теста</strong></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step-by-Step Flow Section -->
     <section class="section lessons-section">
       <div class="container lesson-flow">
-        <!-- Индикатор прогресса шагов для мобильных и десктопа -->
-         <div class="flow-progress" id="flowProgress" aria-label="Шаги подбора">
-           <span class="progress-caption">Ваш маршрут</span>
+
+        <!-- Progress Indicator -->
+        <div class="flow-progress" id="flowProgress" aria-label="Маршрут подбора урока">
+          <span class="progress-caption">Маршрут:</span>
           <div class="progress-step active" data-step-indicator="1">
             <span class="step-dot">1</span>
             <span class="step-text">Предмет</span>
@@ -31,8 +77,8 @@
           </div>
         </div>
 
-        <!-- Шаг 1: Предмет -->
-         <div class="flow-step reveal" id="subjectStep">
+        <!-- Step 1: Subject Selection -->
+        <div class="flow-step reveal" id="subjectStep">
           <div class="flow-heading">
             <span class="flow-number">01</span>
             <div>
@@ -40,27 +86,27 @@
               <h2>Выберите предмет</h2>
             </div>
           </div>
-           <p class="flow-description">Начните с предмета, который хотите разобрать сегодня.</p>
-           <div class="choice-grid subject-choices">
+          <p class="flow-description">Начните с предмета, тему по которому хотите разобрать сегодня.</p>
+          <div class="choice-grid subject-choices">
             <button class="choice-card" type="button" data-subject="math">
-              <span class="choice-icon">∑</span>
+              <span class="choice-icon" aria-hidden="true">∑</span>
               <div class="choice-info">
                 <strong>Математика</strong>
-                <small>Алгебра, геометрия, дроби и подготовка к экзаменам и ОРТ</small>
+                <small>Алгебра, геометрия, дроби и подготовка к экзаменам</small>
               </div>
             </button>
             <button class="choice-card" type="button" data-subject="russian">
-              <span class="choice-icon">А</span>
+              <span class="choice-icon" aria-hidden="true">А</span>
               <div class="choice-info">
                 <strong>Русский язык</strong>
-                <small>Орфография, пунктуация, правила и разборы</small>
+                <small>Орфография, пунктуация, правила и синтаксис</small>
               </div>
             </button>
           </div>
         </div>
 
-        <!-- Шаг 2: Класс -->
-         <div class="flow-step reveal is-locked" id="gradeStep">
+        <!-- Step 2: Grade Selection -->
+        <div class="flow-step reveal is-locked" id="gradeStep">
           <div class="flow-heading">
             <span class="flow-number">02</span>
             <div>
@@ -68,7 +114,7 @@
               <h2>Выберите класс</h2>
             </div>
           </div>
-           <p class="flow-hint" id="gradeHint">Сначала выберите предмет выше</p>
+          <p class="flow-hint" id="gradeHint">Сначала выберите предмет на шаге 1</p>
           <div class="choice-grid grade-choices">
             <button class="choice-card compact selected" type="button" data-grade="all"><span>Все классы</span></button>
             <button class="choice-card compact" type="button" data-grade="5"><span>5 класс</span></button>
@@ -79,8 +125,8 @@
           </div>
         </div>
 
-        <!-- Шаг 3: Тема -->
-         <div class="flow-step reveal is-locked" id="topicStep">
+        <!-- Step 3: Topic Selection -->
+        <div class="flow-step reveal is-locked" id="topicStep">
           <div class="flow-heading">
             <span class="flow-number">03</span>
             <div>
@@ -88,29 +134,60 @@
               <h2>Выберите видео</h2>
             </div>
           </div>
-           <p class="flow-hint" id="topicHint">Выберите видео, чтобы открыть урок и мини-тест</p>
+          <p class="flow-hint" id="topicHint">Выберите конкретное видео, чтобы сфокусироваться на одной теме</p>
           <div class="choice-grid topic-choices" id="topicChoices"></div>
         </div>
 
-        <!-- Результаты: Видеоуроки и Мини-тесты -->
-         <div class="results-panel is-locked" id="resultsPanel">
+        <!-- Results: Lessons Grid & Quizzes -->
+        <div class="results-panel is-locked" id="resultsPanel">
           <div class="results-heading">
-             <div class="results-heading-copy">
+            <div class="results-heading-copy">
               <p class="section-label">Видеоуроки и тест</p>
               <h2 id="resultsTitle">Ваши уроки</h2>
             </div>
-             <button class="reset-button" id="resetFlow" type="button" title="Выбрать заново">
-              <span aria-hidden="true">↺</span> Изменить выбор
+            <button class="reset-button" id="resetFlow" type="button" title="Выбрать заново">
+              <span aria-hidden="true">↺</span> Сбросить фильтры
             </button>
           </div>
           <div class="grid lessons-grid" id="lessonsGrid"></div>
           <p class="lessons-empty" id="lessonsEmpty" hidden>Для выбранной комбинации урок готовится к публикации.</p>
         </div>
+
       </div>
     </section>
   </main>
-  <footer class="footer"><div class="container footer-inner"><a class="logo" href="../">за минуту<span class="logo-dot"></span></a><p class="footer-text">Тема — за минуту.</p></div></footer>
-  <div class="modal-backdrop" id="registerModal" hidden><section class="modal" role="dialog" aria-modal="true" aria-labelledby="registerTitle"><button class="modal-close" type="button" aria-label="Закрыть">×</button><p class="section-label">Ваш профиль</p><h2 id="registerTitle">Регистрация по желанию</h2><p class="modal-text">Имя и email сохраняются только в cookie этого браузера. Пароль не нужен.</p><form id="registerForm"><label>Имя<input name="name" required maxlength="60" autocomplete="name" placeholder="Как к вам обращаться?"></label><label>Email<input name="email" type="email" required maxlength="120" autocomplete="email" placeholder="you@example.com"></label><button class="btn" type="submit">Сохранить профиль</button></form><p class="form-status" id="formStatus" aria-live="polite"></p></section></div>
-  <script src="../js/main.js"></script><script src="../js/lessons.js"></script>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <a class="logo" href="../">за минуту<span class="logo-dot"></span></a>
+      <p class="footer-text">Тема — за минуту. Каталог видеоуроков.</p>
+    </div>
+  </footer>
+
+  <!-- Profile Modal -->
+  <div class="modal-backdrop" id="registerModal" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="registerTitle">
+      <button class="modal-close" type="button" aria-label="Закрыть">×</button>
+      <p class="section-label">Ваш профиль</p>
+      <h2 id="registerTitle">Регистрация по желанию</h2>
+      <p class="modal-text">Имя и email сохраняются только в cookie этого браузера. Пароль не нужен.</p>
+      <form id="registerForm">
+        <label>
+          Имя
+          <input name="name" required maxlength="60" autocomplete="name" placeholder="Как к вам обращаться?">
+        </label>
+        <label>
+          Email
+          <input name="email" type="email" required maxlength="120" autocomplete="email" placeholder="you@example.com">
+        </label>
+        <button class="btn" type="submit">Сохранить профиль</button>
+      </form>
+      <p class="form-status" id="formStatus" aria-live="polite"></p>
+    </section>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/lessons.js"></script>
 </body>
 </html>

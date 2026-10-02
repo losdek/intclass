@@ -1,19 +1,3 @@
-/**
- * intclass — Каталог видеоуроков и интерактивных мини-тестов
- * Структура выбора: Предмет → Класс (5–9) → Тема → Урок с тестом
- *
- * Инструкция для добавления своих тестов ("позже расставлю тесты"):
- * Каждый урок в массиве LESSONS содержит свойство quiz:
- * quiz: [
- *   {
- *     question: "Текст вопроса?",
- *     options: ["Вариант 1", "Вариант 2", "Вариант 3", "Вариант 4"],
- *     answer: 0, // Индекс правильного ответа из options (0 = первый, 1 = второй и т.д.)
- *     explanation: "Короткое пояснение правила или решения"
- *   }
- * ]
- */
-
 const LESSONS = [
   // ==========================================
   // МАТЕМАТИКА (5–9 КЛАССЫ)
@@ -474,14 +458,14 @@ const SUBJECT_LABELS = {
   russian: "Русский язык"
 };
 
-// Состояние пошагового выбора
+// Selection State
 const state = {
   subject: null,
   grade: null,
   topic: null
 };
 
-// DOM элементы
+// DOM References
 const subjectStep = document.getElementById("subjectStep");
 const gradeStep = document.getElementById("gradeStep");
 const topicStep = document.getElementById("topicStep");
@@ -496,7 +480,7 @@ const resetFlowBtn = document.getElementById("resetFlow");
 const flowProgress = document.getElementById("flowProgress");
 
 /**
- * Обновление полосы шагов (индикатора прогресса)
+ * Update step progress indicator
  */
 function updateProgressIndicator() {
   if (!flowProgress) return;
@@ -510,33 +494,58 @@ function updateProgressIndicator() {
   }
   if (p2) {
     p2.classList.toggle("completed", Boolean(state.grade));
-    p2.classList.toggle("active", Boolean(state.subject));
+    p2.classList.toggle("active", Boolean(state.subject) && !state.grade);
   }
   if (p3) {
     p3.classList.toggle("completed", Boolean(state.topic));
-    p3.classList.toggle("active", Boolean(state.subject) && Boolean(state.grade));
+    p3.classList.toggle("active", Boolean(state.subject) && !state.topic);
   }
 }
 
 /**
- * Создание HTML-карточки урока с видеоплеером и интерактивным мини-тестом
+ * URL query string sync
+ */
+function updateUrl() {
+  const url = new URL(window.location);
+  if (state.subject) {
+    url.searchParams.set("subject", state.subject);
+  } else {
+    url.searchParams.delete("subject");
+  }
+  if (state.grade) {
+    url.searchParams.set("grade", state.grade);
+  } else {
+    url.searchParams.delete("grade");
+  }
+  if (state.topic) {
+    url.searchParams.set("topic", state.topic);
+  } else {
+    url.searchParams.delete("topic");
+  }
+  window.history.replaceState({}, "", url.toString());
+}
+
+/**
+ * Build lesson card HTML element
  */
 function createCard(lesson, index) {
   const card = document.createElement("article");
   card.className = "lesson-card";
-  card.style.animationDelay = `${index * 90}ms`;
+  card.style.animationDelay = `${index * 80}ms`;
 
   const quizData = lesson.quiz || [];
   const hasQuiz = quizData.length > 0;
 
-  // Формирование блока мини-теста (скрыт по умолчанию, открывается ПОСЛЕ просмотра видео)
   const quizHtml = hasQuiz
     ? `
       <div class="quiz-lock-status" id="quiz-status-${lesson.id}">
         <div class="quiz-lock-badge">
           <span class="quiz-lock-icon">🔒</span>
-          <span class="quiz-lock-text">Мини-тест откроется после просмотра видеоурока</span>
+          <span class="quiz-lock-text">Мини-тест откроется после видеоурока</span>
         </div>
+        <button class="quiz-unlock-btn" type="button" data-unlock="${lesson.id}">
+          Пройти сейчас
+        </button>
       </div>
       <div class="lesson-quiz" data-lesson-id="${lesson.id}" hidden>
         <div class="quiz-header">
@@ -590,81 +599,89 @@ function createCard(lesson, index) {
 }
 
 /**
- * Динамическая генерация тем для выбранного предмета и класса
+ * Render topic filter chips
  */
 function renderTopics() {
   if (!state.subject) {
-    topicStep.classList.add("is-locked");
-    topicChoices.innerHTML = "";
+    topicStep?.classList.add("is-locked");
+    if (topicChoices) topicChoices.innerHTML = "";
     if (topicHint) topicHint.hidden = false;
     return;
   }
 
-  // Находим подходящие уроки: для конкретного класса или для всех классов предмета
-  const availableLessons = LESSONS.filter((l) => {
+  const available = LESSONS.filter((l) => {
     const matchSub = l.subject === state.subject;
     const matchGrade = !state.grade || l.grade === state.grade;
     return matchSub && matchGrade;
   });
 
-  if (availableLessons.length === 0) {
-    topicChoices.innerHTML = `<p class="flow-hint">Для выбранного класса видео скоро появятся.</p>`;
+  if (available.length === 0) {
+    if (topicChoices) topicChoices.innerHTML = `<p class="flow-hint">Для выбранного класса видео скоро появятся.</p>`;
     return;
   }
 
-  const topicChips = availableLessons
+  const topicChips = available
     .map(
-      (lesson) =>
-        `<button class="topic-chip ${state.topic === lesson.id ? "selected" : ""}" type="button" data-topic="${lesson.id}">${lesson.title}</button>`
+      (l) =>
+        `<button class="topic-chip ${state.topic === l.id ? "selected" : ""}" type="button" data-topic="${l.id}">${l.title}</button>`
     )
     .join("");
 
-  topicChoices.innerHTML = topicChips;
-  topicStep.classList.remove("is-locked");
+  if (topicChoices) topicChoices.innerHTML = topicChips;
+  topicStep?.classList.remove("is-locked");
   if (topicHint) topicHint.hidden = true;
   updateProgressIndicator();
 }
 
 /**
- * Отрисовка подходящих уроков и отображение панели результатов
+ * Render filtered lessons and update results panel
  */
 function renderLessons(shouldScroll = false) {
   if (!state.subject) {
-    resultsPanel.classList.add("is-locked");
+    resultsPanel?.classList.add("is-locked");
     return;
   }
 
-  const filtered = LESSONS.filter((lesson) => {
-    const matchSub = lesson.subject === state.subject;
-    const matchGrade = !state.grade || lesson.grade === state.grade;
-    const matchTopic = !state.topic || lesson.id === state.topic;
+  const filtered = LESSONS.filter((l) => {
+    const matchSub = l.subject === state.subject;
+    const matchGrade = !state.grade || l.grade === state.grade;
+    const matchTopic = !state.topic || l.id === state.topic;
     return matchSub && matchGrade && matchTopic;
   });
 
   const subjectTitle = SUBJECT_LABELS[state.subject] || state.subject;
   const gradeTitle = state.grade ? ` · ${state.grade} класс` : " · Все классы (5–9)";
-  const selectedLesson = LESSONS.find((lesson) => lesson.id === state.topic);
+  const selectedLesson = LESSONS.find((l) => l.id === state.topic);
   const topicTitle = selectedLesson ? ` · ${selectedLesson.title}` : "";
-  resultsTitle.textContent = `${subjectTitle}${gradeTitle}${topicTitle}`;
 
-  grid.innerHTML = "";
-  filtered.forEach((lesson, index) => {
-    grid.appendChild(createCard(lesson, index));
-  });
+  if (resultsTitle) {
+    resultsTitle.textContent = `${subjectTitle}${gradeTitle}${topicTitle}`;
+  }
 
-  empty.hidden = filtered.length > 0;
-  resultsPanel.classList.remove("is-locked");
+  if (grid) {
+    grid.innerHTML = "";
+    filtered.forEach((lesson, index) => {
+      grid.appendChild(createCard(lesson, index));
+    });
+  }
+
+  if (empty) {
+    empty.hidden = filtered.length > 0;
+  }
+
+  resultsPanel?.classList.remove("is-locked");
   updateProgressIndicator();
+  updateUrl();
 
   if (shouldScroll) {
     setTimeout(() => {
-      resultsPanel.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 100);
+      resultsPanel?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 120);
   }
 }
 
 /**
- * Запуск встроенного YouTube плеера без перезагрузки
+ * YouTube Player embed handler
  */
 function playVideo(media) {
   const videoId = media.dataset.video;
@@ -673,12 +690,10 @@ function playVideo(media) {
   const card = media.closest(".lesson-card");
   const statusBox = card?.querySelector(".quiz-lock-status");
 
-  // YouTube плеер с поддержкой API для отслеживания окончания
   media.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&enablejsapi=1&rel=0&origin=${encodeURIComponent(location.origin)}" title="Видеоурок YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
   media.style.cursor = "default";
 
   if (statusBox) {
-    statusBox.classList.add("is-watching");
     const textElem = statusBox.querySelector(".quiz-lock-text");
     const iconElem = statusBox.querySelector(".quiz-lock-icon");
     if (textElem) textElem.textContent = "Идёт видеоурок. Тест откроется по окончании";
@@ -687,7 +702,7 @@ function playVideo(media) {
 }
 
 /**
- * Разблокировка и плавный показ теста после просмотра видео
+ * Unlock Quiz on demand or after video completion
  */
 function unlockQuiz(lessonId, smoothScroll = false) {
   const quizElem = document.querySelector(`.lesson-quiz[data-lesson-id="${lessonId}"]`);
@@ -695,28 +710,43 @@ function unlockQuiz(lessonId, smoothScroll = false) {
 
   const card = quizElem.closest(".lesson-card");
   const statusBox = card?.querySelector(".quiz-lock-status");
+  const quizBox = quizElem.querySelector(".quiz-box");
+  const toggleBtn = quizElem.querySelector(".quiz-toggle-btn");
 
-  if (statusBox) {
-    statusBox.hidden = true;
-  }
-  if (quizElem.hidden) {
-    quizElem.hidden = false;
-    quizElem.classList.add("quiz-unlocked");
-    if (smoothScroll) {
-      setTimeout(() => {
-        quizElem.scrollIntoView({ behavior: "smooth", block: "nearest" });
-      }, 100);
+  if (statusBox) statusBox.hidden = true;
+  quizElem.hidden = false;
+
+  // Auto-expand quiz box when unlocked
+  if (quizBox) {
+    quizBox.hidden = false;
+    if (toggleBtn) {
+      toggleBtn.textContent = "Свернуть тест";
+      toggleBtn.setAttribute("aria-expanded", "true");
     }
+  }
+
+  if (smoothScroll) {
+    setTimeout(() => {
+      quizElem.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }, 120);
   }
 }
 
 /**
- * Обработка интерактивного мини-теста
+ * Interactive Quiz grading & interactions
  */
 function handleQuizInteraction(event) {
   const target = event.target;
 
-  // Свернуть / Развернуть тест
+  // 1. Direct Unlock Button
+  const unlockBtn = target.closest(".quiz-unlock-btn");
+  if (unlockBtn) {
+    const lessonId = unlockBtn.dataset.unlock;
+    unlockQuiz(lessonId, true);
+    return;
+  }
+
+  // 2. Collapse / Expand Quiz
   const toggleBtn = target.closest(".quiz-toggle-btn");
   if (toggleBtn) {
     const quizBox = toggleBtn.closest(".lesson-quiz")?.querySelector(".quiz-box");
@@ -729,7 +759,7 @@ function handleQuizInteraction(event) {
     return;
   }
 
-  // Выбор радио-кнопки (подсветка строки)
+  // 3. Radio Option Selection
   const optionInput = target.closest('input[type="radio"]');
   if (optionInput) {
     const question = optionInput.closest(".quiz-question-item");
@@ -741,7 +771,7 @@ function handleQuizInteraction(event) {
     return;
   }
 
-  // Кнопка "Проверить ответ"
+  // 4. Check Answer
   const checkBtn = target.closest(".quiz-check-btn");
   if (checkBtn) {
     const quizElem = checkBtn.closest(".lesson-quiz");
@@ -759,7 +789,6 @@ function handleQuizInteraction(event) {
     questions.forEach((qElem, qIdx) => {
       const selected = qElem.querySelector('input[type="radio"]:checked');
       const correctIdx = lesson.quiz[qIdx]?.answer;
-      const explanation = lesson.quiz[qIdx]?.explanation || "";
 
       if (!selected) {
         allAnswered = false;
@@ -784,29 +813,31 @@ function handleQuizInteraction(event) {
     });
 
     if (!allAnswered) {
-      resultMsg.hidden = false;
-      resultMsg.className = "quiz-result-msg info";
-      resultMsg.textContent = "Пожалуйста, выберите ответ перед проверкой.";
+      if (resultMsg) {
+        resultMsg.hidden = false;
+        resultMsg.className = "quiz-result-msg info";
+        resultMsg.textContent = "Пожалуйста, выберите ответ перед проверкой.";
+      }
       return;
     }
 
-    resultMsg.hidden = false;
-    if (correctCount === questions.length) {
-      resultMsg.className = "quiz-result-msg success";
-      const exp = lesson.quiz[0]?.explanation ? ` ${lesson.quiz[0].explanation}` : "";
-      resultMsg.textContent = `✓ Отлично! Правильный ответ.${exp}`;
-      checkBtn.hidden = true;
-      if (retryBtn) retryBtn.hidden = false;
-    } else {
-      resultMsg.className = "quiz-result-msg error";
-      resultMsg.textContent = "Пока не совсем точно. Посмотрите урок внимательнее и попробуйте ещё раз!";
+    if (resultMsg) {
+      resultMsg.hidden = false;
+      const explanation = lesson.quiz[0]?.explanation ? ` ${lesson.quiz[0].explanation}` : "";
+      if (correctCount === questions.length) {
+        resultMsg.className = "quiz-result-msg success";
+        resultMsg.textContent = `✓ Отлично! Ответ верный.${explanation}`;
+      } else {
+        resultMsg.className = "quiz-result-msg error";
+        resultMsg.textContent = `Не совсем точно. Правильный ответ подсвечен зелёным.${explanation}`;
+      }
       checkBtn.hidden = true;
       if (retryBtn) retryBtn.hidden = false;
     }
     return;
   }
 
-  // Кнопка "Пройти снова"
+  // 5. Retry Quiz
   const retryBtn = target.closest(".quiz-retry-btn");
   if (retryBtn) {
     const quizElem = retryBtn.closest(".lesson-quiz");
@@ -828,104 +859,88 @@ function handleQuizInteraction(event) {
   }
 }
 
-// ==========================================
-// Слушатели событий интерфейса
-// ==========================================
-
 /**
- * Выбор предмета (Математика / Русский язык)
+ * Step Selection Functions
  */
 function selectSubject(subject, shouldScroll = false) {
   state.subject = subject;
-  state.grade = null; // По умолчанию отображаются все классы
+  state.grade = null;
   state.topic = null;
 
-  // Подсветка кнопок предметов
   document.querySelectorAll("[data-subject]").forEach((button) => {
     button.classList.toggle("selected", button.dataset.subject === subject);
   });
 
-  // Разблокируем шаг 2 (Класс)
   gradeStep?.classList.remove("is-locked");
   if (gradeHint) gradeHint.hidden = true;
 
-  // Активируем кнопку "Все классы"
   document.querySelectorAll("[data-grade]").forEach((btn) => {
     btn.classList.toggle("selected", btn.dataset.grade === "all");
   });
 
-  // Загружаем темы
   renderTopics();
-
-  // Разблокируем результаты и сразу отображаем уроки!
   renderLessons(false);
 
   if (shouldScroll && window.innerWidth <= 768) {
     setTimeout(() => {
       gradeStep?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 100);
+    }, 120);
   }
 }
 
-/**
- * Выбор класса (Все классы, 5, 6, 7, 8, 9)
- */
 function selectGrade(gradeVal, shouldScroll = false) {
   if (!state.subject) return;
 
-  state.grade = (gradeVal === "all" || !gradeVal) ? null : gradeVal;
+  state.grade = gradeVal === "all" || !gradeVal ? null : gradeVal;
   state.topic = null;
 
   document.querySelectorAll("[data-grade]").forEach((btn) => {
-    const isSelected = (!state.grade && btn.dataset.grade === "all") || (btn.dataset.grade === state.grade);
+    const isSelected = (!state.grade && btn.dataset.grade === "all") || btn.dataset.grade === state.grade;
     btn.classList.toggle("selected", isSelected);
   });
 
   renderTopics();
   renderLessons(false);
+
   if (shouldScroll && window.innerWidth <= 768) {
-    setTimeout(() => topicStep?.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
+    setTimeout(() => topicStep?.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
   }
 }
 
-/**
- * Выбор конкретной темы
- */
 function selectTopic(topicVal, shouldScroll = false) {
   state.topic = topicVal;
 
   topicChoices?.querySelectorAll(".topic-chip").forEach((btn) => {
-    const isSelected = btn.dataset.topic === state.topic;
-    btn.classList.toggle("selected", isSelected);
+    btn.classList.toggle("selected", btn.dataset.topic === state.topic);
   });
 
   renderLessons(shouldScroll);
-  const selected = document.querySelector(`[data-video="${LESSONS.find((lesson) => lesson.id === state.topic)?.videoId || ""}"]`);
-  if (selected) playVideo(selected);
+  const selectedLesson = LESSONS.find((l) => l.id === state.topic);
+  if (selectedLesson) {
+    const mediaElem = document.querySelector(`[data-video="${selectedLesson.videoId}"]`);
+    if (mediaElem) playVideo(mediaElem);
+  }
 }
 
-// Шаг 1: Выбор предмета
+// Event Listeners
 document.querySelectorAll("[data-subject]").forEach((button) => {
   button.addEventListener("click", () => {
     selectSubject(button.dataset.subject, true);
   });
 });
 
-// Шаг 2: Выбор класса (5, 6, 7, 8, 9)
 document.querySelectorAll("[data-grade]").forEach((button) => {
   button.addEventListener("click", () => {
     selectGrade(button.dataset.grade, true);
   });
 });
 
-// Шаг 3: Выбор темы
 topicChoices?.addEventListener("click", (event) => {
   const button = event.target.closest("[data-topic]");
   if (!button) return;
-  selectTopic(button.dataset.topic, window.innerWidth <= 768);
+  selectTopic(button.dataset.topic, true);
 });
 
-// Клик по сетке уроков (запуск видео и мини-тест)
 grid?.addEventListener("click", (event) => {
   const media = event.target.closest(".lesson-media");
   if (media) {
@@ -943,7 +958,7 @@ grid?.addEventListener("keydown", (event) => {
   }
 });
 
-// Кнопка сброса выбора (начать заново / изменить)
+// Reset Flow
 resetFlowBtn?.addEventListener("click", () => {
   state.subject = null;
   state.grade = null;
@@ -953,8 +968,8 @@ resetFlowBtn?.addEventListener("click", () => {
     btn.classList.remove("selected");
   });
 
-  topicChoices.innerHTML = "";
-  grid.replaceChildren();
+  if (topicChoices) topicChoices.innerHTML = "";
+  if (grid) grid.innerHTML = "";
   gradeStep?.classList.add("is-locked");
   topicStep?.classList.add("is-locked");
   resultsPanel?.classList.add("is-locked");
@@ -962,42 +977,43 @@ resetFlowBtn?.addEventListener("click", () => {
   if (topicHint) topicHint.hidden = false;
 
   updateProgressIndicator();
+  updateUrl();
   subjectStep?.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
-// ==========================================
-// Инициализация при переходе с главной страницы (?subject=math / ?subject=russian)
-// ==========================================
+// Initialize from URL parameters (?subject=math&grade=5)
 (function initFromUrl() {
   const params = new URLSearchParams(window.location.search);
   const initialSubject = params.get("subject");
   const initialGrade = params.get("grade");
+  const initialTopic = params.get("topic");
 
   if (initialSubject && SUBJECT_LABELS[initialSubject]) {
     selectSubject(initialSubject, false);
     if (initialGrade && ["5", "6", "7", "8", "9"].includes(initialGrade)) {
       selectGrade(initialGrade, false);
     }
+    if (initialTopic && LESSONS.some((l) => l.id === initialTopic)) {
+      selectTopic(initialTopic, false);
+    }
   } else {
     updateProgressIndicator();
   }
 })();
 
-// ==========================================
-// Обработка разблокировки тестов после просмотра видео
-// ==========================================
-
+// Listen for YouTube video ended message to unlock quiz
 window.addEventListener("message", (event) => {
   if (event.origin !== "https://www.youtube-nocookie.com") return;
   try {
     const data = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
     if (data?.event !== "onStateChange" || data.info !== 0) return;
     document.querySelectorAll(".lesson-card iframe").forEach((iframe) => {
-      if (iframe.contentWindow !== event.source) return;
-      const quiz = iframe.closest(".lesson-card")?.querySelector(".lesson-quiz");
-      if (quiz?.hidden) unlockQuiz(quiz.dataset.lessonId, true);
+      if (iframe.contentWindow === event.source) {
+        const quiz = iframe.closest(".lesson-card")?.querySelector(".lesson-quiz");
+        if (quiz?.dataset.lessonId) unlockQuiz(quiz.dataset.lessonId, true);
+      }
     });
-  } catch {}
+  } catch {
+    /* Ignore cross-origin JSON parse errors */
+  }
 });
-
-

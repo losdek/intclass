@@ -1,5 +1,19 @@
-const cleanPath = location.pathname.replace(/(?:index|lessons)\.html$/, (match) => match.startsWith("index") ? "" : "lessons/");
-if (cleanPath !== location.pathname) location.replace(cleanPath + location.search + location.hash);
+/**
+ * intclass — Main Script
+ * Handles navigation, mobile menu, scroll reveals, and profile cookie management.
+ */
+
+// 1. Clean Path Normalization for GitHub Pages
+(function normalizePath() {
+  const cleanPath = location.pathname.replace(/(?:index|lessons)\.html$/, (match) =>
+    match.startsWith("index") ? "" : "lessons/"
+  );
+  if (cleanPath !== location.pathname) {
+    location.replace(cleanPath + location.search + location.hash);
+  }
+})();
+
+// DOM Elements
 const nav = document.getElementById("nav");
 const burger = document.getElementById("burger");
 const navLinks = document.getElementById("navLinks");
@@ -7,118 +21,129 @@ const modal = document.getElementById("registerModal");
 const form = document.getElementById("registerForm");
 const status = document.getElementById("formStatus");
 
-let scrollQueued = false;
+// 2. Navigation Scroll State
+let scrollTicking = false;
 window.addEventListener("scroll", () => {
-  if (scrollQueued) return;
-  scrollQueued = true;
-  requestAnimationFrame(() => {
-    nav?.classList.toggle("scrolled", window.scrollY > 12);
-    scrollQueued = false;
-  });
+  if (!scrollTicking) {
+    window.requestAnimationFrame(() => {
+      nav?.classList.toggle("scrolled", window.scrollY > 20);
+      scrollTicking = false;
+    });
+    scrollTicking = true;
+  }
 }, { passive: true });
 
+// 3. Mobile Navigation Drawer
 burger?.addEventListener("click", () => {
-  const open = burger.classList.toggle("open");
-  navLinks.classList.toggle("open", open);
-  burger.setAttribute("aria-expanded", String(open));
+  const isOpen = burger.classList.toggle("open");
+  navLinks?.classList.toggle("open", isOpen);
+  burger.setAttribute("aria-expanded", String(isOpen));
+  document.body.classList.toggle("menu-open", isOpen);
 });
-navLinks?.addEventListener("click", (event) => {
-  if (event.target.closest("a")) {
-    burger?.classList.remove("open");
-    navLinks.classList.remove("open");
-    burger?.setAttribute("aria-expanded", "false");
+
+// Close mobile menu when clicking a link or clicking outside
+document.addEventListener("click", (event) => {
+  if (navLinks?.classList.contains("open")) {
+    if (event.target.closest(".nav-link") || (!event.target.closest("#navLinks") && !event.target.closest("#burger"))) {
+      burger?.classList.remove("open");
+      navLinks.classList.remove("open");
+      burger?.setAttribute("aria-expanded", "false");
+      document.body.classList.remove("menu-open");
+    }
   }
 });
 
-const observer = new IntersectionObserver((entries) => {
+// 4. Scroll Reveal via IntersectionObserver
+const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (!entry.isIntersecting) return;
-    const element = entry.target;
-    const siblings = [...element.parentElement.children].filter((item) => item.classList.contains("reveal"));
-    element.style.transitionDelay = `${Math.min(Math.max(siblings.indexOf(element), 0) * 90, 420)}ms`;
-    element.classList.add("visible");
-    observer.unobserve(element);
+    const el = entry.target;
+    const siblings = [...(el.parentElement?.children || [])].filter((item) =>
+      item.classList.contains("reveal")
+    );
+    const index = Math.max(siblings.indexOf(el), 0);
+    el.style.transitionDelay = `${Math.min(index * 80, 400)}ms`;
+    el.classList.add("visible");
+    revealObserver.unobserve(el);
   });
-}, { threshold: 0.12, rootMargin: "0px 0px -36px 0px" });
-document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
+}, { threshold: 0.1, rootMargin: "0px 0px -40px 0px" });
 
+document.querySelectorAll(".reveal").forEach((el) => revealObserver.observe(el));
+
+// 5. Cookie Utilities & Profile Registration Modal
 function readCookie(name) {
-  return document.cookie.split("; ").find((part) => part.startsWith(`${name}=`))?.split("=")[1];
+  return document.cookie
+    .split("; ")
+    .find((part) => part.startsWith(`${name}=`))
+    ?.split("=")[1];
 }
+
 function openModal() {
   if (!modal) return;
   modal.hidden = false;
   document.body.classList.add("modal-open");
+
   const saved = readCookie("intclass_profile");
   if (saved && form) {
     try {
       const profile = JSON.parse(decodeURIComponent(saved));
-      form.elements.name.value = profile.name || "";
-      form.elements.email.value = profile.email || "";
-    } catch { /* Invalid local cookie can be ignored. */ }
+      if (form.elements.name) form.elements.name.value = profile.name || "";
+      if (form.elements.email) form.elements.email.value = profile.email || "";
+    } catch {
+      /* Ignore corrupted cookie */
+    }
   }
-  form?.elements.name.focus();
+  if (form?.elements.name) {
+    setTimeout(() => form.elements.name.focus(), 60);
+  }
 }
+
 function closeModal() {
   if (!modal) return;
   modal.hidden = true;
   document.body.classList.remove("modal-open");
 }
-document.querySelectorAll(".register-open").forEach((button) => button.addEventListener("click", openModal));
+
+document.querySelectorAll(".register-open").forEach((btn) => {
+  btn.addEventListener("click", openModal);
+});
+
 modal?.querySelector(".modal-close")?.addEventListener("click", closeModal);
-modal?.addEventListener("click", (event) => { if (event.target === modal) closeModal(); });
-document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeModal(); });
+modal?.addEventListener("click", (event) => {
+  if (event.target === modal) closeModal();
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && modal && !modal.hidden) {
+    closeModal();
+  }
+});
 
 form?.addEventListener("submit", (event) => {
   event.preventDefault();
-  const profile = { name: form.elements.name.value.trim(), email: form.elements.email.value.trim() };
-  document.cookie = `intclass_profile=${encodeURIComponent(JSON.stringify(profile))}; max-age=31536000; path=/; SameSite=Lax`;
-  status.textContent = `Профиль сохранён, ${profile.name}!`;
-  form.querySelector("button").textContent = "Сохранено";
-  setTimeout(closeModal, 1200);
-});
+  const nameInput = form.elements.name;
+  const emailInput = form.elements.email;
+  const submitBtn = form.querySelector("button[type='submit']");
 
-const pressable = ".subject-card, .card, .grade-guide-item, .btn, .nav-link, .modal-close, .choice-card, .topic-chip, .quiz-option-label, .quiz-unlock-btn, .quiz-toggle-btn, .quiz-check-btn, .quiz-retry-btn, .reset-button, .lesson-media";
-function addRipple(target, event) {
-  const rect = target.getBoundingClientRect();
-  const size = Math.max(rect.width, rect.height) * 1.35;
-  const ripple = document.createElement("span");
-  ripple.className = "press-ripple";
-  ripple.style.width = `${size}px`;
-  ripple.style.height = `${size}px`;
-  ripple.style.left = `${(event.clientX || rect.left + rect.width / 2) - rect.left - size / 2}px`;
-  ripple.style.top = `${(event.clientY || rect.top + rect.height / 2) - rect.top - size / 2}px`;
-  target.appendChild(ripple);
-  ripple.addEventListener("animationend", () => ripple.remove(), { once: true });
-}
-function pressOn(event) {
-  const target = event.target.closest(pressable);
-  if (!target) return;
-  target.classList.add("is-pressed");
-  clearTimeout(target.pressTimer);
-  addRipple(target, event);
-}
-function pressOff(event) {
-  const target = event.target.closest(pressable);
-  if (!target) return;
-  clearTimeout(target.pressTimer);
-  target.pressTimer = setTimeout(() => target.classList.remove("is-pressed"), 170);
-}
-document.addEventListener("pointerdown", pressOn);
-document.addEventListener("pointerup", pressOff);
-document.addEventListener("pointercancel", pressOff);
-document.addEventListener("pointerleave", pressOff);
+  const profile = {
+    name: nameInput?.value.trim() || "",
+    email: emailInput?.value.trim() || ""
+  };
 
-document.addEventListener("keydown", (event) => {
-  if (!['Enter', ' '].includes(event.key)) return;
-  const target = event.target.closest(pressable);
-  if (!target || event.repeat) return;
-  target.classList.add("is-pressed");
-  clearTimeout(target.pressTimer);
-  addRipple(target, { clientX: target.getBoundingClientRect().left + target.offsetWidth / 2, clientY: target.getBoundingClientRect().top + target.offsetHeight / 2 });
-});
-document.addEventListener("keyup", (event) => {
-  if (!['Enter', ' '].includes(event.key)) return;
-  const target = event.target.closest(pressable);
-  if (target) pressOff({ target });
+  document.cookie = `intclass_profile=${encodeURIComponent(
+    JSON.stringify(profile)
+  )}; max-age=31536000; path=/; SameSite=Lax`;
+
+  if (status) {
+    status.textContent = `Профиль сохранён, ${profile.name || "друг"}!`;
+  }
+  if (submitBtn) {
+    submitBtn.textContent = "Сохранено ✓";
+  }
+
+  setTimeout(() => {
+    closeModal();
+    if (submitBtn) submitBtn.textContent = "Сохранить профиль";
+    if (status) status.textContent = "";
+  }, 1100);
 });
