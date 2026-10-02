@@ -1,9 +1,9 @@
 /**
  * intclass — Main Script
- * Handles navigation, mobile menu, scroll reveals, and profile cookie management.
+ * Butter-smooth interactions, instant reveals, and reliable mobile drawer.
  */
 
-// 1. Clean Path Normalization for GitHub Pages
+// 1. Path Normalization for GitHub Pages
 (function normalizePath() {
   const cleanPath = location.pathname.replace(/(?:index|lessons)\.html$/, (match) =>
     match.startsWith("index") ? "" : "lessons/"
@@ -21,54 +21,78 @@ const modal = document.getElementById("registerModal");
 const form = document.getElementById("registerForm");
 const status = document.getElementById("formStatus");
 
-// 2. Navigation Scroll State
-let scrollTicking = false;
-window.addEventListener("scroll", () => {
-  if (!scrollTicking) {
-    window.requestAnimationFrame(() => {
-      nav?.classList.toggle("scrolled", window.scrollY > 20);
-      scrollTicking = false;
-    });
-    scrollTicking = true;
-  }
-}, { passive: true });
+// Create Backdrop for Mobile Menu if not already in HTML
+let navBackdrop = document.querySelector(".nav-backdrop");
+if (!navBackdrop) {
+  navBackdrop = document.createElement("div");
+  navBackdrop.className = "nav-backdrop";
+  document.body.appendChild(navBackdrop);
+}
 
-// 3. Mobile Navigation Drawer
-burger?.addEventListener("click", () => {
-  const isOpen = burger.classList.toggle("open");
-  navLinks?.classList.toggle("open", isOpen);
-  burger.setAttribute("aria-expanded", String(isOpen));
-  document.body.classList.toggle("menu-open", isOpen);
-});
-
-// Close mobile menu when clicking a link or clicking outside
-document.addEventListener("click", (event) => {
-  if (navLinks?.classList.contains("open")) {
-    if (event.target.closest(".nav-link") || (!event.target.closest("#navLinks") && !event.target.closest("#burger"))) {
-      burger?.classList.remove("open");
-      navLinks.classList.remove("open");
-      burger?.setAttribute("aria-expanded", "false");
-      document.body.classList.remove("menu-open");
+// 2. High-performance Nav Scroll Listener
+let scrollScheduled = false;
+window.addEventListener(
+  "scroll",
+  () => {
+    if (!scrollScheduled) {
+      window.requestAnimationFrame(() => {
+        nav?.classList.toggle("scrolled", window.scrollY > 15);
+        scrollScheduled = false;
+      });
+      scrollScheduled = true;
     }
+  },
+  { passive: true }
+);
+
+// 3. Smooth Mobile Drawer Toggle
+function toggleMenu(open) {
+  const shouldOpen = typeof open === "boolean" ? open : !burger?.classList.contains("open");
+  burger?.classList.toggle("open", shouldOpen);
+  navLinks?.classList.toggle("open", shouldOpen);
+  navBackdrop?.classList.toggle("open", shouldOpen);
+  burger?.setAttribute("aria-expanded", String(shouldOpen));
+  document.body.classList.toggle("menu-open", shouldOpen);
+}
+
+burger?.addEventListener("click", () => toggleMenu());
+navBackdrop?.addEventListener("click", () => toggleMenu(false));
+
+// Close mobile menu when clicking a link
+navLinks?.addEventListener("click", (event) => {
+  if (event.target.closest("a")) {
+    toggleMenu(false);
   }
 });
 
-// 4. Scroll Reveal via IntersectionObserver
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (!entry.isIntersecting) return;
-    const el = entry.target;
-    const siblings = [...(el.parentElement?.children || [])].filter((item) =>
-      item.classList.contains("reveal")
-    );
-    const index = Math.max(siblings.indexOf(el), 0);
-    el.style.transitionDelay = `${Math.min(index * 80, 400)}ms`;
-    el.classList.add("visible");
-    revealObserver.unobserve(el);
-  });
-}, { threshold: 0.1, rootMargin: "0px 0px -40px 0px" });
+// Close mobile menu on Escape key
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && burger?.classList.contains("open")) {
+    toggleMenu(false);
+  }
+});
 
-document.querySelectorAll(".reveal").forEach((el) => revealObserver.observe(el));
+// 4. Smooth, Non-Laggy Reveal Observer
+const revealObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("visible");
+      revealObserver.unobserve(entry.target);
+    });
+  },
+  { threshold: 0.05, rootMargin: "0px 0px -20px 0px" }
+);
+
+document.querySelectorAll(".reveal").forEach((el) => {
+  // If element is already above or within the fold on load, make visible immediately
+  const rect = el.getBoundingClientRect();
+  if (rect.top < window.innerHeight) {
+    el.classList.add("visible");
+  } else {
+    revealObserver.observe(el);
+  }
+});
 
 // 5. Cookie Utilities & Profile Registration Modal
 function readCookie(name) {
@@ -93,9 +117,7 @@ function openModal() {
       /* Ignore corrupted cookie */
     }
   }
-  if (form?.elements.name) {
-    setTimeout(() => form.elements.name.focus(), 60);
-  }
+  setTimeout(() => form?.elements.name?.focus(), 50);
 }
 
 function closeModal() {
@@ -145,5 +167,5 @@ form?.addEventListener("submit", (event) => {
     closeModal();
     if (submitBtn) submitBtn.textContent = "Сохранить профиль";
     if (status) status.textContent = "";
-  }, 1100);
+  }, 1000);
 });

@@ -494,16 +494,16 @@ function updateProgressIndicator() {
   }
   if (p2) {
     p2.classList.toggle("completed", Boolean(state.grade));
-    p2.classList.toggle("active", Boolean(state.subject) && !state.grade);
+    p2.classList.toggle("active", Boolean(state.subject));
   }
   if (p3) {
     p3.classList.toggle("completed", Boolean(state.topic));
-    p3.classList.toggle("active", Boolean(state.subject) && !state.topic);
+    p3.classList.toggle("active", Boolean(state.subject) && Boolean(state.grade));
   }
 }
 
 /**
- * URL query string sync
+ * URL query string sync (shareable link state)
  */
 function updateUrl() {
   const url = new URL(window.location);
@@ -531,7 +531,10 @@ function updateUrl() {
 function createCard(lesson, index) {
   const card = document.createElement("article");
   card.className = "lesson-card";
-  card.style.animationDelay = `${index * 80}ms`;
+  card.id = `card-${lesson.id}`;
+  if (state.topic === lesson.id) {
+    card.classList.add("highlighted");
+  }
 
   const quizData = lesson.quiz || [];
   const hasQuiz = quizData.length > 0;
@@ -541,10 +544,10 @@ function createCard(lesson, index) {
       <div class="quiz-lock-status" id="quiz-status-${lesson.id}">
         <div class="quiz-lock-badge">
           <span class="quiz-lock-icon">🔒</span>
-          <span class="quiz-lock-text">Мини-тест откроется после видеоурока</span>
+          <span class="quiz-lock-text">Мини-тест откроется после видео</span>
         </div>
         <button class="quiz-unlock-btn" type="button" data-unlock="${lesson.id}">
-          Пройти сейчас
+          Пройти сейчас →
         </button>
       </div>
       <div class="lesson-quiz" data-lesson-id="${lesson.id}" hidden>
@@ -616,15 +619,18 @@ function renderTopics() {
   });
 
   if (available.length === 0) {
-    if (topicChoices) topicChoices.innerHTML = `<p class="flow-hint">Для выбранного класса видео скоро появятся.</p>`;
+    if (topicChoices) {
+      topicChoices.innerHTML = `<p class="flow-hint">Для выбранного класса видео скоро появятся.</p>`;
+    }
     return;
   }
 
   const topicChips = available
-    .map(
-      (l) =>
-        `<button class="topic-chip ${state.topic === l.id ? "selected" : ""}" type="button" data-topic="${l.id}">${l.title}</button>`
-    )
+    .map((l) => {
+      const isSelected = state.topic === l.id;
+      const label = state.grade ? l.topic || l.title : `${l.grade} кл · ${l.topic || l.title}`;
+      return `<button class="topic-chip ${isSelected ? "selected" : ""}" type="button" data-topic="${l.id}">${label}</button>`;
+    })
     .join("");
 
   if (topicChoices) topicChoices.innerHTML = topicChips;
@@ -634,9 +640,9 @@ function renderTopics() {
 }
 
 /**
- * Render filtered lessons and update results panel
+ * Render filtered lessons without choppy screen tearing
  */
-function renderLessons(shouldScroll = false) {
+function renderLessons() {
   if (!state.subject) {
     resultsPanel?.classList.add("is-locked");
     return;
@@ -651,11 +657,10 @@ function renderLessons(shouldScroll = false) {
 
   const subjectTitle = SUBJECT_LABELS[state.subject] || state.subject;
   const gradeTitle = state.grade ? ` · ${state.grade} класс` : " · Все классы (5–9)";
-  const selectedLesson = LESSONS.find((l) => l.id === state.topic);
-  const topicTitle = selectedLesson ? ` · ${selectedLesson.title}` : "";
+  const countText = ` (${filtered.length} ${filtered.length === 1 ? "урок" : "уроков"})`;
 
   if (resultsTitle) {
-    resultsTitle.textContent = `${subjectTitle}${gradeTitle}${topicTitle}`;
+    resultsTitle.textContent = `${subjectTitle}${gradeTitle}${countText}`;
   }
 
   if (grid) {
@@ -672,12 +677,6 @@ function renderLessons(shouldScroll = false) {
   resultsPanel?.classList.remove("is-locked");
   updateProgressIndicator();
   updateUrl();
-
-  if (shouldScroll) {
-    setTimeout(() => {
-      resultsPanel?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 120);
-  }
 }
 
 /**
@@ -696,13 +695,13 @@ function playVideo(media) {
   if (statusBox) {
     const textElem = statusBox.querySelector(".quiz-lock-text");
     const iconElem = statusBox.querySelector(".quiz-lock-icon");
-    if (textElem) textElem.textContent = "Идёт видеоурок. Тест откроется по окончании";
+    if (textElem) textElem.textContent = "Идёт видеоурок. Тест откроется по завершении";
     if (iconElem) iconElem.textContent = "▶";
   }
 }
 
 /**
- * Unlock Quiz on demand or after video completion
+ * Unlock Quiz smoothly on demand or after video completion
  */
 function unlockQuiz(lessonId, smoothScroll = false) {
   const quizElem = document.querySelector(`.lesson-quiz[data-lesson-id="${lessonId}"]`);
@@ -716,7 +715,6 @@ function unlockQuiz(lessonId, smoothScroll = false) {
   if (statusBox) statusBox.hidden = true;
   quizElem.hidden = false;
 
-  // Auto-expand quiz box when unlocked
   if (quizBox) {
     quizBox.hidden = false;
     if (toggleBtn) {
@@ -726,9 +724,7 @@ function unlockQuiz(lessonId, smoothScroll = false) {
   }
 
   if (smoothScroll) {
-    setTimeout(() => {
-      quizElem.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }, 120);
+    quizElem.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 }
 
@@ -816,7 +812,7 @@ function handleQuizInteraction(event) {
       if (resultMsg) {
         resultMsg.hidden = false;
         resultMsg.className = "quiz-result-msg info";
-        resultMsg.textContent = "Пожалуйста, выберите ответ перед проверкой.";
+        resultMsg.textContent = "Пожалуйста, выберите вариант ответа перед проверкой.";
       }
       return;
     }
@@ -860,11 +856,11 @@ function handleQuizInteraction(event) {
 }
 
 /**
- * Step Selection Functions
+ * Step Selection Functions (Without Choppy Scroll Jumps)
  */
-function selectSubject(subject, shouldScroll = false) {
+function selectSubject(subject) {
   state.subject = subject;
-  state.grade = null;
+  // Preserve grade if it was already selected! Otherwise keep null ("all")
   state.topic = null;
 
   document.querySelectorAll("[data-subject]").forEach((button) => {
@@ -875,20 +871,15 @@ function selectSubject(subject, shouldScroll = false) {
   if (gradeHint) gradeHint.hidden = true;
 
   document.querySelectorAll("[data-grade]").forEach((btn) => {
-    btn.classList.toggle("selected", btn.dataset.grade === "all");
+    const isSelected = (!state.grade && btn.dataset.grade === "all") || (btn.dataset.grade === state.grade);
+    btn.classList.toggle("selected", isSelected);
   });
 
   renderTopics();
-  renderLessons(false);
-
-  if (shouldScroll && window.innerWidth <= 768) {
-    setTimeout(() => {
-      gradeStep?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 120);
-  }
+  renderLessons();
 }
 
-function selectGrade(gradeVal, shouldScroll = false) {
+function selectGrade(gradeVal) {
   if (!state.subject) return;
 
   state.grade = gradeVal === "all" || !gradeVal ? null : gradeVal;
@@ -900,45 +891,52 @@ function selectGrade(gradeVal, shouldScroll = false) {
   });
 
   renderTopics();
-  renderLessons(false);
-
-  if (shouldScroll && window.innerWidth <= 768) {
-    setTimeout(() => topicStep?.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
-  }
+  renderLessons();
 }
 
-function selectTopic(topicVal, shouldScroll = false) {
-  state.topic = topicVal;
+function selectTopic(topicVal) {
+  // If clicking already selected topic, toggle off to show all grade lessons
+  if (state.topic === topicVal) {
+    state.topic = null;
+  } else {
+    state.topic = topicVal;
+  }
 
   topicChoices?.querySelectorAll(".topic-chip").forEach((btn) => {
     btn.classList.toggle("selected", btn.dataset.topic === state.topic);
   });
 
-  renderLessons(shouldScroll);
-  const selectedLesson = LESSONS.find((l) => l.id === state.topic);
-  if (selectedLesson) {
-    const mediaElem = document.querySelector(`[data-video="${selectedLesson.videoId}"]`);
-    if (mediaElem) playVideo(mediaElem);
+  renderLessons();
+
+  if (state.topic) {
+    const targetCard = document.getElementById(`card-${state.topic}`);
+    if (targetCard) {
+      targetCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      const media = targetCard.querySelector(".lesson-media");
+      if (media && !media.querySelector("iframe")) {
+        playVideo(media);
+      }
+    }
   }
 }
 
 // Event Listeners
 document.querySelectorAll("[data-subject]").forEach((button) => {
   button.addEventListener("click", () => {
-    selectSubject(button.dataset.subject, true);
+    selectSubject(button.dataset.subject);
   });
 });
 
 document.querySelectorAll("[data-grade]").forEach((button) => {
   button.addEventListener("click", () => {
-    selectGrade(button.dataset.grade, true);
+    selectGrade(button.dataset.grade);
   });
 });
 
 topicChoices?.addEventListener("click", (event) => {
   const button = event.target.closest("[data-topic]");
   if (!button) return;
-  selectTopic(button.dataset.topic, true);
+  selectTopic(button.dataset.topic);
 });
 
 grid?.addEventListener("click", (event) => {
@@ -989,12 +987,12 @@ resetFlowBtn?.addEventListener("click", () => {
   const initialTopic = params.get("topic");
 
   if (initialSubject && SUBJECT_LABELS[initialSubject]) {
-    selectSubject(initialSubject, false);
+    selectSubject(initialSubject);
     if (initialGrade && ["5", "6", "7", "8", "9"].includes(initialGrade)) {
-      selectGrade(initialGrade, false);
+      selectGrade(initialGrade);
     }
     if (initialTopic && LESSONS.some((l) => l.id === initialTopic)) {
-      selectTopic(initialTopic, false);
+      selectTopic(initialTopic);
     }
   } else {
     updateProgressIndicator();
