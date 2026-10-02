@@ -2,10 +2,10 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>за минуту — видеоуроки и мини-тесты</title>
   <meta name="description" content="Русскоязычный справочник видеоуроков и интерактивных мини-тестов за минуту для 5–9 классов.">
-  <meta name="theme-color" content="#fbfbfa">
+  <meta name="theme-color" content="#fafaf9">
 
   <!-- OpenGraph -->
   <meta property="og:title" content="за минуту — видеоуроки и мини-тесты">
@@ -13,32 +13,89 @@
   <meta property="og:type" content="website">
 
   <!-- Favicon SVG -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%233b5bf5'/><text x='50%' y='68%' font-family='sans-serif' font-weight='800' font-size='60' fill='white' text-anchor='middle'>м</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%232563eb'/><text x='50%' y='68%' font-family='sans-serif' font-weight='800' font-size='60' fill='white' text-anchor='middle'>м</text></svg>">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=20261002_25">
+  <link rel="stylesheet" href="css/style.css?v=20261002_30">
 </head>
 <body>
   <!-- Header / Navigation -->
   <header class="nav" id="nav">
+    <div class="scroll-progress-bar" id="scrollProgressBar" aria-hidden="true"></div>
     <div class="container nav-inner">
-      <a class="logo" href="./">
+      <a class="logo" href="./" aria-label="за минуту — на главную">
         за минуту<span class="logo-dot"></span>
       </a>
+
+      <!-- Navigation Links & Mobile App Drawer -->
       <nav class="nav-links" id="navLinks" aria-label="Основная навигация">
-        <a class="nav-link active" href="./">Главная</a>
-        <a class="nav-link" href="#topics">Предметы</a>
-        <a class="nav-link" href="#curriculum">Программа</a>
-        <a class="nav-link" href="#grades">Классы</a>
-        <a class="nav-link" href="lessons/">Видеоуроки</a>
+        <div class="nav-mobile-header">
+          <div class="nav-user-greeting">
+            <span class="greeting-avatar">👋</span>
+            <span id="navUserGreeting">Привет, друг!</span>
+          </div>
+        </div>
+
+        <div class="nav-quick-subjects">
+          <a href="lessons/?subject=math" class="nav-quick-subject math">
+            <span>∑</span>
+            <span>Математика</span>
+          </a>
+          <a href="lessons/?subject=russian" class="nav-quick-subject russian">
+            <span>А</span>
+            <span>Русский язык</span>
+          </a>
+        </div>
+
+        <a class="nav-link active" href="./">
+          <span>Главная</span>
+          <span class="nav-link-arrow">→</span>
+        </a>
+        <a class="nav-link" href="#topics">
+          <span>Предметы</span>
+          <span class="nav-link-arrow">→</span>
+        </a>
+        <a class="nav-link" href="#curriculum">
+          <span>Программа</span>
+          <span class="nav-link-arrow">→</span>
+        </a>
+        <a class="nav-link" href="#grades">
+          <span>Классы</span>
+          <span class="nav-link-arrow">→</span>
+        </a>
+        <a class="nav-link" href="lessons/">
+          <span>Видеоуроки</span>
+          <span class="nav-link-arrow">→</span>
+        </a>
+
+        <div class="nav-mobile-footer">
+          <button class="btn btn-small register-open mobile-register-btn" type="button">
+            <span>👤</span>
+            <span class="mobile-btn-text">Мой профиль</span>
+          </button>
+        </div>
       </nav>
+
+      <!-- Desktop & Mobile Actions -->
       <button class="btn btn-small register-open" type="button">Регистрация</button>
-      <button class="burger" id="burger" type="button" aria-label="Открыть меню" aria-expanded="false">
-        <span></span>
-        <span></span>
-      </button>
+
+      <div class="nav-actions">
+        <button class="nav-profile-btn register-open" type="button" aria-label="Открыть профиль" title="Профиль">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span class="profile-status-dot" id="headerProfileDot" hidden></span>
+        </button>
+
+        <button class="burger" id="burger" type="button" aria-label="Открыть меню" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
     </div>
     <div class="nav-backdrop" id="navBackdrop" aria-hidden="true"></div>
   </header>
@@ -46,8 +103,6 @@
   <main>
     <!-- Hero Section -->
     <section class="hero">
-      <div class="blob blob-1"></div>
-      <div class="blob blob-2"></div>
       <div class="container hero-inner">
         <p class="hero-eyebrow reveal-line">
           <span>Тема понятна быстро</span>
@@ -65,9 +120,16 @@
             <a class="btn btn-ghost" href="#topics">Выбрать предмет</a>
           </span>
         </div>
+        <div class="hero-badges-row reveal-line">
+          <span>
+            <span class="hero-pill-badge">⚡ Видео за 1 мин</span>
+            <span class="hero-pill-badge">🎓 5–9 классы</span>
+            <span class="hero-pill-badge">✍️ Мини-тесты</span>
+          </span>
+        </div>
       </div>
       <div class="scroll-hint" aria-label="Листайте вниз">
-        <svg class="hand-swipe-svg" width="24" height="32" viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg class="hand-swipe-svg" width="22" height="30" viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect x="3" y="2" width="18" height="28" rx="9" stroke="currentColor" stroke-width="2"/>
           <line x1="12" y1="8" x2="12" y2="14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
         </svg>
@@ -121,7 +183,7 @@
               <li><strong>Дроби и вычисления:</strong> обыкновенные, смешанные и десятичные дроби, действия с рациональными и отрицательными числами.</li>
               <li><strong>Уравнения и выражения:</strong> линейные и квадратные уравнения, формулы сокращённого умножения, дискриминант и теорема Виета.</li>
               <li><strong>Наглядная геометрия:</strong> углы, свойства и признаки равенства треугольников, теорема Пифагора, четырёхугольники и площади фигур.</li>
-              <li><strong>Функции и анализ:</strong> квадратичная функция (парабола), свойства функций, чтение графиков, арифметическая и геометрическая прогрессии.</li>
+              <li><strong>Функции и анализ:</strong> квадратичная функция (парабола), свойства функций, чтение графиков, прогрессии.</li>
               <li><strong>Подготовка к экзаменам:</strong> текстовые прикладные задачи (движение, работа, сплавы), основы теории вероятностей и статистика.</li>
             </ul>
             <div class="subject-card-footer">
@@ -135,10 +197,10 @@
             <p class="subject-detail-lead">Чёткие схемы и алгоритмы применения правил вместо утомительной зубрежки справочников. Помогает писать грамотно и уверенно.</p>
             <ul class="subject-points-list">
               <li><strong>Орфография корней:</strong> проверяемые и непроверяемые безударные гласные, корни с чередованием (-лаг-/-лож-, -раст-/-рос-, -бер-/-бир-).</li>
-              <li><strong>Приставки и суффиксы:</strong> правописание приставок ПРЕ- и ПРИ-, приставок на -З/-С; Н и НН в суффиксах частей речи; слитное и раздельное написание НЕ.</li>
-              <li><strong>Осложнённое предложение:</strong> обособленные определения и обстоятельства (причастные и деепричастные обороты), вводные слова, обращения.</li>
-              <li><strong>Сложные синтаксические конструкции:</strong> сложносочинённые (ССП), сложноподчинённые (СПП) с разными придаточными и бессоюзные (БСП) предложения.</li>
-              <li><strong>Экзаменационная практика:</strong> пунктуационный анализ текста, поиск грамматической основы, синтаксические нормы и структура сочинения.</li>
+              <li><strong>Приставки и суффиксы:</strong> правописание приставок ПРЕ- и ПРИ-, приставок на -З/-С; Н и НН в суффиксах частей речи; написание НЕ.</li>
+              <li><strong>Осложнённое предложение:</strong> обособленные определения и обстоятельства (причастные и деепричастные обороты), вводные слова.</li>
+              <li><strong>Сложные синтаксические конструкции:</strong> сложносочинённые (ССП), сложноподчинённые (СПП) и бессоюзные (БСП) предложения.</li>
+              <li><strong>Экзаменационная практика:</strong> пунктуационный анализ текста, поиск грамматической основы, синтаксические нормы и сочинение.</li>
             </ul>
             <div class="subject-card-footer">
               <a class="btn btn-small" href="lessons/?subject=russian">Уроки по русскому языку →</a>
@@ -179,7 +241,7 @@
               <span class="grade-tag">7 класс</span>
               <strong>Старт алгебры, геометрии и причастий</strong>
             </div>
-            <p>Линейные уравнения, формулы сокращённого умножения, признаки равенства треугольников. Причастия, деепричастия, слитное и раздельное написание НЕ.</p>
+            <p>Линейные уравнения, формулы сокращённого умножения, признаки равенства треугольников. Причастия, деепричастия, написание НЕ.</p>
           </div>
 
           <div class="grade-guide-item reveal">
@@ -214,13 +276,14 @@
     </div>
   </footer>
 
-  <!-- Profile Modal -->
+  <!-- Profile Modal / Native Mobile Bottom Sheet -->
   <div class="modal-backdrop" id="registerModal" hidden>
     <section class="modal" role="dialog" aria-modal="true" aria-labelledby="registerTitle">
+      <div class="sheet-handle" aria-hidden="true"></div>
       <button class="modal-close" type="button" aria-label="Закрыть">×</button>
       <p class="section-label">Ваш профиль</p>
-      <h2 id="registerTitle">Регистрация по желанию</h2>
-      <p class="modal-text">Заполнив форму, вы сохраните имя и email в cookie этого браузера. Пароль не нужен и никуда не отправляется.</p>
+      <h2 id="registerTitle">Профиль ученика</h2>
+      <p class="modal-text">Имя и email сохраняются в браузере. Пароль не нужен и никуда не отправляется.</p>
       <form id="registerForm">
         <label>
           Имя

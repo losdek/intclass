@@ -1,6 +1,5 @@
 /**
- * intclass — Main Script
- * Butter-smooth interactions, instant reveals, and reliable mobile drawer.
+ * intclass — Main Script (Mobile-First Interactive Header & Controls)
  */
 
 // 1. Path Normalization for GitHub Pages
@@ -17,37 +16,96 @@
 const nav = document.getElementById("nav");
 const burger = document.getElementById("burger");
 const navLinks = document.getElementById("navLinks");
+const navBackdrop = document.getElementById("navBackdrop");
+const scrollProgressBar = document.getElementById("scrollProgressBar");
 const modal = document.getElementById("registerModal");
 const form = document.getElementById("registerForm");
 const status = document.getElementById("formStatus");
+const headerProfileDot = document.getElementById("headerProfileDot");
+const navUserGreeting = document.getElementById("navUserGreeting");
 
-// Create Backdrop for Mobile Menu if not already in HTML
-let navBackdrop = document.querySelector(".nav-backdrop");
-if (!navBackdrop) {
-  navBackdrop = document.createElement("div");
-  navBackdrop.className = "nav-backdrop";
-  document.body.appendChild(navBackdrop);
+// 2. Cookie Utilities
+function readCookie(name) {
+  return document.cookie
+    .split("; ")
+    .find((part) => part.startsWith(`${name}=`))
+    ?.split("=")[1];
 }
 
-// 2. High-performance Nav Scroll Listener
+// Update profile badge and greeting in header & mobile drawer
+function updateProfileUI() {
+  const saved = readCookie("intclass_profile");
+  if (saved) {
+    try {
+      const profile = JSON.parse(decodeURIComponent(saved));
+      if (profile.name) {
+        if (headerProfileDot) headerProfileDot.hidden = false;
+        if (navUserGreeting) navUserGreeting.textContent = `Привет, ${profile.name}!`;
+        document.querySelectorAll(".mobile-btn-text").forEach((el) => {
+          el.textContent = `Профиль: ${profile.name}`;
+        });
+        return profile;
+      }
+    } catch {}
+  }
+  if (headerProfileDot) headerProfileDot.hidden = true;
+  if (navUserGreeting) navUserGreeting.textContent = "Привет, друг!";
+  return null;
+}
+
+updateProfileUI();
+
+// 3. High-performance Nav Scroll & Interactive Reading Progress
 let scrollScheduled = false;
+function onScroll() {
+  const scrollY = window.scrollY;
+  nav?.classList.toggle("scrolled", scrollY > 15);
+
+  // Dynamic Scroll Progress Bar
+  if (scrollProgressBar) {
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? Math.min(Math.max(scrollY / docHeight, 0), 1) : 0;
+    scrollProgressBar.style.transform = `scaleX(${progress})`;
+  }
+
+  // ScrollSpy on home page
+  const sections = document.querySelectorAll("section[id]");
+  if (sections.length > 0) {
+    let currentId = "";
+    sections.forEach((sec) => {
+      const top = sec.offsetTop - 120;
+      if (scrollY >= top) {
+        currentId = sec.getAttribute("id");
+      }
+    });
+
+    document.querySelectorAll(".nav-link").forEach((link) => {
+      const href = link.getAttribute("href");
+      if (href && href.startsWith("#")) {
+        link.classList.toggle("active", href === `#${currentId}`);
+      } else if (href === "./" && !currentId) {
+        link.classList.add("active");
+      }
+    });
+  }
+
+  scrollScheduled = false;
+}
+
 window.addEventListener(
   "scroll",
   () => {
     if (!scrollScheduled) {
-      window.requestAnimationFrame(() => {
-        nav?.classList.toggle("scrolled", window.scrollY > 15);
-        scrollScheduled = false;
-      });
+      window.requestAnimationFrame(onScroll);
       scrollScheduled = true;
     }
   },
   { passive: true }
 );
 
-// 3. Smooth Mobile Drawer Toggle
-function toggleMenu(open) {
-  const shouldOpen = typeof open === "boolean" ? open : !burger?.classList.contains("open");
+// 4. Smooth Mobile Drawer Toggle
+function toggleMenu(forceOpen) {
+  const shouldOpen = typeof forceOpen === "boolean" ? forceOpen : !burger?.classList.contains("open");
   burger?.classList.toggle("open", shouldOpen);
   navLinks?.classList.toggle("open", shouldOpen);
   navBackdrop?.classList.toggle("open", shouldOpen);
@@ -58,9 +116,9 @@ function toggleMenu(open) {
 burger?.addEventListener("click", () => toggleMenu());
 navBackdrop?.addEventListener("click", () => toggleMenu(false));
 
-// Close mobile menu when clicking a link
+// Close mobile drawer when clicking any link
 navLinks?.addEventListener("click", (event) => {
-  if (event.target.closest("a")) {
+  if (event.target.closest("a") || event.target.closest(".register-open")) {
     toggleMenu(false);
   }
 });
@@ -72,7 +130,7 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-// 4. Smooth, Non-Laggy Reveal Observer
+// 5. Scroll Reveal Observer (Immediate above fold)
 const revealObserver = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
@@ -85,7 +143,6 @@ const revealObserver = new IntersectionObserver(
 );
 
 document.querySelectorAll(".reveal").forEach((el) => {
-  // If element is already above or within the fold on load, make visible immediately
   const rect = el.getBoundingClientRect();
   if (rect.top < window.innerHeight) {
     el.classList.add("visible");
@@ -94,14 +151,7 @@ document.querySelectorAll(".reveal").forEach((el) => {
   }
 });
 
-// 5. Cookie Utilities & Profile Registration Modal
-function readCookie(name) {
-  return document.cookie
-    .split("; ")
-    .find((part) => part.startsWith(`${name}=`))
-    ?.split("=")[1];
-}
-
+// 6. Profile Modal (Native Bottom Sheet on Mobile)
 function openModal() {
   if (!modal) return;
   modal.hidden = false;
@@ -113,11 +163,9 @@ function openModal() {
       const profile = JSON.parse(decodeURIComponent(saved));
       if (form.elements.name) form.elements.name.value = profile.name || "";
       if (form.elements.email) form.elements.email.value = profile.email || "";
-    } catch {
-      /* Ignore corrupted cookie */
-    }
+    } catch {}
   }
-  setTimeout(() => form?.elements.name?.focus(), 50);
+  setTimeout(() => form?.elements.name?.focus(), 60);
 }
 
 function closeModal() {
@@ -156,6 +204,8 @@ form?.addEventListener("submit", (event) => {
     JSON.stringify(profile)
   )}; max-age=31536000; path=/; SameSite=Lax`;
 
+  updateProfileUI();
+
   if (status) {
     status.textContent = `Профиль сохранён, ${profile.name || "друг"}!`;
   }
@@ -167,5 +217,5 @@ form?.addEventListener("submit", (event) => {
     closeModal();
     if (submitBtn) submitBtn.textContent = "Сохранить профиль";
     if (status) status.textContent = "";
-  }, 1000);
+  }, 950);
 });

@@ -2,38 +2,95 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>Видеоуроки и мини-тесты — за минуту</title>
   <meta name="description" content="Каталог видеоуроков и интерактивных мини-тестов по математике и русскому языку для 5–9 классов.">
-  <meta name="theme-color" content="#fbfbfa">
+  <meta name="theme-color" content="#fafaf9">
 
   <!-- Favicon SVG -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%233b5bf5'/><text x='50%' y='68%' font-family='sans-serif' font-weight='800' font-size='60' fill='white' text-anchor='middle'>м</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%232563eb'/><text x='50%' y='68%' font-family='sans-serif' font-weight='800' font-size='60' fill='white' text-anchor='middle'>м</text></svg>">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/style.css?v=20261002_25">
+  <link rel="stylesheet" href="../css/style.css?v=20261002_30">
 </head>
 <body class="lessons-page">
   <!-- Header / Navigation -->
   <header class="nav" id="nav">
+    <div class="scroll-progress-bar" id="scrollProgressBar" aria-hidden="true"></div>
     <div class="container nav-inner">
-      <a class="logo" href="../">
+      <a class="logo" href="../" aria-label="за минуту — на главную">
         за минуту<span class="logo-dot"></span>
       </a>
+
+      <!-- Navigation Links & Mobile App Drawer -->
       <nav class="nav-links" id="navLinks" aria-label="Основная навигация">
-        <a class="nav-link" href="../">Главная</a>
-        <a class="nav-link" href="../#topics">Предметы</a>
-        <a class="nav-link" href="../#curriculum">Программа</a>
-        <a class="nav-link" href="../#grades">Классы</a>
-        <a class="nav-link active" href="./">Видеоуроки</a>
+        <div class="nav-mobile-header">
+          <div class="nav-user-greeting">
+            <span class="greeting-avatar">👋</span>
+            <span id="navUserGreeting">Привет, друг!</span>
+          </div>
+        </div>
+
+        <div class="nav-quick-subjects">
+          <a href="./?subject=math" class="nav-quick-subject math">
+            <span>∑</span>
+            <span>Математика</span>
+          </a>
+          <a href="./?subject=russian" class="nav-quick-subject russian">
+            <span>А</span>
+            <span>Русский язык</span>
+          </a>
+        </div>
+
+        <a class="nav-link" href="../">
+          <span>Главная</span>
+          <span class="nav-link-arrow">→</span>
+        </a>
+        <a class="nav-link" href="../#topics">
+          <span>Предметы</span>
+          <span class="nav-link-arrow">→</span>
+        </a>
+        <a class="nav-link" href="../#curriculum">
+          <span>Программа</span>
+          <span class="nav-link-arrow">→</span>
+        </a>
+        <a class="nav-link" href="../#grades">
+          <span>Классы</span>
+          <span class="nav-link-arrow">→</span>
+        </a>
+        <a class="nav-link active" href="./">
+          <span>Видеоуроки</span>
+          <span class="nav-link-arrow">→</span>
+        </a>
+
+        <div class="nav-mobile-footer">
+          <button class="btn btn-small register-open mobile-register-btn" type="button">
+            <span>👤</span>
+            <span class="mobile-btn-text">Мой профиль</span>
+          </button>
+        </div>
       </nav>
+
+      <!-- Desktop & Mobile Actions -->
       <button class="btn btn-small register-open" type="button">Регистрация</button>
-      <button class="burger" id="burger" type="button" aria-label="Открыть меню" aria-expanded="false">
-        <span></span>
-        <span></span>
-      </button>
+
+      <div class="nav-actions">
+        <button class="nav-profile-btn register-open" type="button" aria-label="Открыть профиль" title="Профиль">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span class="profile-status-dot" id="headerProfileDot" hidden></span>
+        </button>
+
+        <button class="burger" id="burger" type="button" aria-label="Открыть меню" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
     </div>
     <div class="nav-backdrop" id="navBackdrop" aria-hidden="true"></div>
   </header>
@@ -41,7 +98,6 @@
   <main>
     <!-- Page Header -->
     <section class="page-head">
-      <div class="blob blob-1"></div>
       <div class="container page-head-inner">
         <div>
           <p class="section-label reveal-line"><span>Библиотека знаний</span></p>
@@ -106,7 +162,7 @@
           </div>
         </div>
 
-        <!-- Step 2: Grade Selection -->
+        <!-- Step 2: Grade Selection (Horizontal Swipeable Pill Bar on Mobile) -->
         <div class="flow-step reveal is-locked" id="gradeStep">
           <div class="flow-heading">
             <span class="flow-number">02</span>
@@ -116,7 +172,7 @@
             </div>
           </div>
           <p class="flow-hint" id="gradeHint">Сначала выберите предмет на шаге 1</p>
-          <div class="choice-grid grade-choices">
+          <div class="choice-grid grade-choices" role="region" aria-label="Выбор класса">
             <button class="choice-card compact selected" type="button" data-grade="all"><span>Все классы</span></button>
             <button class="choice-card compact" type="button" data-grade="5"><span>5 класс</span></button>
             <button class="choice-card compact" type="button" data-grade="6"><span>6 класс</span></button>
@@ -166,13 +222,14 @@
     </div>
   </footer>
 
-  <!-- Profile Modal -->
+  <!-- Profile Modal / Native Mobile Bottom Sheet -->
   <div class="modal-backdrop" id="registerModal" hidden>
     <section class="modal" role="dialog" aria-modal="true" aria-labelledby="registerTitle">
+      <div class="sheet-handle" aria-hidden="true"></div>
       <button class="modal-close" type="button" aria-label="Закрыть">×</button>
       <p class="section-label">Ваш профиль</p>
-      <h2 id="registerTitle">Регистрация по желанию</h2>
-      <p class="modal-text">Имя и email сохраняются только в cookie этого браузера. Пароль не нужен.</p>
+      <h2 id="registerTitle">Профиль ученика</h2>
+      <p class="modal-text">Имя и email сохраняются в браузере. Пароль не нужен и никуда не отправляется.</p>
       <form id="registerForm">
         <label>
           Имя
