@@ -892,14 +892,16 @@ function selectGrade(gradeVal, shouldScroll = false) {
  * Выбор конкретной темы
  */
 function selectTopic(topicVal, shouldScroll = false) {
-  state.topic = (topicVal === "__all__" || !topicVal) ? null : topicVal;
+  state.topic = topicVal;
 
   topicChoices?.querySelectorAll(".topic-chip").forEach((btn) => {
-    const isSelected = (!state.topic && btn.dataset.topic === "__all__") || (btn.dataset.topic === state.topic);
+    const isSelected = btn.dataset.topic === state.topic;
     btn.classList.toggle("selected", isSelected);
   });
 
   renderLessons(shouldScroll);
+  const selected = document.querySelector(`[data-video="${LESSONS.find((lesson) => lesson.id === state.topic)?.videoId || ""}"]`);
+  if (selected) playVideo(selected);
 }
 
 // Шаг 1: Выбор предмета
