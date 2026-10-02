@@ -1,4 +1,4 @@
-const cleanPath = location.pathname.replace(/(?:index|lessons)\.html$/, (match) => match.startsWith("index") ? "" : "lessons");
+const cleanPath = location.pathname.replace(/(?:index|lessons)\.html$/, (match) => match.startsWith("index") ? "" : "lessons/");
 if (cleanPath !== location.pathname) location.replace(cleanPath + location.search + location.hash);
 const nav = document.getElementById("nav");
 const burger = document.getElementById("burger");
