@@ -329,15 +329,12 @@ body.modal-open {
   margin-top: 2.25rem;
 }
 
-.hero-actions-bw .btn {
-  border: 2px solid #111115;
-  background: #111115;
-  color: #ffffff;
+.hero-actions .btn,
+.hero-actions .btn-ghost {
+  border: 1px solid #d8d8de;
+  background: #f7f7f8;
+  color: #2a2a31;
   box-shadow: none;
-}
-.hero-actions-bw .btn-ghost {
-  background: #ffffff;
-  color: #111115;
 }
 .hero-actions > span {
   display: inline-flex;
