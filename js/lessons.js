@@ -541,11 +541,11 @@ function createCard(lesson, index) {
       <div class="lesson-quiz" data-lesson-id="${lesson.id}" hidden>
         <div class="quiz-header">
           <span class="quiz-tag">Мини-тест по теме</span>
-          <button class="quiz-toggle-btn" type="button" aria-expanded="true">
-            Свернуть тест
+          <button class="quiz-toggle-btn" type="button" aria-expanded="false">
+            Развернуть тест
           </button>
         </div>
-        <div class="quiz-box">
+        <div class="quiz-box" hidden>
           ${quizData.map((q, qIndex) => `
             <div class="quiz-question-item" data-q-index="${qIndex}">
               <p class="quiz-q-title">${q.question}</p>
