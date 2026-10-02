@@ -12,6 +12,28 @@
   }
 })();
 
+// iOS Safari :active pseudo-class enabler & touch feedback
+document.addEventListener("touchstart", () => {}, { passive: true });
+
+// Mobile light haptics on physical tap if supported
+document.addEventListener(
+  "click",
+  (event) => {
+    if (
+      event.target.closest(
+        "button, .btn, .chip, .bottom-bar-item, .nav-toggle, .subject-card, .guide-topic-card"
+      )
+    ) {
+      if (typeof navigator.vibrate === "function") {
+        try {
+          navigator.vibrate(10);
+        } catch {}
+      }
+    }
+  },
+  { passive: true }
+);
+
 // DOM Elements
 const nav = document.getElementById("nav");
 const burger = document.getElementById("burger");
@@ -87,6 +109,19 @@ function onScroll() {
         link.classList.add("active");
       }
     });
+
+    // Sync mobile bottom dock active items
+    const homeBottomItem = document.querySelector('.bottom-bar-item[data-nav="home"]');
+    const topicsBottomItem = document.querySelector('.bottom-bar-item[data-nav="topics"]');
+    if (homeBottomItem && topicsBottomItem) {
+      if (currentId === "topics" || currentId === "curriculum" || currentId === "grades") {
+        topicsBottomItem.classList.add("active");
+        homeBottomItem.classList.remove("active");
+      } else {
+        homeBottomItem.classList.add("active");
+        topicsBottomItem.classList.remove("active");
+      }
+    }
   }
 
   scrollScheduled = false;
