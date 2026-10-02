@@ -198,21 +198,23 @@ body.modal-open {
   justify-content: center;
   border: 1px solid #8ea3e8;
   border-radius: 999px;
-  background: #5b70bf;
+  background: linear-gradient(135deg, #354b91 0%, #5d72c1 52%, #b9c7f1 100%);
   color: #ffffff;
   cursor: pointer;
   font: 700 0.94rem 'Inter', sans-serif;
   padding: 0.85rem 1.65rem;
   text-decoration: none;
   box-shadow: 0 8px 22px rgba(64, 88, 173, 0.18);
-  transition: transform 0.12s ease, background 0.12s ease;
+  transition: transform 0.22s var(--ease), background 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease;
   min-height: 48px;
   -webkit-tap-highlight-color: transparent;
 }
 
 /* Инверсия при нажатии пальцем на телефоне */
 .btn:active {
-  transform: scale(0.97);
+  transform: translateY(2px) scale(0.965);
+  filter: brightness(0.9) saturate(0.92);
+  box-shadow: 0 3px 10px rgba(35, 52, 111, 0.2);
 }
 
 .btn-small {
@@ -222,18 +224,18 @@ body.modal-open {
 }
 
 .btn-ghost {
-  background: #eef2ff;
-  color: #4058ad;
+  background: linear-gradient(135deg, #dfe6fb 0%, #edf1ff 52%, #ffffff 100%);
+  color: #354b91;
   border: 1px solid #c5d0f2;
   box-shadow: 0 6px 16px rgba(64, 88, 173, 0.1);
 }
 
 .btn-ghost:active {
-  transform: scale(0.97);
+  transform: translateY(2px) scale(0.965);
 }
 
 .btn-dark {
-  background: #40558f;
+  background: linear-gradient(135deg, #293b75 0%, #4b61a8 100%);
   color: #ffffff;
 }
 
@@ -337,7 +339,23 @@ body.modal-open {
 }
 
 .hero-actions .btn-ghost {
-  background: linear-gradient(135deg, #edf1ff 0%, #ffffff 100%);
+  background: linear-gradient(135deg, #dfe6fb 0%, #edf1ff 52%, #ffffff 100%);
+}
+
+/* A consistent, short press response for every interactive control. */
+.btn.is-pressed,
+.card.is-pressed,
+.choice-card.is-pressed,
+.topic-chip.is-pressed,
+.quiz-toggle-btn.is-pressed,
+.quiz-check-btn.is-pressed,
+.quiz-retry-btn.is-pressed,
+.reset-button.is-pressed,
+.lesson-media.is-pressed,
+.modal-close.is-pressed {
+  transform: translateY(2px) scale(0.965);
+  filter: brightness(0.9) saturate(0.92);
+  box-shadow: 0 3px 12px rgba(35, 52, 111, 0.2);
 }
 .hero-actions > span {
   display: inline-flex;
@@ -513,7 +531,7 @@ body.modal-open {
 
 .subject-detail-card,
 .grade-guide-item {
-  background: #f4f6fb;
+  background: linear-gradient(145deg, #ffffff 0%, #dfe6f5 100%);
   border-color: #dce3f0;
 }
 .subject-card {
@@ -523,7 +541,7 @@ body.modal-open {
   gap: 1.25rem;
   border: 1px solid var(--line);
   border-radius: 20px;
-  background: #f3f6fc;
+  background: linear-gradient(145deg, #ffffff 0%, #e1e8f8 100%);
   color: var(--ink);
   cursor: pointer;
 }
@@ -576,6 +594,12 @@ body.modal-open {
   border-color: var(--accent) !important;
   transform: scale(0.98);
   box-shadow: 0 8px 24px rgba(17, 17, 22, 0.24);
+}
+
+.subject-card.is-pressed {
+  background: linear-gradient(145deg, #31478b 0%, #5269b1 100%) !important;
+  color: #ffffff !important;
+  border-color: #31478b !important;
 }
 
 .subject-card:active .card-num {
@@ -679,7 +703,7 @@ body.modal-open {
   border: 1px solid #dce3f0;
   border-radius: 18px;
   padding: 1.35rem 1.4rem;
-  background: #f5f7fb;
+  background: linear-gradient(145deg, #ffffff 0%, #e7ecf7 100%);
   box-shadow: 0 2px 10px rgba(37, 55, 103, 0.06);
   transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
   -webkit-tap-highlight-color: transparent;
@@ -794,7 +818,7 @@ body.modal-open {
   position: relative;
   overflow: hidden;
   padding: 148px 0 68px;
-  background: #f7f9fd;
+  background: linear-gradient(180deg, #f8faff 0%, #e9eef8 100%);
 }
 
 .page-title {
@@ -827,7 +851,7 @@ body.modal-open {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #f9faff;
+  background: linear-gradient(105deg, #ffffff 0%, #e4eaf8 100%);
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: 0.65rem 1.4rem;
@@ -887,7 +911,7 @@ body.modal-open {
 
 /* Карточки шагов */
 .flow-step {
-  background: #f9faff;
+  background: linear-gradient(145deg, #ffffff 0%, #e7edf8 100%);
   border: 1.5px solid var(--line);
   border-radius: var(--radius);
   padding: 1.85rem;
@@ -955,7 +979,7 @@ body.modal-open {
   gap: 1.15rem;
   border: 1px solid var(--line);
   border-radius: 16px;
-  background: #ffffff;
+  background: linear-gradient(145deg, #ffffff 0%, #e2e9f8 100%);
   color: var(--ink);
   padding: 1.25rem 1.4rem;
   text-align: left;
@@ -1031,7 +1055,7 @@ body.modal-open {
   font-weight: 700;
   border: 1px solid var(--line);
   border-radius: 14px;
-  background: #ffffff;
+  background: linear-gradient(145deg, #ffffff 0%, #e2e9f8 100%);
   color: var(--ink);
   box-shadow: 0 2px 8px rgba(17, 17, 22, 0.06);
   min-height: 52px;
@@ -1057,7 +1081,7 @@ body.modal-open {
 .topic-chip {
   border: 1px solid var(--line);
   border-radius: 999px;
-  background: #ffffff;
+  background: linear-gradient(145deg, #ffffff 0%, #e2e9f8 100%);
   color: var(--ink);
   cursor: pointer;
   font: 700 0.9rem 'Inter', sans-serif;
@@ -1082,7 +1106,7 @@ body.modal-open {
 
 /* Панель результатов */
 .results-panel {
-  background: #f9faff;
+  background: linear-gradient(145deg, #ffffff 0%, #e4eaf7 100%);
   border: 1.5px solid var(--line);
   border-radius: var(--radius);
   padding: 2.2rem;
@@ -1143,7 +1167,7 @@ body.modal-open {
   flex-direction: column;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: #ffffff;
+  background: linear-gradient(145deg, #ffffff 0%, #e7edf8 100%);
   overflow: hidden;
   animation: card-in 0.65s var(--ease) both;
   transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
@@ -1169,7 +1193,7 @@ body.modal-open {
   position: relative;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  background: #edf1fa;
+  background: linear-gradient(135deg, #cbd6ef 0%, #e9eef9 100%);
   cursor: pointer;
 }
 

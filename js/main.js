@@ -81,12 +81,17 @@ form?.addEventListener("submit", (event) => {
 const pressable = ".subject-card, .card, .btn, .nav-link, .modal-close, .choice-card, .topic-chip, .quiz-unlock-btn, .quiz-toggle-btn, .quiz-check-btn, .quiz-retry-btn, .reset-button, .lesson-media";
 function pressOn(event) {
   const target = event.target.closest(pressable);
-  if (target) target.classList.add("is-pressed");
+  if (!target) return;
+  target.classList.add("is-pressed");
+  clearTimeout(target.pressTimer);
 }
 function pressOff(event) {
   const target = event.target.closest(pressable);
-  if (target) target.classList.remove("is-pressed");
+  if (!target) return;
+  clearTimeout(target.pressTimer);
+  target.pressTimer = setTimeout(() => target.classList.remove("is-pressed"), 170);
 }
 document.addEventListener("pointerdown", pressOn);
 document.addEventListener("pointerup", pressOff);
 document.addEventListener("pointercancel", pressOff);
+document.addEventListener("pointerleave", pressOff);
