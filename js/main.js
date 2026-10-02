@@ -6,7 +6,15 @@ const modal = document.getElementById("registerModal");
 const form = document.getElementById("registerForm");
 const status = document.getElementById("formStatus");
 
-window.addEventListener("scroll", () => nav?.classList.toggle("scrolled", window.scrollY > 12), { passive: true });
+let scrollQueued = false;
+window.addEventListener("scroll", () => {
+  if (scrollQueued) return;
+  scrollQueued = true;
+  requestAnimationFrame(() => {
+    nav?.classList.toggle("scrolled", window.scrollY > 12);
+    scrollQueued = false;
+  });
+}, { passive: true });
 
 burger?.addEventListener("click", () => {
   const open = burger.classList.toggle("open");

@@ -62,8 +62,8 @@ body.modal-open {
   width: 100%;
   z-index: 50;
   background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border-bottom: 1px solid transparent;
   transform: translateY(-100%);
   animation: nav-in 0.55s var(--ease) 0.15s forwards;
@@ -205,16 +205,14 @@ body.modal-open {
   padding: 0.85rem 1.65rem;
   text-decoration: none;
   box-shadow: 0 8px 22px rgba(85, 75, 232, 0.16);
-  transition: transform 0.12s ease, filter 0.12s ease, box-shadow 0.12s ease;
+  transition: transform 0.12s ease, background 0.12s ease;
   min-height: 48px;
   -webkit-tap-highlight-color: transparent;
 }
 
 /* Инверсия при нажатии пальцем на телефоне */
 .btn:active {
-  filter: saturate(1.08) brightness(0.98);
   transform: scale(0.97);
-  box-shadow: 0 4px 12px rgba(85, 75, 232, 0.18);
 }
 
 .btn-small {
@@ -231,7 +229,6 @@ body.modal-open {
 }
 
 .btn-ghost:active {
-  filter: saturate(1.08) brightness(0.98);
   transform: scale(0.97);
 }
 
@@ -376,7 +373,7 @@ body.modal-open {
 .blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(75px);
+  filter: blur(28px);
   pointer-events: none;
 }
 
@@ -1176,12 +1173,12 @@ body.modal-open {
   height: 100%;
   display: block;
   object-fit: cover;
-  transition: transform 0.65s var(--ease), filter 0.65s var(--ease);
+  transition: transform 0.35s var(--ease);
 }
 
 .lesson-media:active img {
   transform: scale(1.03);
-  filter: saturate(1.1);
+  transform: scale(1.03);
 }
 
 .lesson-media iframe {
