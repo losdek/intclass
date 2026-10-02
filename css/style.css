@@ -333,13 +333,16 @@ body.modal-open {
 
 .hero-actions .btn,
 .hero-actions .btn-ghost {
-  background: linear-gradient(135deg, #4058ad 0%, #7188df 52%, #dbe3ff 100%);
-  border-color: #8ea3e8;
-  box-shadow: 0 8px 22px rgba(64, 88, 173, 0.14);
+  background: linear-gradient(135deg, #27365f 0%, #3e4f87 54%, #6375aa 100%);
+  border-color: #53689f;
+  color: #f2f5ff;
+  box-shadow: 0 7px 18px rgba(31, 45, 87, 0.2);
 }
 
 .hero-actions .btn-ghost {
-  background: linear-gradient(135deg, #dfe6fb 0%, #edf1ff 52%, #ffffff 100%);
+  background: linear-gradient(135deg, #d5dcef 0%, #c1cbe3 54%, #aab8d6 100%);
+  border-color: #8d9dc4;
+  color: #25345e;
 }
 
 /* A consistent, short press response for every interactive control. */
