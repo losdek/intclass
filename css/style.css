@@ -196,26 +196,25 @@ body.modal-open {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid var(--ink);
+  border: 1px solid #c9d4ff;
   border-radius: 999px;
-  background: var(--ink);
-  color: #ffffff;
+  background: linear-gradient(135deg, #6f86ff 0%, #dfe6ff 58%, #ffffff 100%);
+  color: #24306b;
   cursor: pointer;
   font: 700 0.94rem 'Inter', sans-serif;
   padding: 0.85rem 1.65rem;
   text-decoration: none;
-  box-shadow: 0 4px 14px rgba(17, 17, 22, 0.16);
-  transition: transform 0.12s ease, background 0.12s ease, color 0.12s ease, box-shadow 0.12s ease;
+  box-shadow: 0 8px 22px rgba(85, 75, 232, 0.16);
+  transition: transform 0.12s ease, filter 0.12s ease, box-shadow 0.12s ease;
   min-height: 48px;
   -webkit-tap-highlight-color: transparent;
 }
 
 /* Инверсия при нажатии пальцем на телефоне */
 .btn:active {
-  background: #ffffff !important;
-  color: var(--ink) !important;
+  filter: saturate(1.08) brightness(0.98);
   transform: scale(0.97);
-  box-shadow: 0 2px 6px rgba(17, 17, 22, 0.1);
+  box-shadow: 0 4px 12px rgba(85, 75, 232, 0.18);
 }
 
 .btn-small {
@@ -225,24 +224,20 @@ body.modal-open {
 }
 
 .btn-ghost {
-  background: #ffffff;
-  color: var(--ink);
-  border: 2px solid var(--ink);
-  box-shadow: 0 2px 8px rgba(17, 17, 22, 0.08);
+  background: linear-gradient(135deg, #ffffff 0%, #eef2ff 62%, #d7e0ff 100%);
+  color: #31408a;
+  border: 1px solid #d5defc;
+  box-shadow: 0 6px 16px rgba(85, 75, 232, 0.1);
 }
 
 .btn-ghost:active {
-  background: var(--ink) !important;
-  color: #ffffff !important;
-  transform: scale(0.97);
-}
-
-.btn:active {
+  filter: saturate(1.08) brightness(0.98);
   transform: scale(0.97);
 }
 
 .btn-dark {
-  background: var(--ink);
+  background: linear-gradient(135deg, #5d74f8 0%, #cfd9ff 55%, #ffffff 100%);
+  color: #24306b;
 }
 
 /* ==========================================================================
