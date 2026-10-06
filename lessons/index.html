@@ -13,7 +13,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/style.css?v=20261002_30">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="stylesheet" href="../css/style.css?v=20261006_01">
 </head>
 <body class="lessons-page">
   <!-- Header / Navigation -->
@@ -70,6 +71,10 @@
             <span>👤</span>
             <span class="mobile-btn-text">Мой профиль</span>
           </button>
+          <button class="theme-toggle-btn mobile-theme-btn" type="button" style="margin-top: 0.5rem; width: 100%;">
+            <span class="theme-icon">🌙</span>
+            <span class="theme-label">Тёмная тема</span>
+          </button>
         </div>
       </nav>
 
@@ -77,6 +82,9 @@
       <button class="btn btn-small register-open" type="button">Регистрация</button>
 
       <div class="nav-actions">
+        <button class="theme-toggle-btn theme-toggle-icon-only" type="button" aria-label="Переключить тему" title="Сменить тему">
+          <span class="theme-icon">🌙</span>
+        </button>
         <button class="nav-profile-btn register-open" type="button" aria-label="Открыть профиль" title="Профиль">
           <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -132,6 +140,38 @@
             <span class="step-dot">3</span>
             <span class="step-text">Видео</span>
           </div>
+        </div>
+
+        <!-- Overall Course Progress Card -->
+        <div class="overall-progress-card reveal">
+          <div class="overall-progress-header">
+            <span class="overall-progress-title">📊 Прогресс изучения</span>
+            <span class="overall-progress-text" id="overallProgressText">Пройдено 0 из 40 уроков (0%)</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="overallProgressBar" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Live Instant Search Bar -->
+        <div class="lesson-search-container reveal">
+          <div class="search-input-wrap">
+            <svg class="search-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="search" id="lessonSearch" class="lesson-search-input" placeholder="Поиск по урокам, темам, правилам и тестам..." autocomplete="off">
+            <kbd class="search-kbd-hint">/</kbd>
+            <button type="button" id="clearSearch" class="clear-search-btn" hidden aria-label="Очистить поиск">✕</button>
+          </div>
+        </div>
+
+        <!-- Filter Tabs Bar (All / Bookmarks / Completed / In Progress) -->
+        <div class="filter-tabs-bar reveal" role="tablist" aria-label="Фильтры уроков">
+          <button class="filter-tab-btn active" type="button" data-filter="all">Все уроки</button>
+          <button class="filter-tab-btn" type="button" data-filter="favorites">★ Избранное</button>
+          <button class="filter-tab-btn" type="button" data-filter="completed">✓ Изученные</button>
+          <button class="filter-tab-btn" type="button" data-filter="uncompleted">В процессе</button>
         </div>
 
         <!-- Step 1: Subject Selection -->
@@ -272,6 +312,10 @@
         <button class="btn" type="submit">Сохранить профиль</button>
       </form>
       <p class="form-status" id="formStatus" aria-live="polite"></p>
+      <div id="profileStats"></div>
+      <div style="margin-top: 1rem; display: flex; justify-content: flex-end;">
+        <button class="btn btn-secondary btn-small" type="button" id="resetProgressBtn">Сбросить прогресс</button>
+      </div>
     </section>
   </div>
 

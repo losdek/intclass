@@ -2135,3 +2135,511 @@ button, input {
     right: 1rem;
   }
 }
+
+
+/* ==========================================================================
+   Dark Theme System [data-theme="dark"]
+   High-contrast, eye-friendly night mode engineered for focus.
+   ========================================================================== */
+[data-theme="dark"] {
+  --bg: #090d16;
+  --surface: #111726;
+  --surface-subtle: #172033;
+  --surface-hover: #1f2b42;
+  --border: #202b3f;
+  --border-light: #161f31;
+  --border-focus: #4b5563;
+
+  --ink: #f8fafc;
+  --soft: #94a3b8;
+  --faint: #64748b;
+
+  --accent: #3b82f6;
+  --accent-soft: #172554;
+  --accent-hover: #60a5fa;
+  --accent-border: #1e40af;
+
+  --math-accent: #818cf8;
+  --math-soft: #1e1b4b;
+  --math-border: #3730a3;
+
+  --rus-accent: #38bdf8;
+  --rus-soft: #082f49;
+  --rus-border: #0369a1;
+
+  --success: #34d399;
+  --success-soft: #064e3b;
+  --success-border: #047857;
+
+  --danger: #f87171;
+  --danger-soft: #450a0a;
+  --danger-border: #991b1b;
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 2px 8px -2px rgba(0, 0, 0, 0.5), 0 1px 4px -1px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 24px -4px rgba(0, 0, 0, 0.6), 0 3px 8px -2px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 16px 36px -4px rgba(0, 0, 0, 0.7), 0 4px 12px -2px rgba(0, 0, 0, 0.4);
+  --shadow-dock: 0 10px 30px -5px rgba(0, 0, 0, 0.7), 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-sheet: 0 -12px 48px rgba(0, 0, 0, 0.8);
+}
+
+[data-theme="dark"] html {
+  color-scheme: dark;
+}
+
+[data-theme="dark"] .sheet-handle {
+  background: #334155;
+}
+
+[data-theme="dark"] .hero-invert {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+/* ==========================================================================
+   Theme Toggle Button
+   ========================================================================== */
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--ink);
+  border-radius: var(--radius-pill);
+  padding: 0.45rem 0.85rem;
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease);
+}
+
+.theme-toggle-btn:hover {
+  background: var(--surface-subtle);
+  border-color: var(--accent-border);
+  transform: translateY(-1px);
+}
+
+.theme-toggle-icon-only {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: var(--radius-pill);
+}
+
+/* ==========================================================================
+   Live Search Bar
+   ========================================================================== */
+.lesson-search-container {
+  margin: 1.25rem 0 1.5rem;
+  position: relative;
+}
+
+.search-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+  transition: all var(--duration-fast) var(--ease);
+}
+
+.search-input-wrap:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.search-icon-svg {
+  position: absolute;
+  left: 1rem;
+  color: var(--faint);
+  pointer-events: none;
+}
+
+.lesson-search-input {
+  width: 100%;
+  padding: 0.9rem 4.5rem 0.9rem 2.9rem;
+  font-size: 0.98rem;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--ink);
+  font-family: inherit;
+}
+
+.lesson-search-input::placeholder {
+  color: var(--faint);
+}
+
+.search-kbd-hint {
+  position: absolute;
+  right: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  font-family: inherit;
+  font-weight: 600;
+  color: var(--soft);
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+.clear-search-btn {
+  position: absolute;
+  right: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: var(--surface-subtle);
+  color: var(--soft);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all var(--duration-fast);
+}
+
+.clear-search-btn:hover {
+  background: var(--surface-hover);
+  color: var(--ink);
+}
+
+/* ==========================================================================
+   Filter Tabs Bar (All / Bookmarks / Completed / In Progress)
+   ========================================================================== */
+.filter-tabs-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.35rem;
+  margin-bottom: 1.25rem;
+  scrollbar-width: none;
+}
+
+.filter-tabs-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.filter-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.95rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--soft);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--duration-fast) var(--ease);
+}
+
+.filter-tab-btn:hover {
+  background: var(--surface-subtle);
+  color: var(--ink);
+}
+
+.filter-tab-btn.active {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+
+[data-theme="dark"] .filter-tab-btn.active {
+  background: var(--accent);
+  color: #ffffff;
+  border-color: var(--accent);
+}
+
+/* ==========================================================================
+   Overall Course Progress Card
+   ========================================================================== */
+.overall-progress-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-xs);
+}
+
+.overall-progress-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.65rem;
+}
+
+.overall-progress-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.overall-progress-text {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--soft);
+}
+
+.progress-bar-track {
+  width: 100%;
+  height: 8px;
+  background: var(--surface-subtle);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #10b981);
+  border-radius: 99px;
+  transition: width 0.5s var(--ease);
+}
+
+/* ==========================================================================
+   Takeaways & Card Actions & Ribbons
+   ========================================================================== */
+.lesson-takeaway {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.85rem;
+  margin: 0.75rem 0 0.85rem;
+  font-size: 0.84rem;
+  color: var(--ink);
+  line-height: 1.45;
+}
+
+.takeaway-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+  margin-top: -1px;
+}
+
+.takeaway-text strong {
+  color: var(--accent);
+  margin-right: 0.2rem;
+}
+
+.lesson-card-top-actions {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  z-index: 2;
+}
+
+.card-icon-action {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease);
+}
+
+.card-icon-action:hover {
+  background: rgba(0, 0, 0, 0.85);
+  transform: scale(1.08);
+}
+
+.bookmark-action-btn.active {
+  background: #f59e0b;
+  color: #ffffff;
+  border-color: #d97706;
+}
+
+.lesson-completed-ribbon {
+  position: absolute;
+  bottom: 0.65rem;
+  left: 0.65rem;
+  background: #10b981;
+  color: #ffffff;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.4);
+  z-index: 2;
+  letter-spacing: 0.02em;
+}
+
+.lesson-card.is-completed {
+  border-color: var(--success-border);
+}
+
+/* ==========================================================================
+   Profile Modal Learning Stats
+   ========================================================================== */
+.profile-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin: 1rem 0 1.25rem;
+}
+
+.profile-stat-box {
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem;
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1.1;
+}
+
+.stat-label {
+  font-size: 0.78rem;
+  color: var(--soft);
+  margin-top: 0.2rem;
+  display: block;
+}
+
+.btn-secondary {
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
+  color: var(--ink);
+}
+
+.btn-secondary:hover {
+  background: var(--surface-hover);
+}
+
+/* ==========================================================================
+   Toast Notifications
+   ========================================================================== */
+.toast-container {
+  position: fixed;
+  bottom: 5.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+
+.toast-item {
+  background: rgba(17, 24, 39, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #ffffff;
+  font-size: 0.86rem;
+  font-weight: 500;
+  padding: 0.6rem 1.15rem;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  opacity: 0;
+  transform: translateY(12px) scale(0.96);
+  transition: all 0.25s var(--ease-spring);
+  pointer-events: auto;
+}
+
+.toast-item.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.toast-success {
+  border-left: 3px solid #10b981;
+}
+
+.toast-info {
+  border-left: 3px solid #3b82f6;
+}
+
+/* ==========================================================================
+   Confetti Particles
+   ========================================================================== */
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -20px;
+  width: 9px;
+  height: 14px;
+  opacity: 0.9;
+  border-radius: 2px;
+  animation: confettiFall 2.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes confettiFall {
+  0% {
+    top: -20px;
+    transform: rotate(0deg) translateX(0);
+    opacity: 1;
+  }
+  100% {
+    top: 105vh;
+    transform: rotate(720deg) translateX(40px);
+    opacity: 0;
+  }
+}
+
+/* ==========================================================================
+   Print Stylesheet
+   Clean layout for printable study cheat-sheets.
+   ========================================================================== */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .nav, .footer, .mobile-bottom-bar, .modal-backdrop, .toast-container,
+  .reset-button, .quiz-actions, .lesson-card-top-actions, .filter-tabs-bar,
+  .lesson-search-container, .scroll-hint, .scroll-progress-bar {
+    display: none !important;
+  }
+  .lesson-card {
+    break-inside: avoid;
+    box-shadow: none !important;
+    border: 1px solid #cccccc !important;
+    margin-bottom: 1.5rem !important;
+  }
+}

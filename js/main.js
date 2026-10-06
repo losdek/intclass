@@ -1,5 +1,5 @@
 /**
- * intclass — Main Script (Mobile-First Interactive Header & Controls)
+ * intclass — Main Script (Mobile-First Native UI, Theming & Controls)
  */
 
 // 1. Path Normalization for GitHub Pages
@@ -21,7 +21,7 @@ document.addEventListener(
   (event) => {
     if (
       event.target.closest(
-        "button, .btn, .chip, .bottom-bar-item, .nav-toggle, .subject-card, .guide-topic-card"
+        "button, .btn, .chip, .bottom-bar-item, .nav-toggle, .subject-card, .guide-topic-card, .theme-toggle-btn"
       )
     ) {
       if (typeof navigator.vibrate === "function") {
@@ -33,6 +33,59 @@ document.addEventListener(
   },
   { passive: true }
 );
+
+// 2. Theme Management (Light / Dark with localStorage & System OS detection)
+const THEME_STORAGE_KEY = "intclass_theme";
+
+function getPreferredTheme() {
+  const saved = localStorage.getItem(THEME_STORAGE_KEY);
+  if (saved === "dark" || saved === "light") return saved;
+  return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute("data-theme", theme);
+  const themeMeta = document.querySelector('meta[name="theme-color"]');
+  if (themeMeta) {
+    themeMeta.setAttribute("content", theme === "dark" ? "#090d16" : "#fafaf9");
+  }
+
+  // Update all theme toggle buttons
+  document.querySelectorAll(".theme-toggle-btn").forEach((btn) => {
+    btn.setAttribute("aria-label", theme === "dark" ? "Переключить на светлую тему" : "Переключить на тёмную тему");
+    btn.setAttribute("title", theme === "dark" ? "Светлая тема" : "Тёмная тема");
+    const iconSpan = btn.querySelector(".theme-icon");
+    if (iconSpan) {
+      iconSpan.textContent = theme === "dark" ? "☀️" : "🌙";
+    }
+    const labelSpan = btn.querySelector(".theme-label");
+    if (labelSpan) {
+      labelSpan.textContent = theme === "dark" ? "Светлая тема" : "Тёмная тема";
+    }
+  });
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute("data-theme") || getPreferredTheme();
+  const next = current === "dark" ? "light" : "dark";
+  localStorage.setItem(THEME_STORAGE_KEY, next);
+  applyTheme(next);
+  showToast(next === "dark" ? "Тёмная тема включена" : "Светлая тема включена", "info", 1800);
+}
+
+// Initialize theme immediately to prevent flashing
+applyTheme(getPreferredTheme());
+
+// Listen for OS theme changes if user hasn't set explicit manual preference
+if (window.matchMedia) {
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+    if (!localStorage.getItem(THEME_STORAGE_KEY)) {
+      applyTheme(e.matches ? "dark" : "light");
+    }
+  });
+}
 
 // DOM Elements
 const nav = document.getElementById("nav");
@@ -46,7 +99,7 @@ const status = document.getElementById("formStatus");
 const headerProfileDot = document.getElementById("headerProfileDot");
 const navUserGreeting = document.getElementById("navUserGreeting");
 
-// 2. Cookie Utilities
+// 3. Cookie & Progress Utilities
 function readCookie(name) {
   return document.cookie
     .split("; ")
@@ -54,9 +107,51 @@ function readCookie(name) {
     ?.split("=")[1];
 }
 
-// Update profile badge and greeting in header & mobile drawer
+function getCompletedLessonsCount() {
+  try {
+    const raw = localStorage.getItem("intclass_progress");
+    if (!raw) return 0;
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.length : 0;
+  } catch {
+    return 0;
+  }
+}
+
+function getBookmarkedLessonsCount() {
+  try {
+    const raw = localStorage.getItem("intclass_bookmarks");
+    if (!raw) return 0;
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.length : 0;
+  } catch {
+    return 0;
+  }
+}
+
+// Update profile badge, greeting, and learning stats in header & mobile drawer
 function updateProfileUI() {
   const saved = readCookie("intclass_profile");
+  const completedCount = getCompletedLessonsCount();
+  const bookmarksCount = getBookmarkedLessonsCount();
+
+  // Profile modal stats element
+  const statsElem = document.getElementById("profileStats");
+  if (statsElem) {
+    statsElem.innerHTML = `
+      <div class="profile-stats-grid">
+        <div class="profile-stat-box">
+          <span class="stat-number">${completedCount}</span>
+          <span class="stat-label">Изучено уроков</span>
+        </div>
+        <div class="profile-stat-box">
+          <span class="stat-number">${bookmarksCount}</span>
+          <span class="stat-label">В избранном</span>
+        </div>
+      </div>
+    `;
+  }
+
   if (saved) {
     try {
       const profile = JSON.parse(decodeURIComponent(saved));
@@ -70,14 +165,48 @@ function updateProfileUI() {
       }
     } catch {}
   }
-  if (headerProfileDot) headerProfileDot.hidden = true;
+
+  if (headerProfileDot) headerProfileDot.hidden = completedCount === 0;
   if (navUserGreeting) navUserGreeting.textContent = "Привет, друг!";
   return null;
 }
 
 updateProfileUI();
 
-// 3. High-performance Nav Scroll & Interactive Reading Progress
+// 4. Toast Notification System
+function showToast(message, type = "info", duration = 2600) {
+  let toastContainer = document.getElementById("toastContainer");
+  if (!toastContainer) {
+    toastContainer = document.createElement("div");
+    toastContainer.id = "toastContainer";
+    toastContainer.className = "toast-container";
+    toastContainer.setAttribute("aria-live", "polite");
+    document.body.appendChild(toastContainer);
+  }
+
+  const toast = document.createElement("div");
+  toast.className = `toast-item toast-${type}`;
+  toast.innerHTML = `<span>${message}</span>`;
+  toastContainer.appendChild(toast);
+
+  // Trigger enter animation
+  requestAnimationFrame(() => {
+    toast.classList.add("visible");
+  });
+
+  setTimeout(() => {
+    toast.classList.remove("visible");
+    setTimeout(() => {
+      toast.remove();
+    }, 280);
+  }, duration);
+}
+
+// Expose showToast globally
+window.showToast = showToast;
+window.updateProfileUI = updateProfileUI;
+
+// 5. High-performance Nav Scroll & Interactive Reading Progress
 let scrollScheduled = false;
 function onScroll() {
   const scrollY = window.scrollY;
@@ -138,7 +267,7 @@ window.addEventListener(
   { passive: true }
 );
 
-// 4. Smooth Mobile Drawer Toggle
+// 6. Smooth Mobile Drawer Toggle
 function toggleMenu(forceOpen) {
   const shouldOpen = typeof forceOpen === "boolean" ? forceOpen : !burger?.classList.contains("open");
   burger?.classList.toggle("open", shouldOpen);
@@ -151,7 +280,7 @@ function toggleMenu(forceOpen) {
 burger?.addEventListener("click", () => toggleMenu());
 navBackdrop?.addEventListener("click", () => toggleMenu(false));
 
-// Close mobile drawer when clicking any link
+// Close mobile drawer when clicking navigation link
 navLinks?.addEventListener("click", (event) => {
   if (event.target.closest("a") || event.target.closest(".register-open")) {
     toggleMenu(false);
@@ -165,7 +294,7 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-// 5. Scroll Reveal Observer (Immediate above fold)
+// 7. Scroll Reveal Observer (Immediate above fold)
 const revealObserver = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
@@ -186,11 +315,12 @@ document.querySelectorAll(".reveal").forEach((el) => {
   }
 });
 
-// 6. Profile Modal (Native Bottom Sheet on Mobile)
+// 8. Profile Modal (Native Bottom Sheet on Mobile)
 function openModal() {
   if (!modal) return;
   modal.hidden = false;
   document.body.classList.add("modal-open");
+  updateProfileUI();
 
   const saved = readCookie("intclass_profile");
   if (saved && form) {
@@ -248,9 +378,45 @@ form?.addEventListener("submit", (event) => {
     submitBtn.textContent = "Сохранено ✓";
   }
 
+  showToast(`Профиль сохранён! Привет, ${profile.name || "друг"}!`, "success");
+
   setTimeout(() => {
     closeModal();
     if (submitBtn) submitBtn.textContent = "Сохранить профиль";
     if (status) status.textContent = "";
   }, 950);
 });
+
+// Reset progress button in modal
+const resetProgressBtn = document.getElementById("resetProgressBtn");
+resetProgressBtn?.addEventListener("click", () => {
+  if (confirm("Сбросить историю пройденных уроков и тестов?")) {
+    localStorage.removeItem("intclass_progress");
+    localStorage.removeItem("intclass_bookmarks");
+    updateProfileUI();
+    if (typeof window.reloadLessonsProgress === "function") {
+      window.reloadLessonsProgress();
+    }
+    showToast("Прогресс обучения сброшен", "info");
+  }
+});
+
+// Bind Theme Toggles
+document.querySelectorAll(".theme-toggle-btn").forEach((btn) => {
+  btn.addEventListener("click", toggleTheme);
+});
+
+// 9. Register Service Worker for Offline / PWA Support
+if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
+  window.addEventListener("load", () => {
+    const swPath = location.pathname.includes("/lessons/") ? "../sw.js" : "./sw.js";
+    navigator.serviceWorker
+      .register(swPath)
+      .then((reg) => {
+        // SW registered
+      })
+      .catch(() => {
+        // SW registration skipped or failed silently
+      });
+  });
+}
