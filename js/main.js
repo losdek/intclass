@@ -21,7 +21,7 @@ document.addEventListener(
   (event) => {
     if (
       event.target.closest(
-        "button, .btn, .chip, .bottom-bar-item, .nav-toggle, .subject-card, .guide-topic-card, .theme-toggle-btn"
+        "button, .btn, .chip, .nav-toggle, .subject-card, .guide-topic-card, .theme-toggle-btn"
       )
     ) {
       if (typeof navigator.vibrate === "function") {
@@ -223,9 +223,30 @@ window.updateProfileUI = updateProfileUI;
 
 // 5. High-performance Nav Scroll & Interactive Reading Progress
 let scrollScheduled = false;
+
+// Header hides while scrolling down past the first screen and returns on any scroll up
+const firstScreen = document.querySelector(".hero, .page-head");
+let lastDirectionY = window.scrollY;
+
+function updateHeaderVisibility(scrollY) {
+  if (!nav) return;
+  const firstScreenEnd = firstScreen ? firstScreen.offsetTop + firstScreen.offsetHeight : 240;
+  const busy = document.body.classList.contains("menu-open") || document.body.classList.contains("modal-open");
+  if (busy || scrollY <= firstScreenEnd) {
+    nav.classList.remove("nav-hidden");
+    lastDirectionY = scrollY;
+    return;
+  }
+  const delta = scrollY - lastDirectionY;
+  if (Math.abs(delta) < 8) return; // ignore jitter; small moves add up until they count
+  nav.classList.toggle("nav-hidden", delta > 0);
+  lastDirectionY = scrollY;
+}
+
 function onScroll() {
   const scrollY = window.scrollY;
   nav?.classList.toggle("scrolled", scrollY > 15);
+  updateHeaderVisibility(scrollY);
 
   // Dynamic Scroll Progress Bar
   if (scrollProgressBar) {
@@ -254,18 +275,6 @@ function onScroll() {
       }
     });
 
-    // Sync mobile bottom dock active items
-    const homeBottomItem = document.querySelector('.bottom-bar-item[data-nav="home"]');
-    const topicsBottomItem = document.querySelector('.bottom-bar-item[data-nav="topics"]');
-    if (homeBottomItem && topicsBottomItem) {
-      if (currentId === "topics" || currentId === "curriculum" || currentId === "grades") {
-        topicsBottomItem.classList.add("active");
-        homeBottomItem.classList.remove("active");
-      } else {
-        homeBottomItem.classList.add("active");
-        topicsBottomItem.classList.remove("active");
-      }
-    }
   }
 
   scrollScheduled = false;

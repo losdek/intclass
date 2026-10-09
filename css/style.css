@@ -38,7 +38,6 @@
   --radius-lg: 12px;
 
   --header-h: 60px;
-  --bottom-bar-h: 60px;
   --ease: cubic-bezier(0.2, 0, 0, 1);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --fast: 160ms;
@@ -228,6 +227,13 @@ h3 {
   background: var(--bg);
   border-bottom: 1px solid var(--border);
   padding-top: env(safe-area-inset-top, 0px);
+  transition: transform 320ms var(--ease-out);
+}
+
+/* slid out of view while reading; main.js brings it back on scroll up */
+.nav.nav-hidden {
+  transform: translateY(-100%);
+  transition-timing-function: var(--ease);
 }
 
 .nav-inner {
@@ -599,7 +605,7 @@ h3 {
    Footer
    ========================================================================== */
 .footer {
-  padding: 3rem 0;
+  padding: 2.5rem 0 calc(2.5rem + env(safe-area-inset-bottom, 0px));
 }
 
 .footer-inner {
@@ -610,16 +616,19 @@ h3 {
   gap: 0.5rem 1.5rem;
 }
 
-.footer-text {
-  font-size: 0.88rem;
+.footer-text,
+.footer-link {
+  font-size: 0.85rem;
   color: var(--faint);
 }
 
-/* ==========================================================================
-   Mobile bottom navigation
-   ========================================================================== */
-.mobile-bottom-bar {
-  display: none;
+.footer-link {
+  padding: 0.5rem 0;
+  transition: color var(--fast) var(--ease);
+}
+
+.footer-link:hover {
+  color: var(--ink);
 }
 
 /* ==========================================================================
@@ -1823,7 +1832,6 @@ h3 {
 .topic-chip:active,
 .filter-tab-btn:active,
 .quiz-option-label:active,
-.bottom-bar-item:active,
 .nav-quick-subject:active {
   transform: scale(0.98);
 }
@@ -2005,51 +2013,8 @@ h3 {
     pointer-events: auto;
   }
 
-  /* Bottom tab bar within thumb reach */
-  body {
-    padding-bottom: calc(var(--bottom-bar-h) + env(safe-area-inset-bottom, 0px));
-  }
-
-  .mobile-bottom-bar {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 50;
-    display: block;
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-    background: var(--bg);
-    border-top: 1px solid var(--border);
-  }
-
-  .bottom-bar-inner {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    height: var(--bottom-bar-h);
-  }
-
-  .bottom-bar-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.2rem;
-    font-size: 0.7rem;
-    font-weight: 500;
-    color: var(--faint);
-  }
-
-  .bottom-bar-icon svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  .bottom-bar-item.active {
-    color: var(--ink);
-  }
-
   .toast-container {
-    bottom: calc(var(--bottom-bar-h) + env(safe-area-inset-bottom, 0px) + 0.75rem);
+    bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
   }
 
   /* Profile becomes a bottom sheet */
@@ -2138,7 +2103,6 @@ h3 {
 @media print {
   .nav,
   .footer,
-  .mobile-bottom-bar,
   .modal-backdrop,
   .toast-container,
   .filter-tabs-bar,
