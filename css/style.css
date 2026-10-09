@@ -1305,12 +1305,69 @@ button, input {
   transition: transform var(--duration-normal) var(--ease), opacity var(--duration-fast) var(--ease);
 }
 
-.lesson-media iframe {
+.lesson-media iframe,
+.lesson-media video {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   border: 0;
+}
+
+.lesson-media video {
+  background: #000;
+  object-fit: contain;
+}
+
+/* Self-hosted video length */
+.video-duration {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(9, 9, 11, 0.78);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+/* Lessons whose video is not recorded yet */
+.lesson-media.is-pending {
+  cursor: default;
+  background: var(--surface-subtle);
+}
+
+.pending-media {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 16px;
+  text-align: center;
+  color: var(--soft);
+  background:
+    repeating-linear-gradient(135deg, transparent 0 14px, rgba(127, 127, 127, 0.06) 14px 28px);
+}
+
+.pending-icon {
+  font-size: 28px;
+  opacity: 0.8;
+}
+
+.pending-text {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.pending-topic {
+  font-size: 13px;
+  opacity: 0.8;
 }
 
 /* Play Badge */

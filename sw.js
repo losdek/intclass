@@ -1,7 +1,7 @@
 /**
  * intclass Service Worker — Offline Caching & Instant Loading
  */
-const CACHE_NAME = "intclass-v2";
+const CACHE_NAME = "intclass-v3";
 const STATIC_ASSETS = [
   "./",
   "index.html",
@@ -47,6 +47,12 @@ self.addEventListener("fetch", (event) => {
 
   // Only handle same-origin GET requests
   if (request.method !== "GET" || url.origin !== location.origin) {
+    return;
+  }
+
+  // Lesson videos stream straight from the network: the browser needs HTTP range requests
+  // for seeking, and caching every MP4 would fill the offline cache with tens of megabytes
+  if (url.pathname.endsWith(".mp4") || request.headers.has("range")) {
     return;
   }
 
