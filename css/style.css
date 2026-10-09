@@ -56,6 +56,17 @@
   --overlay: rgba(11, 18, 32, 0.5);
   --media-ui: rgba(11, 18, 32, 0.62);
 
+  /* drawings in quiz tasks: the palette of the «за минуту» videos */
+  --fig-paper: #f7f9fc;
+  --fig-grid: #e1e7f0;
+  --fig-teal: #1e8c78;
+  --fig-teal-soft: rgba(30, 140, 120, 0.22);
+  --fig-mustard: #f0b23a;
+  --fig-mustard-soft: rgba(240, 178, 58, 0.26);
+  --fig-red: #e1513a;
+  --fig-on-color: #1d1b2e;
+  --fig-ok-soft: rgba(22, 163, 74, 0.2);
+
   --radius-sm: 6px;
   --radius: 8px;
   --radius-lg: 12px;
@@ -124,6 +135,16 @@
 
   --overlay: rgba(0, 0, 0, 0.6);
   --media-ui: rgba(0, 0, 0, 0.62);
+
+  --fig-paper: #0a1120;
+  --fig-grid: #1a2640;
+  --fig-teal: #34b89c;
+  --fig-teal-soft: rgba(52, 184, 156, 0.24);
+  --fig-mustard: #f2be52;
+  --fig-mustard-soft: rgba(242, 190, 82, 0.24);
+  --fig-red: #f2705a;
+  --fig-on-color: #10131c;
+  --fig-ok-soft: rgba(74, 222, 128, 0.2);
 
   color-scheme: dark;
 }
@@ -1752,6 +1773,290 @@ h2,
   color: var(--accent-text);
 }
 
+/* Interactive tasks: scales, protractor, number line, grid… (js/tasks.js) */
+.task {
+  display: grid;
+  gap: 0.6rem;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--fig-paper);
+  transition: border-color var(--fast) var(--ease), box-shadow var(--fast) var(--ease);
+}
+
+.is-correct > .task {
+  border-color: var(--success);
+  box-shadow: 0 0 0 1px var(--success);
+}
+
+.is-wrong > .task {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 1px var(--danger);
+}
+
+.task-fig {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  margin-inline: auto;
+  overflow: visible;
+  font-family: var(--font-body);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.task-plane .task-fig,
+.task-line .task-fig {
+  max-width: 320px;
+}
+
+.task-pick .task-fig {
+  max-width: 280px;
+}
+
+.task-fig:focus-visible,
+.task-fig .f-pick:focus-visible {
+  outline: none;
+}
+
+.task-fig:focus-visible {
+  border-radius: var(--radius-sm);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.is-tappable,
+.f-pick,
+.f-handle {
+  cursor: pointer;
+}
+
+.f-handle {
+  cursor: grab;
+  touch-action: none;
+}
+
+/* shapes */
+.f-ink { fill: var(--ink); }
+.f-paper { fill: var(--fig-paper); }
+.f-axis { stroke: var(--ink); stroke-width: 2; stroke-linecap: round; }
+.f-grid { stroke: var(--fig-grid); stroke-width: 1; }
+.f-tick { stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; }
+.f-string { stroke: var(--soft); stroke-width: 1.6; fill: none; }
+.f-hit { fill: transparent; }
+.f-hit-line { stroke: transparent; stroke-width: 22; stroke-linecap: round; fill: none; }
+
+.f-label {
+  fill: var(--soft);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.f-small { font-size: 9px; }
+.task-numberline .f-label { font-size: 12px; }
+.f-zero { fill: var(--ink); font-weight: 700; }
+.f-value { fill: var(--ink); font-weight: 600; }
+.f-axis-name { fill: var(--ink); font-style: italic; font-size: 11px; }
+
+.f-point-name {
+  fill: var(--ink);
+  font-size: 11px;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.f-readout,
+.f-wedge-text,
+.f-knob-text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-anchor: middle;
+}
+
+/* scales */
+.f-box { fill: var(--fig-mustard); stroke: var(--fig-on-color); stroke-opacity: 0.25; }
+.f-box-text { fill: var(--fig-on-color); font-size: 15px; font-weight: 700; font-style: italic; }
+.f-weight { fill: var(--fig-teal); }
+.f-weight-ring { fill: none; stroke: var(--fig-teal); stroke-width: 2.4; }
+.f-weight-text { fill: #ffffff; font-size: 12px; font-weight: 700; }
+.f-pan { fill: var(--ink); }
+.f-needle { fill: var(--fig-red); transition: fill var(--medium) var(--ease); }
+.is-level .f-needle { fill: var(--success); }
+
+/* protractor */
+.f-protractor { fill: var(--accent-soft); stroke: var(--accent-border); stroke-width: 1.2; }
+.f-ray { stroke: var(--ink); stroke-width: 3; stroke-linecap: round; }
+.f-ray-move { stroke: var(--accent); }
+.f-wedge { fill: var(--fig-mustard-soft); stroke: var(--fig-mustard); stroke-width: 1.6; }
+.f-readout { fill: var(--ink); font-size: 13px; }
+.f-knob { fill: var(--accent); stroke: var(--surface); stroke-width: 2.5; }
+.f-knob-text { fill: var(--on-accent); font-size: 9px; }
+.f-handle:active .f-knob { cursor: grabbing; }
+
+/* tap targets: number line ticks and parts of a figure */
+.f-mark { fill: transparent; stroke: transparent; stroke-width: 2.5; }
+.f-pick.is-on .f-mark { fill: var(--accent); }
+.f-pick.is-answer .f-mark { stroke: var(--success); }
+.f-pick.is-miss .f-mark { fill: var(--danger); }
+.f-pick:focus-visible .f-mark,
+.f-pick:focus-visible .f-part-shape { stroke: var(--accent); }
+
+.f-disk { fill: var(--fig-teal-soft); stroke: var(--ink); stroke-width: 3; }
+.f-part-line .f-part-shape { fill: none; stroke: var(--ink); stroke-width: 3; stroke-linecap: round; transition: stroke var(--fast) var(--ease), stroke-width var(--fast) var(--ease); }
+.f-part-line.is-on .f-part-shape { stroke: var(--accent); stroke-width: 5; }
+.f-part-line.is-answer .f-part-shape { stroke: var(--success); stroke-width: 5; }
+.f-part-line.is-miss .f-part-shape { stroke: var(--danger); }
+
+.f-part-area .f-part-shape { fill: var(--surface); stroke: var(--ink); stroke-width: 2.5; transition: fill var(--fast) var(--ease); }
+.f-part-area.is-on .f-part-shape { fill: var(--accent-tint); }
+.f-part-area.is-answer .f-part-shape { fill: var(--fig-ok-soft); }
+.f-part-area.is-miss .f-part-shape { fill: var(--danger-soft); }
+.f-area-text { fill: var(--ink); font-size: 16px; font-weight: 700; text-anchor: middle; opacity: 0; transition: opacity var(--medium) var(--ease); }
+.show-areas .f-area-text { opacity: 1; }
+.f-side { font-size: 14px; font-weight: 700; font-style: italic; text-anchor: middle; }
+.f-side-a { fill: var(--fig-teal); }
+.f-side-b { fill: #c98a12; }
+:root[data-theme="dark"] .f-side-b { fill: var(--fig-mustard); }
+
+/* coordinate plane */
+.f-point .f-dot { fill: var(--accent); stroke: var(--surface); stroke-width: 2; }
+.f-ghost-dot { fill: none; stroke: var(--success); stroke-width: 2.5; }
+.f-guide { fill: none; stroke: var(--success); stroke-width: 1.6; stroke-dasharray: 4 3; }
+.f-graph { stroke: var(--accent); stroke-width: 3; stroke-linecap: round; }
+.f-target-dot { fill: var(--surface); stroke: var(--fig-red); stroke-width: 3; transition: fill var(--fast) var(--ease), stroke var(--fast) var(--ease); }
+.f-target.is-hit .f-target-dot { fill: var(--success); stroke: var(--success); }
+.f-target-text { fill: var(--ink); font-size: 9px; font-weight: 600; paint-order: stroke; stroke: var(--fig-paper); stroke-width: 3; }
+
+/* bars and the mean line */
+.f-bar { fill: var(--fig-teal); }
+.f-over { fill: var(--fig-paper); fill-opacity: 0.55; }
+.f-under { fill: var(--fig-teal-soft); stroke: var(--fig-teal); stroke-width: 1.2; stroke-dasharray: 3 2; }
+.f-level-line { stroke: var(--fig-mustard); stroke-width: 3; stroke-dasharray: 7 4; stroke-linecap: round; }
+
+/* triangle corners on a straight line */
+.f-tri { fill: none; stroke: var(--ink); stroke-width: 2.5; stroke-linejoin: round; }
+.f-w-a { fill: var(--fig-teal); }
+.f-w-b { fill: var(--fig-mustard); }
+.f-w-c { fill: var(--fig-red); }
+.f-big { stroke: var(--fig-paper); stroke-width: 1.5; }
+.f-w-c.is-over { fill-opacity: 0.55; stroke: var(--fig-red); stroke-dasharray: 4 3; }
+.f-wedge-text { fill: var(--fig-on-color); font-size: 11px; }
+
+/* controls under the drawing */
+.task-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem 0.9rem;
+}
+
+.task-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.task-step-name {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--soft);
+}
+
+.task-step-btn {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--accent-text);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1;
+  transition: background var(--fast) var(--ease), border-color var(--fast) var(--ease), transform var(--fast) var(--ease);
+}
+
+/* hover tints only where there is a real hover, so a tap on a phone doesn't leave one behind */
+@media (hover: hover) {
+  .task-step-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  .f-pick:not(.is-on):hover .f-mark { fill: var(--accent-tint); }
+  .f-part-line:not(.is-on):hover .f-part-shape { stroke: var(--accent-text); }
+  .f-part-area:not(.is-on):hover .f-part-shape { fill: var(--accent-soft); }
+}
+
+.task-step-btn:active:not(:disabled) {
+  transform: scale(0.92);
+}
+
+.task-step-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.task-step-out {
+  min-width: 2.6ch;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.task-slider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.task-slider .task-step-name {
+  flex: none;
+  font-style: normal;
+}
+
+.task-range {
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+  accent-color: var(--accent);
+}
+
+.task-formula {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--accent-text);
+}
+
+.task-answer {
+  font-size: 0.86rem;
+  font-weight: 600;
+  line-height: 1.45;
+  text-align: center;
+  color: var(--success);
+}
+
+.task.is-locked .task-fig,
+.task.is-locked .task-controls {
+  pointer-events: none;
+}
+
+.task.is-locked .task-controls {
+  opacity: 0.6;
+}
+
 /* ==========================================================================
    Toasts & confetti
    ========================================================================== */
@@ -1924,6 +2229,12 @@ h2,
   to {
     transform: translateY(100%);
   }
+}
+
+@keyframes dot-pop {
+  0% { transform: scale(0.3); }
+  60% { transform: scale(1.25); }
+  100% { transform: scale(1); }
 }
 
 @keyframes answer-pop {
@@ -2104,6 +2415,29 @@ h2,
 
 .anim .quiz-option-label.is-wrong {
   animation: answer-shake 0.45s var(--ease);
+}
+
+/* tasks: marks pop in, the readout bumps, the frame reacts to the check */
+.anim .task-fig .pop {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: dot-pop 0.45s var(--spring);
+}
+
+.anim .task-step-out.bump {
+  animation: select-pop 0.35s var(--spring);
+}
+
+.anim .is-correct > .task {
+  animation: answer-pop 0.4s var(--ease-out);
+}
+
+.anim .is-wrong > .task {
+  animation: answer-shake 0.45s var(--ease);
+}
+
+.anim .task-answer {
+  animation: rise 0.45s var(--ease-out) backwards;
 }
 
 /* Profile dialog / bottom sheet */

@@ -130,6 +130,21 @@ const LESSONS = [
     },
     "quiz": [
       {
+        "type": "scales",
+        "question": "Весы — это уравнение x + 2 = 7. Подберите x кнопками − и +, чтобы весы уравновесились.",
+        "left": {
+          "x": 1,
+          "n": 2
+        },
+        "right": {
+          "x": 0,
+          "n": 7
+        },
+        "max": 12,
+        "solution": 5,
+        "explanation": "Неизвестное слагаемое: x = 7 − 2 = 5. Проверка: 5 + 2 = 7."
+      },
+      {
         "question": "Найдите корень уравнения x + 15 = 40.",
         "options": [
           "25",
@@ -176,6 +191,16 @@ const LESSONS = [
     },
     "quiz": [
       {
+        "type": "angle",
+        "question": "Поверните луч транспортира так, чтобы получился тупой угол.",
+        "accept": [
+          91,
+          179
+        ],
+        "solution": 120,
+        "explanation": "Острый угол меньше 90°, прямой — ровно 90°, тупой — больше 90°, но меньше 180°, развёрнутый — 180°."
+      },
+      {
         "question": "Сколько квадратных сантиметров в 1 м²?",
         "options": [
           "10 000",
@@ -184,16 +209,6 @@ const LESSONS = [
         ],
         "answer": 0,
         "explanation": "1 м² — это квадрат 100 см × 100 см, значит 100 · 100 = 10 000 см²."
-      },
-      {
-        "question": "Какой угол называют тупым?",
-        "options": [
-          "Больше 90°, но меньше 180°",
-          "Ровно 90°",
-          "Меньше 90°"
-        ],
-        "answer": 0,
-        "explanation": "Острый — меньше 90°, прямой — 90°, тупой — от 90° до 180°, развёрнутый — 180°."
       },
       {
         "question": "Чему равен объём комнаты 5 м × 4 м × 3 м?",
@@ -227,6 +242,17 @@ const LESSONS = [
     "takeaway": "Сложение чисел с разными знаками: из большего модуля вычитают меньший и ставят знак слагаемого с большим модулем.",
     "quiz": [
       {
+        "type": "numberline",
+        "question": "Отметьте на числовой оси все числа, модуль которых равен 3.",
+        "min": -5,
+        "max": 5,
+        "solution": [
+          -3,
+          3
+        ],
+        "explanation": "Модуль — это расстояние до нуля. На расстоянии 3 от нуля лежат два числа: −3 и 3."
+      },
+      {
         "question": "Чему равна сумма чисел (-7) + 12?",
         "options": [
           "5",
@@ -247,16 +273,6 @@ const LESSONS = [
         ],
         "answer": 0,
         "explanation": "Минус на минус при умножении даёт плюс: (-4) · (-5) = 20."
-      },
-      {
-        "question": "Чему равен модуль числа −3?",
-        "options": [
-          "3",
-          "−3",
-          "0"
-        ],
-        "answer": 0,
-        "explanation": "Модуль — расстояние до нуля, а расстояние не бывает отрицательным: |−3| = 3."
       },
       {
         "question": "Какое число больше: −2 или −5?",
@@ -349,6 +365,16 @@ const LESSONS = [
     "takeaway": "Координаты точки записываются как (x; y): первая по горизонтали (OX), вторая по вертикали (OY).",
     "quiz": [
       {
+        "type": "plane",
+        "question": "Поставьте точку A(3; −2): нажмите на нужный узел сетки.",
+        "range": 5,
+        "solution": [
+          3,
+          -2
+        ],
+        "explanation": "Сначала x = 3 — три шага вправо, потом y = −2 — два шага вниз. Точка (−2; 3) — ловушка: это другая точка."
+      },
+      {
         "question": "В какой координатной четверти лежит точка A(-3; 5)?",
         "options": [
           "Во II четверти (x < 0, y > 0)",
@@ -399,6 +425,16 @@ const LESSONS = [
       "duration": "1:42"
     },
     "quiz": [
+      {
+        "type": "pick",
+        "figure": "circle",
+        "question": "Нажмите на диаметр окружности.",
+        "solution": [
+          "diameter"
+        ],
+        "reveal": "Диаметр BC проходит через центр O",
+        "explanation": "Диаметр — хорда, которая проходит через центр. OA — радиус, DE — хорда, не проходящая через центр."
+      },
       {
         "question": "Какова длина окружности пиццы диаметром 30 см (π ≈ 3,14)?",
         "options": [
@@ -456,14 +492,26 @@ const LESSONS = [
     },
     "quiz": [
       {
-        "question": "Найдите среднее арифметическое чисел 3, 7, 2, 5, 3.",
-        "options": [
-          "4",
-          "3",
-          "5"
+        "type": "level",
+        "question": "За пять дней прочитано 3, 7, 2, 5 и 3 страницы. Перетащите линию на уровень среднего арифметического.",
+        "values": [
+          3,
+          7,
+          2,
+          5,
+          3
         ],
-        "answer": 0,
-        "explanation": "(3 + 7 + 2 + 5 + 3) : 5 = 20 : 5 = 4."
+        "labels": [
+          "Пн",
+          "Вт",
+          "Ср",
+          "Чт",
+          "Пт"
+        ],
+        "max": 8,
+        "step": 0.5,
+        "solution": 4,
+        "explanation": "(3 + 7 + 2 + 5 + 3) : 5 = 20 : 5 = 4. На этом уровне выступы над линией ровно заполняют пустоты под ней."
       },
       {
         "question": "Чему равна медиана ряда 3, 7, 2, 5, 3?",
@@ -506,6 +554,21 @@ const LESSONS = [
     "description": "Раскрытие скобок, приведение подобных слагаемых, перенос слагаемых со сменой знака и уравнения вида ax + b = cx + d, задачи на движение.",
     "takeaway": "При переносе слагаемого из одной части уравнения в другую его знак меняется на противоположный: ax + b = c => ax = c - b.",
     "quiz": [
+      {
+        "type": "scales",
+        "question": "Весы — это уравнение 3x + 1 = x + 9. Подберите x, чтобы весы уравновесились.",
+        "left": {
+          "x": 3,
+          "n": 1
+        },
+        "right": {
+          "x": 1,
+          "n": 9
+        },
+        "max": 10,
+        "solution": 4,
+        "explanation": "Иксы влево, числа вправо: 3x − x = 9 − 1, 2x = 8, x = 4. Проверка: 3 · 4 + 1 = 13 и 4 + 9 = 13."
+      },
       {
         "question": "Чему равен корень уравнения 4x - 8 = 12?",
         "options": [
@@ -564,6 +627,14 @@ const LESSONS = [
     "takeaway": "1-й признак: по двум сторонам и углу между ними. 2-й: по стороне и двум углам. 3-й: по трем сторонам.",
     "quiz": [
       {
+        "type": "triangle-sum",
+        "question": "В треугольнике ∠A = 50° и ∠B = 70°. Поверните угол C так, чтобы три угла сложились в развёрнутый угол.",
+        "a": 50,
+        "b": 70,
+        "solution": 60,
+        "explanation": "Сумма углов треугольника 180°: 180° − 50° − 70° = 60°."
+      },
+      {
         "question": "Первый признак равенства треугольников гласит о равенстве по...",
         "options": [
           "Двум сторонам и углу между ними",
@@ -572,16 +643,6 @@ const LESSONS = [
         ],
         "answer": 0,
         "explanation": "Если две стороны и угол между ними одного треугольника равны двум сторонам и углу между ними другого, то они равны."
-      },
-      {
-        "question": "Два угла треугольника равны 50° и 70°. Чему равен третий угол?",
-        "options": [
-          "60°",
-          "120°",
-          "70°"
-        ],
-        "answer": 0,
-        "explanation": "Сумма углов треугольника 180°: 180° − (50° + 70°) = 60°."
       },
       {
         "question": "Можно ли сложить треугольник из палочек длиной 1, 2 и 5?",
@@ -618,6 +679,17 @@ const LESSONS = [
     "takeaway": "Квадрат суммы равен: квадрату первого числа плюс удвоенное произведение плюс квадрат второго: (a + b)² = a² + 2ab + b².",
     "quiz": [
       {
+        "type": "pick",
+        "figure": "square",
+        "question": "В ловушке (a + b)² = a² + b² теряются части квадрата со стороной a + b. Нажмите на все потерянные части.",
+        "solution": [
+          "ab1",
+          "ab2"
+        ],
+        "reveal": "Потеряны два прямоугольника ab — это слагаемое 2ab",
+        "explanation": "(a + b)² = a² + 2ab + b²: кроме квадратов a² и b² в большом квадрате есть два прямоугольника a × b."
+      },
+      {
         "question": "Чему равно выражение (x + 3)² в раскрытом виде?",
         "options": [
           "x² + 6x + 9",
@@ -637,15 +709,6 @@ const LESSONS = [
         ],
         "answer": 0,
         "explanation": "(100 + 1)² = 100² + 2 · 100 · 1 + 1² = 10 000 + 200 + 1 = 10 201."
-      },
-      {
-        "question": "Верно ли, что (a + b)² = a² + b²?",
-        "options": [
-          "Нет, потеряно слагаемое 2ab",
-          "Да, всегда"
-        ],
-        "answer": 0,
-        "explanation": "Например, (3 + 2)² = 25, а 3² + 2² = 13."
       },
       {
         "question": "Вычислите 99 · 101.",
@@ -700,6 +763,25 @@ const LESSONS = [
       "duration": "1:33"
     },
     "quiz": [
+      {
+        "type": "line",
+        "question": "Подберите k и b, чтобы прямая y = kx + b прошла через обе отмеченные точки.",
+        "points": [
+          [
+            0,
+            -1
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        "solution": {
+          "k": 2,
+          "b": -1
+        },
+        "explanation": "При x = 0 получаем y = b, значит b = −1. Из точки (2; 3): 3 = 2k − 1, k = 2. Ответ: y = 2x − 1."
+      },
       {
         "question": "Принадлежит ли точка (−2; −3) графику y = 2x + 1?",
         "options": [
@@ -1612,8 +1694,9 @@ function createCard(lesson) {
           ${quizData
             .map(
               (q, qIndex) => `
-            <div class="quiz-question-item" data-q-index="${qIndex}">
+            <div class="quiz-question-item${q.type ? " is-task" : ""}" data-q-index="${qIndex}">
               <p class="quiz-q-title"><span class="q-num">${qIndex + 1}.</span> ${q.question}</p>
+              ${q.type ? `<div class="task task-${q.type}" data-task="${q.type}"></div>` : `
               <div class="quiz-options">
                 ${shuffledIndices(q.options.length)
                   .map(
@@ -1625,7 +1708,7 @@ function createCard(lesson) {
                 `
                   )
                   .join("")}
-              </div>
+              </div>`}
             </div>
           `
             )
@@ -1686,6 +1769,14 @@ function createCard(lesson) {
       ${quizHtml}
     </div>
   `;
+
+  // interactive tasks (scales, protractor, grid…) are drawn by js/tasks.js
+  if (window.IntTasks) {
+    card.querySelectorAll(".task[data-task]").forEach((el) => {
+      const qIndex = Number(el.closest(".quiz-question-item").dataset.qIndex);
+      window.IntTasks.mount(el, quizData[qIndex]);
+    });
+  }
 
   return card;
 }
@@ -1940,41 +2031,49 @@ function handleQuizInteraction(event) {
     const retryBtn = quizElem.querySelector(".quiz-retry-btn");
     const questions = quizElem.querySelectorAll(".quiz-question-item");
 
-    let allAnswered = true;
+    // a radio question answers with the option index, an interactive task with its widget value
+    const answers = [...questions].map((qElem) => {
+      const task = qElem.querySelector(".task")?.taskCtrl;
+      if (task) return task.value();
+      const selected = qElem.querySelector('input[type="radio"]:checked');
+      return selected ? Number(selected.value) : null;
+    });
+    const allAnswered = answers.every((a) => a !== null);
     let correctCount = 0;
 
-    questions.forEach((qElem, qIdx) => {
-      const selected = qElem.querySelector('input[type="radio"]:checked');
-      const correctIdx = lesson.quiz[qIdx]?.answer;
+    if (allAnswered) {
+      questions.forEach((qElem, qIdx) => {
+        const q = lesson.quiz[qIdx];
+        const userVal = answers[qIdx];
+        const task = qElem.querySelector(".task")?.taskCtrl;
 
-      if (!selected) {
-        allAnswered = false;
-        return;
-      }
-
-      const userVal = Number(selected.value);
-      const labels = qElem.querySelectorAll(".quiz-option-label");
-
-      labels.forEach((label) => {
-        const lIdx = Number(label.dataset.opt);
-        label.classList.remove("is-correct", "is-wrong");
-        if (lIdx === correctIdx) {
-          label.classList.add("is-correct");
-        } else if (lIdx === userVal && userVal !== correctIdx) {
-          label.classList.add("is-wrong");
+        if (task) {
+          const ok = window.IntTasks.check(q, userVal);
+          qElem.classList.add(ok ? "is-correct" : "is-wrong");
+          if (!ok) task.reveal();
+          task.lock(true);
+          if (ok) correctCount++;
+          return;
         }
-      });
 
-      if (userVal === correctIdx) {
-        correctCount++;
-      }
-    });
+        qElem.querySelectorAll(".quiz-option-label").forEach((label) => {
+          const lIdx = Number(label.dataset.opt);
+          label.classList.remove("is-correct", "is-wrong");
+          if (lIdx === q.answer) {
+            label.classList.add("is-correct");
+          } else if (lIdx === userVal) {
+            label.classList.add("is-wrong");
+          }
+        });
+        if (userVal === q.answer) correctCount++;
+      });
+    }
 
     if (!allAnswered) {
       if (resultMsg) {
         resultMsg.hidden = false;
         resultMsg.className = "quiz-result-msg info";
-        resultMsg.textContent = "Пожалуйста, ответьте на все вопросы перед проверкой.";
+        resultMsg.textContent = "Пожалуйста, ответьте на все вопросы и выполните задания перед проверкой.";
       }
       return;
     }
@@ -2005,7 +2104,7 @@ function handleQuizInteraction(event) {
         updateOverallProgressStats();
       } else {
         resultMsg.className = "quiz-result-msg error";
-        resultMsg.textContent = `Результат: ${correctCount} из ${questions.length}. Правильные ответы подсвечены зелёным. ${explanations}`;
+        resultMsg.textContent = `Результат: ${correctCount} из ${questions.length}. Правильные ответы подсвечены зелёным, в заданиях показано верное решение. ${explanations}`;
       }
       checkBtn.hidden = true;
       if (retryBtn) retryBtn.hidden = false;
@@ -2026,6 +2125,10 @@ function handleQuizInteraction(event) {
       });
       quizElem.querySelectorAll(".quiz-option-label").forEach((label) => {
         label.classList.remove("checked", "is-correct", "is-wrong");
+      });
+      quizElem.querySelectorAll(".quiz-question-item").forEach((item) => {
+        item.classList.remove("is-correct", "is-wrong");
+        item.querySelector(".task")?.taskCtrl?.reset();
       });
     }
 

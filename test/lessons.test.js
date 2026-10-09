@@ -3,6 +3,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const { LESSONS, SUBJECT_LABELS } = require("../js/lessons.js");
+const IntTasks = require("../js/tasks.js");
 
 const ROOT = path.join(__dirname, "..");
 
@@ -68,6 +69,8 @@ describe("Lessons Dataset Validation", () => {
       assert.ok(Array.isArray(lesson.quiz) && lesson.quiz.length > 0, `Lesson ${lesson.id} has no quiz`);
       lesson.quiz.forEach((q, qIndex) => {
         assert.ok(q.question && q.question.length > 5, `Invalid quiz question in ${lesson.id}[${qIndex}]`);
+        assert.ok(q.explanation && q.explanation.length > 5, `Missing explanation in ${lesson.id}[${qIndex}]`);
+        if (q.type) return; // interactive tasks are checked below
         assert.ok(Array.isArray(q.options) && q.options.length >= 2, `Invalid options in ${lesson.id}[${qIndex}]`);
         assert.ok(
           Number.isInteger(q.answer) && q.answer >= 0 && q.answer < q.options.length,
@@ -77,6 +80,56 @@ describe("Lessons Dataset Validation", () => {
         assert.strictEqual(new Set(q.options).size, q.options.length, `Duplicate options in ${lesson.id}[${qIndex}]`);
       });
     });
+  });
+
+  test("Every lesson with a video has an interactive task, and every task accepts its own solution", () => {
+    LESSONS.filter((l) => l.video).forEach((lesson) => {
+      assert.ok(lesson.quiz.some((q) => q.type), `No interactive task in ${lesson.id}`);
+    });
+    LESSONS.flatMap((l) => l.quiz.map((q) => [l.id, q])).filter(([, q]) => q.type).forEach(([id, q]) => {
+      assert.ok(IntTasks.TASK_TYPES[q.type], `Unknown task type ${q.type} in ${id}`);
+      assert.ok(q.solution !== undefined, `Task without solution in ${id}`);
+      assert.ok(IntTasks.check(q, q.solution), `The solution of ${id} (${q.type}) does not pass its own check`);
+      assert.strictEqual(IntTasks.check(q, null), false, `Unanswered task counts as correct in ${id}`);
+    });
+  });
+
+  test("Interactive task checks reject wrong answers", () => {
+    const { check } = IntTasks;
+    const scales = { type: "scales", left: { x: 3, n: 1 }, right: { x: 1, n: 9 }, solution: 4 };
+    assert.ok(check(scales, 4));
+    assert.ok(!check(scales, 5));
+    assert.ok(!check(scales, 0));
+
+    const angle = { type: "angle", accept: [91, 179], solution: 120 };
+    assert.ok(check(angle, 91) && check(angle, 179));
+    assert.ok(!check(angle, 90) && !check(angle, 180) && !check(angle, 45));
+
+    const numberline = { type: "numberline", solution: [-3, 3] };
+    assert.ok(check(numberline, [3, -3]));
+    assert.ok(!check(numberline, [3]) && !check(numberline, [-3, 3, 0]) && !check(numberline, [-3, 2]));
+
+    const plane = { type: "plane", solution: [3, -2] };
+    assert.ok(check(plane, [3, -2]));
+    assert.ok(!check(plane, [-2, 3]) && !check(plane, [3, 2]));
+
+    const pick = { type: "pick", solution: ["ab1", "ab2"] };
+    assert.ok(check(pick, ["ab2", "ab1"]));
+    assert.ok(!check(pick, ["ab1"]) && !check(pick, ["ab1", "ab2", "a2"]));
+
+    const level = { type: "level", solution: 4 };
+    assert.ok(check(level, 4));
+    assert.ok(!check(level, 4.5) && !check(level, 3));
+
+    const tri = { type: "triangle-sum", a: 50, b: 70, solution: 60 };
+    assert.ok(check(tri, 60));
+    assert.ok(!check(tri, 70));
+
+    const line = { type: "line", points: [[0, -1], [2, 3]], solution: { k: 2, b: -1 } };
+    assert.ok(check(line, { k: 2, b: -1 }));
+    assert.ok(!check(line, { k: 1, b: -1 }) && !check(line, { k: 2, b: 1 }));
+
+    assert.ok(!check({ type: "no-such-type", solution: 1 }, 1));
   });
 
   test("All grades 5–9 have at least 4 math and 4 russian lessons", () => {
