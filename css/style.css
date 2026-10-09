@@ -25,7 +25,10 @@
   --accent-tint: #dbeafe;
   --accent-border: #bfdbfe;
   --accent-glow: rgba(37, 99, 235, 0.32);
+  --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #2563eb 52%, #1d4ed8 100%);
+  --hero-glow: radial-gradient(closest-side, rgba(37, 99, 235, 0.16), rgba(37, 99, 235, 0));
   --blue-band: #eff6ff;
+  --band-end: #12306e;
 
   --math: #2563eb;
   --rus: #0284c7;
@@ -56,6 +59,10 @@
   --radius-sm: 6px;
   --radius: 8px;
   --radius-lg: 12px;
+
+  /* Unbounded (made for Cyrillic) carries the headings, Onest the reading text */
+  --font-display: "Unbounded", "Onest", system-ui, sans-serif;
+  --font-body: "Onest", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
   --header-h: 60px;
   --ease: cubic-bezier(0.2, 0, 0, 1);
@@ -88,7 +95,10 @@
   --accent-tint: #15295a;
   --accent-border: #1e3a8a;
   --accent-glow: rgba(59, 130, 246, 0.4);
-  --blue-band: #10234d;
+  --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #2563eb 55%, #1e40af 100%);
+  --hero-glow: radial-gradient(closest-side, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0));
+  --blue-band: #0e1c3f;
+  --band-end: #13306f;
 
   --math: #6ea8ff;
   --rus: #38bdf8;
@@ -168,7 +178,7 @@ html {
 }
 
 body {
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.6;
   color: var(--ink);
@@ -227,6 +237,15 @@ h3 {
   line-height: 1.15;
   letter-spacing: -0.02em;
   overflow-wrap: break-word;
+  text-wrap: balance;
+}
+
+h1,
+h2,
+.logo,
+.stat-number {
+  font-family: var(--font-display);
+  font-weight: 700;
 }
 
 :focus-visible {
@@ -260,7 +279,7 @@ h3 {
   padding: 0.6rem 1.15rem;
   border: 1px solid var(--accent);
   border-radius: var(--radius);
-  background: var(--accent);
+  background: var(--accent-gradient);
   color: var(--on-accent);
   font-size: 0.95rem;
   font-weight: 600;
@@ -294,7 +313,8 @@ h3 {
   background: var(--bg);
   border-bottom: 1px solid var(--border);
   padding-top: env(safe-area-inset-top, 0px);
-  transition: transform 420ms var(--ease-out), box-shadow 300ms var(--ease);
+  will-change: transform;
+  transition: transform 460ms var(--ease-out), box-shadow 300ms var(--ease);
 }
 
 .nav.scrolled {
@@ -303,10 +323,11 @@ h3 {
 
 /* slid out of view while reading; main.js brings it back on scroll up */
 .nav.nav-hidden {
-  transform: translateY(-100%);
+  transform: translateY(-105%);
   box-shadow: none;
-  transition-duration: 300ms;
-  transition-timing-function: var(--ease);
+  pointer-events: none;
+  transition-duration: 340ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nav-inner {
@@ -320,7 +341,7 @@ h3 {
   display: inline-flex;
   align-items: baseline;
   font-size: 1.05rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.03em;
   white-space: nowrap;
 }
@@ -445,6 +466,27 @@ h3 {
   border-bottom: 1px solid var(--border);
 }
 
+/* soft blue glow behind the first screen; drifts slowly when motion is allowed */
+.hero {
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  right: -28%;
+  top: 6%;
+  width: min(92vw, 760px);
+  aspect-ratio: 1;
+  background: var(--hero-glow);
+  pointer-events: none;
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 1;
+}
+
 .hero-eyebrow,
 .section-label {
   font-size: 0.75rem;
@@ -456,10 +498,10 @@ h3 {
 
 .hero-title {
   margin: 0.9rem 0 1.1rem;
-  font-size: clamp(2.3rem, 8.5vw, 4.4rem);
-  font-weight: 800;
-  letter-spacing: -0.045em;
-  line-height: 1.02;
+  font-size: clamp(2.1rem, 8vw, 4.2rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.06;
 }
 
 .hero-invert {
@@ -469,7 +511,7 @@ h3 {
   margin-top: 0.08em;
   padding: 0 0.18em;
   border-radius: 10px;
-  background: var(--accent);
+  background: var(--accent-gradient);
   color: var(--on-accent);
 }
 
@@ -497,15 +539,10 @@ h3 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.5rem 1rem;
+  padding: 0.25rem 1rem;
   border-radius: var(--radius);
   transform: translateX(-50%);
   color: var(--accent-text);
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
   transition: opacity 0.45s var(--ease), transform 0.45s var(--ease-out);
 }
 
@@ -567,7 +604,7 @@ h3 {
 .section-title {
   margin: 0.5rem 0 0.6rem;
   font-size: clamp(1.6rem, 5vw, 2.3rem);
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .section-desc {
@@ -616,7 +653,7 @@ h3 {
 
 .subject-icon {
   border-color: var(--accent);
-  background: var(--accent);
+  background: var(--accent-gradient);
   color: var(--on-accent);
 }
 
@@ -822,7 +859,7 @@ h3 {
 .modal h2 {
   margin: 0.4rem 0 0.5rem;
   font-size: 1.45rem;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .modal-text {
@@ -887,7 +924,7 @@ h3 {
 
 .stat-number {
   font-size: 1.5rem;
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1;
 }
 
@@ -900,14 +937,33 @@ h3 {
    Lessons page: heading, route, progress, search, filters
    ========================================================================== */
 .page-head {
+  position: relative;
+  overflow: hidden;
   padding: clamp(3.5rem, 10vw, 6rem) 0 clamp(2.5rem, 6vw, 3.5rem);
   border-bottom: 1px solid var(--border);
+  background: linear-gradient(155deg, var(--band-bg) 0%, var(--band-end) 100%);
+}
+
+/* soft blue glow in the corner of the library header */
+.page-head::before {
+  content: "";
+  position: absolute;
+  right: -22%;
+  top: -70%;
+  width: min(90vw, 640px);
+  aspect-ratio: 1;
+  background: radial-gradient(closest-side, rgba(96, 165, 250, 0.38), rgba(96, 165, 250, 0));
+  pointer-events: none;
+}
+
+.page-head > .container {
+  position: relative;
 }
 
 .page-title {
   margin: 0.5rem 0;
   font-size: clamp(2rem, 7vw, 3.2rem);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.04em;
 }
 
@@ -1109,9 +1165,9 @@ h3 {
 }
 
 .filter-tab-btn.active {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: var(--bg);
+  background: var(--accent-gradient);
+  border-color: var(--accent);
+  color: var(--on-accent);
 }
 
 /* ==========================================================================
@@ -1229,7 +1285,7 @@ h3 {
 }
 
 .choice-card.compact.selected {
-  background: var(--accent);
+  background: var(--accent-gradient);
   color: var(--on-accent);
 }
 
@@ -1252,7 +1308,7 @@ h3 {
 }
 
 .topic-chip.selected {
-  background: var(--accent);
+  background: var(--accent-gradient);
   border-color: var(--accent);
   color: var(--on-accent);
 }
@@ -1282,7 +1338,7 @@ h3 {
 .results-heading h2 {
   margin-top: 0.3rem;
   font-size: clamp(1.3rem, 4vw, 1.6rem);
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .reset-button {
@@ -1503,8 +1559,8 @@ h3 {
 
 .lesson-takeaway {
   padding: 0.7rem 0.85rem;
-  border-left: 3px solid var(--accent);
-  border-radius: 0 var(--radius) var(--radius) 0;
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius);
   background: var(--accent-soft);
   font-size: 0.9rem;
   line-height: 1.5;
@@ -1515,7 +1571,13 @@ h3 {
 }
 
 .takeaway-text strong {
+  display: block;
+  margin-bottom: 0.2rem;
+  font-size: 0.72rem;
   font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-text);
 }
 
 /* Quiz */
@@ -1554,8 +1616,10 @@ h3 {
   flex: none;
   min-height: 40px;
   padding: 0.4rem 0.8rem;
-  border: 1px solid var(--border-strong);
+  border: 1px solid var(--accent-border);
   border-radius: var(--radius);
+  background: var(--accent-soft);
+  color: var(--accent-text);
   font-size: 0.86rem;
   font-weight: 600;
   white-space: nowrap;
@@ -1658,7 +1722,7 @@ h3 {
 
 .quiz-check-btn {
   border-color: var(--accent);
-  background: var(--accent);
+  background: var(--accent-gradient);
   color: var(--on-accent);
 }
 
@@ -1761,8 +1825,8 @@ h3 {
 
 @keyframes reveal-up {
   from {
-    opacity: 0;
-    transform: translateY(40px) scale(0.97);
+    opacity: 0.25;
+    transform: translateY(32px) scale(0.98);
   }
 }
 
@@ -1882,9 +1946,36 @@ h3 {
   }
 }
 
-@keyframes reveal-fallback {
+@keyframes glow-drift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
   to {
-    opacity: 1;
+    transform: translate3d(-9%, 7%, 0) scale(1.18);
+  }
+}
+
+.anim .hero::before,
+.anim .page-head::before {
+  animation: glow-drift 16s ease-in-out infinite alternate;
+}
+
+/* Gradient buttons: a light sheen sweeps across on hover (pointer devices) */
+.btn:not(.btn-ghost):not(.btn-secondary)::after,
+.quiz-check-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.32) 50%, transparent 70%);
+  transform: translateX(-135%);
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .anim .btn:not(.btn-ghost):not(.btn-secondary):hover::after,
+  .anim .quiz-check-btn:hover::after {
+    transform: translateX(135%);
+    transition: transform 850ms var(--ease-out);
   }
 }
 
@@ -1944,18 +2035,12 @@ h3 {
   inset: 0;
   z-index: -1;
   border-radius: inherit;
-  background: var(--accent);
+  background: var(--accent-gradient);
   transform-origin: left center;
   animation: marker-sweep 0.8s var(--ease-out) 0.75s backwards;
 }
 
 /* Scroll reveal: main.js adds .visible when a block enters the screen */
-.anim .reveal:not(.visible) {
-  opacity: 0;
-  /* safety net: never leave content invisible if the observer doesn't fire */
-  animation: reveal-fallback 0.4s 3s forwards;
-}
-
 .anim .reveal.visible {
   animation: reveal-up 1s var(--ease-out) var(--stagger, 0ms) backwards;
 }
@@ -2121,10 +2206,42 @@ h3 {
 }
 
 /* Circular theme switch (View Transitions); main.js animates the circle */
-::view-transition-old(root),
-::view-transition-new(root) {
+.theme-vt::view-transition-old(root),
+.theme-vt::view-transition-new(root) {
   animation: none;
   mix-blend-mode: normal;
+}
+
+/* Page to page: a short fade instead of a hard cut (browsers that support it) */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+::view-transition-old(root) {
+  animation: 180ms cubic-bezier(0.4, 0, 1, 1) both vt-out;
+}
+
+::view-transition-new(root) {
+  animation: 320ms cubic-bezier(0, 0, 0.2, 1) 60ms both vt-in;
+}
+
+.theme-vt::view-transition-old(root),
+.theme-vt::view-transition-new(root) {
+  animation: none;
+}
+
+@keyframes vt-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-in {
+  from {
+    opacity: 0;
+  }
 }
 
 /* ==========================================================================
@@ -2132,13 +2249,13 @@ h3 {
    ========================================================================== */
 @media (hover: hover) and (pointer: fine) {
   .btn:hover {
-    background: var(--accent-strong);
-    border-color: var(--accent-strong);
+    filter: brightness(1.08) saturate(1.05);
     transform: translateY(-2px);
     box-shadow: 0 12px 26px -12px var(--accent-glow);
   }
   .btn-ghost:hover,
   .btn-secondary:hover {
+    filter: none;
     background: var(--surface-subtle);
     border-color: var(--accent-border);
     color: var(--ink);
@@ -2167,7 +2284,9 @@ h3 {
   .subject-card:hover .card-arrow { color: var(--ink); transform: translateX(4px); }
   .lesson-media:hover .play-badge::before { background: rgba(0, 0, 0, 0.8); transform: scale(1.08); }
   .lesson-media:not(.is-pending):hover img { transform: scale(1.035); }
-  .quiz-check-btn:hover { background: var(--accent-strong); border-color: var(--accent-strong); }
+  .quiz-check-btn:hover { filter: brightness(1.08) saturate(1.05); }
+  .quiz-unlock-btn:hover,
+  .quiz-toggle-btn:hover { background: var(--accent-tint); border-color: var(--accent); }
 }
 
 /* press states come after hover so a click always shows the press */
