@@ -34,6 +34,34 @@ document.addEventListener(
   { passive: true }
 );
 
+// Tap ripple: a soft circle spreads from the exact point that was pressed
+const RIPPLE_TARGETS = [
+  ".btn", ".card", ".choice-card", ".topic-chip", ".filter-tab-btn", ".quiz-option-label",
+  ".nav-quick-subject", ".theme-toggle-btn", ".nav-profile-btn", ".reset-button", ".quiz-unlock-btn",
+  ".quiz-toggle-btn", ".quiz-check-btn", ".quiz-retry-btn", ".card-icon-action"
+].join(", ");
+
+document.addEventListener(
+  "pointerdown",
+  (event) => {
+    if (event.button !== 0 || !document.documentElement.classList.contains("anim")) return;
+    const target = event.target.closest(RIPPLE_TARGETS);
+    if (!target) return;
+    const rect = target.getBoundingClientRect();
+    const size = Math.hypot(rect.width, rect.height) * 2;
+    // <i> rather than <span>: several components style their child spans
+    const ripple = document.createElement("i");
+    ripple.className = "ripple";
+    ripple.setAttribute("aria-hidden", "true");
+    ripple.style.width = ripple.style.height = `${size}px`;
+    ripple.style.left = `${event.clientX - rect.left - size / 2}px`;
+    ripple.style.top = `${event.clientY - rect.top - size / 2}px`;
+    target.appendChild(ripple);
+    ripple.addEventListener("animationend", () => ripple.remove());
+  },
+  { passive: true }
+);
+
 // 2. Theme Management (Light / Dark with localStorage & System OS detection)
 const THEME_STORAGE_KEY = "intclass_theme";
 const MOON_ICON = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
@@ -51,7 +79,7 @@ function applyTheme(theme) {
   document.documentElement.setAttribute("data-theme", theme);
   const themeMeta = document.querySelector('meta[name="theme-color"]');
   if (themeMeta) {
-    themeMeta.setAttribute("content", theme === "dark" ? "#0a0a0b" : "#ffffff");
+    themeMeta.setAttribute("content", theme === "dark" ? "#070b14" : "#ffffff");
   }
 
   // Update all theme toggle buttons
@@ -75,18 +103,37 @@ function motionEnabled() {
 }
 
 let themeSwitchTimer;
-function toggleTheme() {
+function toggleTheme(event) {
   const root = document.documentElement;
   const current = root.getAttribute("data-theme") || getPreferredTheme();
   const next = current === "dark" ? "light" : "dark";
   localStorage.setItem(THEME_STORAGE_KEY, next);
-  // cross-fade colours while the theme flips instead of snapping
-  if (motionEnabled()) {
-    root.classList.add("theme-switching");
-    clearTimeout(themeSwitchTimer);
-    themeSwitchTimer = setTimeout(() => root.classList.remove("theme-switching"), 450);
+
+  const button = event?.currentTarget;
+  if (motionEnabled() && document.startViewTransition && button) {
+    // the new theme spreads as a circle from the button that was pressed
+    const rect = button.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+    const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+    const transition = document.startViewTransition(() => applyTheme(next));
+    transition.ready
+      .then(() => {
+        root.animate(
+          { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+          { duration: 620, easing: "cubic-bezier(0.16, 1, 0.3, 1)", pseudoElement: "::view-transition-new(root)" }
+        );
+      })
+      .catch(() => {});
+  } else {
+    // browsers without View Transitions: cross-fade colours instead of snapping
+    if (motionEnabled()) {
+      root.classList.add("theme-switching");
+      clearTimeout(themeSwitchTimer);
+      themeSwitchTimer = setTimeout(() => root.classList.remove("theme-switching"), 450);
+    }
+    applyTheme(next);
   }
-  applyTheme(next);
   showToast(next === "dark" ? "Тёмная тема включена" : "Светлая тема включена", "info", 1800);
 }
 
@@ -246,6 +293,7 @@ function updateHeaderVisibility(scrollY) {
 function onScroll() {
   const scrollY = window.scrollY;
   nav?.classList.toggle("scrolled", scrollY > 15);
+  document.body.classList.toggle("has-scrolled", scrollY > 40); // fades the «Листайте вниз» hint
   updateHeaderVisibility(scrollY);
 
   // Dynamic Scroll Progress Bar
@@ -290,6 +338,7 @@ window.addEventListener(
   },
   { passive: true }
 );
+onScroll(); // correct state when the page opens already scrolled (reload, back button)
 
 // 6. Smooth Mobile Drawer Toggle
 function toggleMenu(forceOpen) {

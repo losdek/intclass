@@ -5,23 +5,43 @@
    ========================================================================== */
 
 :root {
+  /* 60% white · 25% dark navy · 15% blue */
   --bg: #ffffff;
   --surface: #ffffff;
-  --surface-subtle: #f6f6f7;
-  --surface-hover: #efeff1;
-  --border: #e4e4e7;
-  --border-strong: #d4d4d8;
+  --surface-subtle: #f5f7fb;
+  --surface-hover: #edf1f8;
+  --border: #e3e8f0;
+  --border-strong: #cbd5e1;
 
-  --ink: #0a0a0b;
-  --soft: #52525b;
-  --faint: #71717a;
+  --ink: #0b1220;
+  --soft: #475569;
+  --faint: #64748b;
 
   --accent: #2563eb;
-  --accent-soft: #eff4ff;
-  --accent-border: #c7d7fe;
+  --accent-strong: #1d4ed8;
+  --accent-text: #2563eb;
+  --on-accent: #ffffff;
+  --accent-soft: #eff6ff;
+  --accent-tint: #dbeafe;
+  --accent-border: #bfdbfe;
+  --accent-glow: rgba(37, 99, 235, 0.32);
+  --blue-band: #eff6ff;
 
-  --math: #4338ca;
-  --rus: #0369a1;
+  --math: #2563eb;
+  --rus: #0284c7;
+
+  /* dark navy bands: curriculum, lessons heading, footer */
+  --band-bg: #0b1220;
+  --band-surface: #111a2e;
+  --band-surface-2: #16213a;
+  --band-border: #1e2a44;
+  --band-border-strong: #334466;
+  --band-ink: #f8fafc;
+  --band-soft: #a7b4c9;
+  --band-faint: #8796ad;
+  --band-accent-text: #6ea8ff;
+  --band-accent-soft: #13254d;
+  --band-accent-border: #1e3a8a;
 
   --success: #15803d;
   --success-soft: #f0fdf4;
@@ -30,8 +50,8 @@
   --danger-soft: #fef2f2;
   --danger-border: #fecaca;
 
-  --overlay: rgba(10, 10, 11, 0.45);
-  --media-ui: rgba(10, 10, 11, 0.62);
+  --overlay: rgba(11, 18, 32, 0.5);
+  --media-ui: rgba(11, 18, 32, 0.62);
 
   --radius-sm: 6px;
   --radius: 8px;
@@ -39,7 +59,8 @@
 
   --header-h: 60px;
   --ease: cubic-bezier(0.2, 0, 0, 1);
-  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --fast: 160ms;
   --medium: 260ms;
 
@@ -47,23 +68,42 @@
 }
 
 :root[data-theme="dark"] {
-  --bg: #0a0a0b;
-  --surface: #111113;
-  --surface-subtle: #18181b;
-  --surface-hover: #1f1f23;
-  --border: #27272a;
-  --border-strong: #3f3f46;
+  /* 60% dark navy · 25% light · 15% blue */
+  --bg: #070b14;
+  --surface: #0d1424;
+  --surface-subtle: #111a2d;
+  --surface-hover: #16213a;
+  --border: #1c2740;
+  --border-strong: #2a3a5c;
 
-  --ink: #f4f4f5;
-  --soft: #a1a1aa;
-  --faint: #8b8b94;
+  --ink: #eef2f9;
+  --soft: #a3b1c6;
+  --faint: #8090a8;
 
-  --accent: #60a5fa;
-  --accent-soft: #14213b;
+  --accent: #2563eb;
+  --accent-strong: #3b82f6;
+  --accent-text: #6ea8ff;
+  --on-accent: #ffffff;
+  --accent-soft: #0f1d3a;
+  --accent-tint: #15295a;
   --accent-border: #1e3a8a;
+  --accent-glow: rgba(59, 130, 246, 0.4);
+  --blue-band: #10234d;
 
-  --math: #a5b4fc;
-  --rus: #7dd3fc;
+  --math: #6ea8ff;
+  --rus: #38bdf8;
+
+  --band-bg: #0c1630;
+  --band-surface: #111e3d;
+  --band-surface-2: #15244a;
+  --band-border: #1d2f5a;
+  --band-border-strong: #2b4277;
+  --band-ink: #eef2f9;
+  --band-soft: #a9b8d3;
+  --band-faint: #8798b8;
+  --band-accent-text: #7cb4ff;
+  --band-accent-soft: #17306a;
+  --band-accent-border: #24448e;
 
   --success: #4ade80;
   --success-soft: #0d1f14;
@@ -76,6 +116,37 @@
   --media-ui: rgba(0, 0, 0, 0.62);
 
   color-scheme: dark;
+}
+
+/* Dark navy bands reuse every component with darker tokens */
+.section-dark,
+.page-head,
+.footer {
+  --bg: var(--band-bg);
+  --surface: var(--band-surface);
+  --surface-subtle: var(--band-surface-2);
+  --surface-hover: var(--band-surface-2);
+  --border: var(--band-border);
+  --border-strong: var(--band-border-strong);
+  --ink: var(--band-ink);
+  --soft: var(--band-soft);
+  --faint: var(--band-faint);
+  --accent-text: var(--band-accent-text);
+  --accent-soft: var(--band-accent-soft);
+  --accent-border: var(--band-accent-border);
+  background: var(--bg);
+  color: var(--ink);
+}
+
+/* Light-blue band: same components on a blue-tinted ground */
+.section-blue {
+  --border: var(--accent-border);
+  background: var(--blue-band);
+}
+
+.section-dark,
+.section-blue {
+  border-bottom: 0;
 }
 
 /* ==========================================================================
@@ -187,10 +258,10 @@ h3 {
   gap: 0.45rem;
   min-height: 44px;
   padding: 0.6rem 1.15rem;
-  border: 1px solid var(--ink);
+  border: 1px solid var(--accent);
   border-radius: var(--radius);
-  background: var(--ink);
-  color: var(--bg);
+  background: var(--accent);
+  color: var(--on-accent);
   font-size: 0.95rem;
   font-weight: 600;
   line-height: 1.2;
@@ -213,10 +284,6 @@ h3 {
   border-color: var(--border-strong);
 }
 
-.btn:active {
-  opacity: 0.75;
-}
-
 /* ==========================================================================
    Header
    ========================================================================== */
@@ -227,12 +294,18 @@ h3 {
   background: var(--bg);
   border-bottom: 1px solid var(--border);
   padding-top: env(safe-area-inset-top, 0px);
-  transition: transform 320ms var(--ease-out);
+  transition: transform 420ms var(--ease-out), box-shadow 300ms var(--ease);
+}
+
+.nav.scrolled {
+  box-shadow: 0 10px 30px -24px rgba(11, 18, 32, 0.55);
 }
 
 /* slid out of view while reading; main.js brings it back on scroll up */
 .nav.nav-hidden {
   transform: translateY(-100%);
+  box-shadow: none;
+  transition-duration: 300ms;
   transition-timing-function: var(--ease);
 }
 
@@ -362,7 +435,13 @@ h3 {
    Home: hero
    ========================================================================== */
 .hero {
-  padding: clamp(5rem, 14vw, 9.5rem) 0 clamp(4.5rem, 12vw, 8rem);
+  position: relative;
+  display: flex;
+  align-items: center;
+  /* the first screen fills the viewport, so the next section never peeks in */
+  min-height: calc(100vh - var(--header-h));
+  min-height: calc(100svh - var(--header-h) - env(safe-area-inset-top, 0px));
+  padding: clamp(3rem, 8vw, 5rem) 0 clamp(7.5rem, 16vh, 9rem);
   border-bottom: 1px solid var(--border);
 }
 
@@ -372,7 +451,7 @@ h3 {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--faint);
+  color: var(--accent-text);
 }
 
 .hero-title {
@@ -390,8 +469,8 @@ h3 {
   margin-top: 0.08em;
   padding: 0 0.18em;
   border-radius: 10px;
-  background: var(--ink);
-  color: var(--bg);
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 .hero-sub {
@@ -410,17 +489,79 @@ h3 {
   gap: 0.6rem;
 }
 
+/* «Листайте вниз»: a finger swipes up on touch screens, a mouse wheel rolls on computers */
+.scroll-hint {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(1.25rem, 4vh, 2.5rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  transform: translateX(-50%);
+  color: var(--accent-text);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: opacity 0.45s var(--ease), transform 0.45s var(--ease-out);
+}
+
+.scroll-hint-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 58px;
+}
+
+.scroll-hint-icon svg {
+  width: 30px;
+  height: 30px;
+}
+
+/* the trail the finger leaves while swiping */
+.scroll-hint-finger::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 4px;
+  bottom: 10px;
+  width: 2px;
+  margin-left: -1px;
+  border-radius: 2px;
+  background: linear-gradient(to top, var(--accent), transparent);
+  opacity: 0.35;
+}
+
+.scroll-hint-mouse {
+  display: none;
+}
+
+.scroll-hint-mouse svg {
+  width: 24px;
+  height: 36px;
+}
+
+.has-scrolled .scroll-hint {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 14px);
+}
+
 /* ==========================================================================
    Sections & cards
    ========================================================================== */
 .section {
-  padding: clamp(5rem, 13vw, 8.5rem) 0;
+  padding: clamp(6rem, 16vw, 10rem) 0;
   border-bottom: 1px solid var(--border);
 }
 
 .section-head {
   max-width: 42rem;
-  margin-bottom: clamp(2.25rem, 6vw, 3.25rem);
+  margin-bottom: clamp(2.5rem, 7vw, 3.75rem);
 }
 
 .section-title {
@@ -466,18 +607,23 @@ h3 {
   flex: none;
   width: 44px;
   height: 44px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--accent-border);
   border-radius: var(--radius);
+  background: var(--accent-soft);
   font-size: 1.2rem;
   font-weight: 700;
 }
 
-.subject-math .subject-icon,
+.subject-icon {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
 [data-subject="math"] .choice-icon {
   color: var(--math);
 }
 
-.subject-russian .subject-icon,
 [data-subject="russian"] .choice-icon {
   color: var(--rus);
 }
@@ -547,7 +693,8 @@ h3 {
   top: 0.62em;
   width: 5px;
   height: 5px;
-  background: var(--border-strong);
+  border-radius: 1px;
+  background: var(--accent);
 }
 
 .subject-points-list strong {
@@ -582,7 +729,7 @@ h3 {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .grade-guide-header strong {
@@ -814,7 +961,8 @@ h3 {
 }
 
 .progress-step.active .step-dot {
-  border-color: var(--ink);
+  border-color: var(--accent);
+  color: var(--accent-text);
 }
 
 .progress-step.completed {
@@ -822,9 +970,9 @@ h3 {
 }
 
 .progress-step.completed .step-dot {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
 }
 
 .progress-divider {
@@ -1003,7 +1151,8 @@ h3 {
 }
 
 .flow-step:not(.is-locked) .flow-number {
-  border-color: var(--ink);
+  border-color: var(--accent);
+  color: var(--accent-text);
 }
 
 .flow-heading .section-label {
@@ -1074,13 +1223,14 @@ h3 {
 }
 
 .choice-card.selected {
-  border-color: var(--ink);
-  box-shadow: inset 0 0 0 1px var(--ink);
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+  background: var(--accent-soft);
 }
 
 .choice-card.compact.selected {
-  background: var(--ink);
-  color: var(--bg);
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 .topic-choices {
@@ -1102,9 +1252,9 @@ h3 {
 }
 
 .topic-chip.selected {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
 }
 
 /* ==========================================================================
@@ -1332,7 +1482,7 @@ h3 {
 }
 
 .lesson-subject {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 /* the topic repeats the card title, so it is left out of the label row */
@@ -1353,8 +1503,9 @@ h3 {
 
 .lesson-takeaway {
   padding: 0.7rem 0.85rem;
-  border-left: 2px solid var(--accent);
-  background: var(--surface-subtle);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background: var(--accent-soft);
   font-size: 0.9rem;
   line-height: 1.5;
 }
@@ -1499,15 +1650,16 @@ h3 {
 .quiz-retry-btn {
   min-height: 44px;
   padding: 0.55rem 1rem;
-  border: 1px solid var(--ink);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius);
   font-size: 0.92rem;
   font-weight: 600;
 }
 
 .quiz-check-btn {
-  background: var(--ink);
-  color: var(--bg);
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 .quiz-result-msg {
@@ -1533,7 +1685,7 @@ h3 {
 .quiz-result-msg.info {
   border-color: var(--accent-border);
   background: var(--accent-soft);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 /* ==========================================================================
@@ -1605,6 +1757,64 @@ h3 {
     opacity: 0;
     transform: translateY(18px);
   }
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.97);
+  }
+}
+
+@keyframes line-up {
+  from {
+    transform: translateY(105%);
+  }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.35;
+  }
+  45% {
+    opacity: 0.28;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes select-pop {
+  0% { transform: scale(0.94); }
+  60% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+@keyframes star-pop {
+  0% { transform: scale(0.3) rotate(-35deg); }
+  60% { transform: scale(1.4) rotate(12deg); }
+  100% { transform: none; }
+}
+
+@keyframes finger-swipe {
+  0% { transform: translateY(16px); opacity: 0; }
+  18% { opacity: 1; }
+  62% { transform: translateY(-12px); opacity: 1; }
+  85%, 100% { transform: translateY(-20px); opacity: 0; }
+}
+
+@keyframes trail-grow {
+  0%, 15% { transform: scaleY(0); }
+  62% { transform: scaleY(1); }
+  100% { transform: scaleY(1); opacity: 0; }
+}
+
+@keyframes wheel-roll {
+  0% { transform: translateY(0); opacity: 1; }
+  70% { transform: translateY(9px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 0; }
 }
 
 /* the backdrop fades its colour, not its opacity, so the sheet inside stays solid */
@@ -1684,14 +1894,46 @@ h3 {
   animation: rise 0.9s var(--ease-out) backwards;
 }
 
-.anim .hero-title .reveal-line:nth-child(1),
-.anim .page-title .reveal-line { animation-delay: 90ms; }
-.anim .hero-title .reveal-line:nth-child(2) { animation-delay: 180ms; }
-.anim .hero-sub,
-.anim .page-sub { animation-delay: 280ms; }
-.anim .hero-actions { animation-delay: 380ms; }
+/* title lines slide up out of a mask, one after another */
+.anim .hero-title .reveal-line,
+.anim .page-title .reveal-line {
+  overflow: hidden;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+  animation: none;
+}
 
-/* «за минуту»: the dark box sweeps in like a highlighter */
+.anim .hero-title .reveal-line > span,
+.anim .page-title .reveal-line > span {
+  display: inline-block;
+  animation: line-up 1.05s var(--ease-out) backwards;
+}
+
+.anim .hero-title .reveal-line:nth-child(1) > span,
+.anim .page-title .reveal-line > span { animation-delay: 120ms; }
+.anim .hero-title .reveal-line:nth-child(2) > span { animation-delay: 240ms; }
+.anim .hero-sub,
+.anim .page-sub { animation-delay: 420ms; }
+.anim .hero-actions { animation-delay: 540ms; }
+
+.anim .scroll-hint {
+  animation: rise 0.9s var(--ease-out) 1.2s backwards;
+}
+
+.anim .scroll-hint-finger svg {
+  animation: finger-swipe 1.9s var(--ease) 2s infinite;
+}
+
+.anim .scroll-hint-finger::before {
+  transform-origin: bottom center;
+  animation: trail-grow 1.9s var(--ease) 2s infinite;
+}
+
+.anim .scroll-hint-mouse .wheel {
+  animation: wheel-roll 1.6s var(--ease) 2s infinite;
+}
+
+/* «за минуту»: the blue box sweeps in like a highlighter */
 .anim .hero-invert {
   background: transparent;
 }
@@ -1702,9 +1944,9 @@ h3 {
   inset: 0;
   z-index: -1;
   border-radius: inherit;
-  background: var(--ink);
+  background: var(--accent);
   transform-origin: left center;
-  animation: marker-sweep 0.75s var(--ease-out) 0.55s backwards;
+  animation: marker-sweep 0.8s var(--ease-out) 0.75s backwards;
 }
 
 /* Scroll reveal: main.js adds .visible when a block enters the screen */
@@ -1715,7 +1957,7 @@ h3 {
 }
 
 .anim .reveal.visible {
-  animation: rise 0.8s var(--ease-out) var(--stagger, 0ms) backwards;
+  animation: reveal-up 1s var(--ease-out) var(--stagger, 0ms) backwards;
 }
 
 .anim .grid > .reveal:nth-child(2) { --stagger: 90ms; }
@@ -1731,7 +1973,7 @@ h3 {
 
 /* Lesson cards and topic chips cascade in whenever the list is rebuilt */
 .anim .lessons-grid > .lesson-card {
-  animation: rise 0.6s var(--ease-out) backwards;
+  animation: reveal-up 0.8s var(--ease-out) backwards;
 }
 
 .anim .lessons-grid > .lesson-card:nth-child(2) { animation-delay: 60ms; }
@@ -1756,6 +1998,19 @@ h3 {
 .anim .quiz-result-msg,
 .anim .lesson-quiz {
   animation: rise 0.45s var(--ease-out) backwards;
+}
+
+/* tapping a choice makes it pop */
+.anim .choice-card.selected,
+.anim .topic-chip.selected,
+.anim .filter-tab-btn.active,
+.anim .quiz-option-label.checked {
+  animation: select-pop 0.45s var(--spring);
+}
+
+.anim .bookmark-action-btn.active .bookmark-icon {
+  display: inline-block;
+  animation: star-pop 0.6s var(--spring);
 }
 
 .anim .quiz-option-label.is-correct {
@@ -1785,8 +2040,8 @@ h3 {
 
 /* Toasts rise from below */
 .toast-item {
-  transform: translateY(10px) scale(0.98);
-  transition: opacity 260ms var(--ease-out), transform 260ms var(--ease-out);
+  transform: translateY(16px) scale(0.94);
+  transition: opacity 300ms var(--ease-out), transform 480ms var(--spring);
 }
 
 /* Theme switch: colours cross-fade, the icon turns */
@@ -1825,24 +2080,70 @@ h3 {
   .anim .nav-links.open > :nth-child(n + 8) { animation-delay: 210ms; }
 }
 
-/* Press feedback (works on touch screens too) */
-.btn:active,
-.card:active,
-.choice-card:active,
-.topic-chip:active,
-.filter-tab-btn:active,
-.quiz-option-label:active,
-.nav-quick-subject:active {
-  transform: scale(0.98);
+/* Click feedback: a ripple spreads from the touch point (main.js),
+   the control presses in fast and springs back */
+.btn,
+.card,
+.choice-card,
+.topic-chip,
+.filter-tab-btn,
+.quiz-option-label,
+.nav-quick-subject,
+.theme-toggle-btn,
+.nav-profile-btn,
+.reset-button,
+.quiz-unlock-btn,
+.quiz-toggle-btn,
+.quiz-check-btn,
+.quiz-retry-btn,
+.card-icon-action,
+.scroll-hint {
+  position: relative;
+  overflow: hidden;
+  transition-property: transform, background-color, border-color, color, box-shadow, opacity;
+  transition-duration: 480ms, 200ms, 200ms, 200ms, 300ms, 300ms;
+  transition-timing-function: var(--spring), var(--ease), var(--ease), var(--ease), var(--ease-out), var(--ease);
+}
+
+.scroll-hint {
+  position: absolute;
+  overflow: visible;
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0;
+  transform: scale(0);
+  pointer-events: none;
+  animation: ripple 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
+/* Circular theme switch (View Transitions); main.js animates the circle */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
 }
 
 /* ==========================================================================
    Hover effects only where a real pointer exists (no sticky hover on phones)
    ========================================================================== */
 @media (hover: hover) and (pointer: fine) {
-  .btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .btn:hover {
+    background: var(--accent-strong);
+    border-color: var(--accent-strong);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px -12px var(--accent-glow);
+  }
   .btn-ghost:hover,
-  .btn-secondary:hover { opacity: 1; background: var(--surface-subtle); }
+  .btn-secondary:hover {
+    background: var(--surface-subtle);
+    border-color: var(--accent-border);
+    color: var(--ink);
+    box-shadow: none;
+  }
   .nav-link:hover { color: var(--ink); }
   .theme-toggle-btn:hover,
   .nav-profile-btn:hover,
@@ -1855,13 +2156,78 @@ h3 {
   .choice-card:hover,
   .topic-chip:hover,
   .filter-tab-btn:hover,
-  .quiz-option-label:hover { border-color: var(--border-strong); }
+  .quiz-option-label:hover { border-color: var(--accent-border); }
+  .choice-card:hover,
+  .topic-chip:hover,
+  .filter-tab-btn:hover { transform: translateY(-2px); }
   .filter-tab-btn:hover { color: var(--ink); }
-  .card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px -14px rgba(0, 0, 0, 0.25); }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 18px 36px -22px var(--accent-glow); }
+  .lesson-card:hover { border-color: var(--accent-border); box-shadow: 0 18px 36px -24px var(--accent-glow); }
+  .scroll-hint:hover { transform: translate(-50%, -3px); }
   .subject-card:hover .card-arrow { color: var(--ink); transform: translateX(4px); }
   .lesson-media:hover .play-badge::before { background: rgba(0, 0, 0, 0.8); transform: scale(1.08); }
   .lesson-media:not(.is-pending):hover img { transform: scale(1.035); }
-  .quiz-check-btn:hover { opacity: 0.85; }
+  .quiz-check-btn:hover { background: var(--accent-strong); border-color: var(--accent-strong); }
+}
+
+/* press states come after hover so a click always shows the press */
+.btn:active,
+.card:active,
+.choice-card:active,
+.topic-chip:active,
+.filter-tab-btn:active,
+.quiz-option-label:active,
+.nav-quick-subject:active,
+.theme-toggle-btn:active,
+.nav-profile-btn:active,
+.reset-button:active,
+.quiz-unlock-btn:active,
+.quiz-toggle-btn:active,
+.quiz-check-btn:active,
+.quiz-retry-btn:active,
+.card-icon-action:active {
+  transform: scale(0.95);
+  transition-duration: 90ms;
+}
+
+.card:active {
+  transform: scale(0.98);
+}
+
+/* finger on touch screens, mouse wheel where a real pointer exists */
+@media (hover: hover) and (pointer: fine) {
+  .scroll-hint-finger { display: none; }
+  .scroll-hint-mouse { display: grid; }
+}
+
+/* desktop navigation: a blue underline slides in */
+@media (min-width: 861px) {
+  .nav-link {
+    position: relative;
+  }
+
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -6px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transition: transform 0.4s var(--ease-out);
+  }
+
+  .nav-link.active::after {
+    transform: scaleX(1);
+  }
+}
+
+@media (min-width: 861px) and (hover: hover) {
+  .nav-link:hover::after {
+    transform: scaleX(1);
+  }
 }
 
 @media (hover: none) {
@@ -1971,7 +2337,7 @@ h3 {
   }
 
   .nav-link.active {
-    color: var(--accent);
+    color: var(--accent-text);
   }
 
   .nav-link-arrow {

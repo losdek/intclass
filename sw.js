@@ -1,7 +1,7 @@
 /**
  * intclass Service Worker — Offline Caching & Instant Loading
  */
-const CACHE_NAME = "intclass-v6";
+const CACHE_NAME = "intclass-v7";
 const STATIC_ASSETS = [
   "./",
   "index.html",
