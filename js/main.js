@@ -69,10 +69,23 @@ function applyTheme(theme) {
   });
 }
 
+// True when the page runs its motion design (set in <head>, off for "reduce motion")
+function motionEnabled() {
+  return document.documentElement.classList.contains("anim");
+}
+
+let themeSwitchTimer;
 function toggleTheme() {
-  const current = document.documentElement.getAttribute("data-theme") || getPreferredTheme();
+  const root = document.documentElement;
+  const current = root.getAttribute("data-theme") || getPreferredTheme();
   const next = current === "dark" ? "light" : "dark";
   localStorage.setItem(THEME_STORAGE_KEY, next);
+  // cross-fade colours while the theme flips instead of snapping
+  if (motionEnabled()) {
+    root.classList.add("theme-switching");
+    clearTimeout(themeSwitchTimer);
+    themeSwitchTimer = setTimeout(() => root.classList.remove("theme-switching"), 450);
+  }
   applyTheme(next);
   showToast(next === "dark" ? "Тёмная тема включена" : "Светлая тема включена", "info", 1800);
 }
@@ -320,6 +333,7 @@ document.querySelectorAll(".reveal").forEach((el) => {
 // 8. Profile Modal (Native Bottom Sheet on Mobile)
 function openModal() {
   if (!modal) return;
+  modal.classList.remove("closing");
   modal.hidden = false;
   document.body.classList.add("modal-open");
   updateProfileUI();
@@ -336,9 +350,21 @@ function openModal() {
 }
 
 function closeModal() {
-  if (!modal) return;
-  modal.hidden = true;
-  document.body.classList.remove("modal-open");
+  if (!modal || modal.hidden || modal.classList.contains("closing")) return;
+  const finish = () => {
+    modal.classList.remove("closing");
+    modal.hidden = true;
+    document.body.classList.remove("modal-open");
+  };
+  if (!motionEnabled()) {
+    finish();
+    return;
+  }
+  // let the sheet slide away before hiding it (unless it was reopened meanwhile)
+  modal.classList.add("closing");
+  setTimeout(() => {
+    if (modal.classList.contains("closing")) finish();
+  }, 220);
 }
 
 document.querySelectorAll(".register-open").forEach((btn) => {

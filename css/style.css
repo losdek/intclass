@@ -33,13 +33,16 @@
   --overlay: rgba(10, 10, 11, 0.45);
   --media-ui: rgba(10, 10, 11, 0.62);
 
-  --radius: 4px;
-  --radius-sm: 2px;
+  --radius-sm: 6px;
+  --radius: 8px;
+  --radius-lg: 12px;
 
   --header-h: 60px;
   --bottom-bar-h: 60px;
   --ease: cubic-bezier(0.2, 0, 0, 1);
-  --fast: 120ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --fast: 160ms;
+  --medium: 260ms;
 
   color-scheme: light;
 }
@@ -194,7 +197,8 @@ h3 {
   line-height: 1.2;
   text-align: center;
   white-space: nowrap;
-  transition: opacity var(--fast) var(--ease), background var(--fast) var(--ease);
+  transition: opacity var(--fast) var(--ease), background var(--fast) var(--ease),
+    transform var(--medium) var(--ease-out), box-shadow var(--medium) var(--ease-out);
 }
 
 .btn-small {
@@ -246,6 +250,7 @@ h3 {
   width: 6px;
   height: 6px;
   margin-left: 3px;
+  border-radius: 2px;
   background: var(--accent);
 }
 
@@ -321,6 +326,7 @@ h3 {
   right: 6px;
   width: 7px;
   height: 7px;
+  border-radius: 50%;
   background: var(--accent);
 }
 
@@ -350,7 +356,7 @@ h3 {
    Home: hero
    ========================================================================== */
 .hero {
-  padding: clamp(3rem, 9vw, 6.5rem) 0 clamp(2.5rem, 7vw, 5rem);
+  padding: clamp(5rem, 14vw, 9.5rem) 0 clamp(4.5rem, 12vw, 8rem);
   border-bottom: 1px solid var(--border);
 }
 
@@ -372,9 +378,12 @@ h3 {
 }
 
 .hero-invert {
+  position: relative;
+  isolation: isolate;
   display: inline-block;
   margin-top: 0.08em;
   padding: 0 0.18em;
+  border-radius: 10px;
   background: var(--ink);
   color: var(--bg);
 }
@@ -399,13 +408,13 @@ h3 {
    Sections & cards
    ========================================================================== */
 .section {
-  padding: clamp(3rem, 8vw, 5rem) 0;
+  padding: clamp(5rem, 13vw, 8.5rem) 0;
   border-bottom: 1px solid var(--border);
 }
 
 .section-head {
   max-width: 42rem;
-  margin-bottom: 2rem;
+  margin-bottom: clamp(2.25rem, 6vw, 3.25rem);
 }
 
 .section-title {
@@ -420,15 +429,16 @@ h3 {
 
 .grid {
   display: grid;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
 .card {
   display: block;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   background: var(--surface);
-  transition: border-color var(--fast) var(--ease);
+  transition: border-color var(--fast) var(--ease), transform var(--medium) var(--ease-out),
+    box-shadow var(--medium) var(--ease-out);
 }
 
 .subjects-grid,
@@ -552,7 +562,7 @@ h3 {
   display: grid;
   grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
   gap: 0.4rem 2rem;
-  padding: 1.25rem 0;
+  padding: 1.6rem 0;
   border-bottom: 1px solid var(--border);
 }
 
@@ -582,14 +592,14 @@ h3 {
 .center-actions {
   display: flex;
   justify-content: center;
-  margin-top: 2rem;
+  margin-top: 3rem;
 }
 
 /* ==========================================================================
    Footer
    ========================================================================== */
 .footer {
-  padding: 2rem 0;
+  padding: 3rem 0;
 }
 
 .footer-inner {
@@ -633,7 +643,7 @@ h3 {
   overflow-y: auto;
   padding: 1.75rem;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   background: var(--surface);
 }
 
@@ -716,7 +726,7 @@ h3 {
   gap: 0.15rem;
   padding: 0.85rem;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
 }
 
 .stat-number {
@@ -734,7 +744,7 @@ h3 {
    Lessons page: heading, route, progress, search, filters
    ========================================================================== */
 .page-head {
-  padding: clamp(2.25rem, 7vw, 4rem) 0 clamp(1.5rem, 4vw, 2.25rem);
+  padding: clamp(3.5rem, 10vw, 6rem) 0 clamp(2.5rem, 6vw, 3.5rem);
   border-bottom: 1px solid var(--border);
 }
 
@@ -752,12 +762,12 @@ h3 {
 
 .lessons-section {
   border-bottom: 0;
-  padding-top: clamp(1.5rem, 5vw, 2.5rem);
+  padding-top: clamp(2rem, 6vw, 3rem);
 }
 
 .lesson-flow {
   display: grid;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
 .flow-progress {
@@ -818,7 +828,7 @@ h3 {
 .overall-progress-card {
   padding: 0.9rem 1rem;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
 }
 
 .overall-progress-header {
@@ -846,10 +856,16 @@ h3 {
   background: var(--surface-hover);
 }
 
+.progress-bar-track {
+  border-radius: 999px;
+  overflow: hidden;
+}
+
 .progress-bar-fill {
   height: 100%;
+  border-radius: 999px;
   background: var(--accent);
-  transition: width 0.4s var(--ease);
+  transition: width 0.8s var(--ease-out);
 }
 
 .search-input-wrap {
@@ -931,7 +947,8 @@ h3 {
   font-weight: 500;
   color: var(--soft);
   white-space: nowrap;
-  transition: border-color var(--fast) var(--ease), color var(--fast) var(--ease);
+  transition: border-color var(--fast) var(--ease), color var(--fast) var(--ease),
+    transform var(--fast) var(--ease);
 }
 
 .filter-tab-btn.active {
@@ -946,9 +963,9 @@ h3 {
 .flow-step {
   padding: 1.25rem;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   background: var(--surface);
-  transition: opacity var(--fast) var(--ease);
+  transition: opacity 400ms var(--ease-out);
 }
 
 .flow-step.is-locked {
@@ -1019,7 +1036,8 @@ h3 {
   border-radius: var(--radius);
   background: var(--surface);
   text-align: left;
-  transition: border-color var(--fast) var(--ease), background var(--fast) var(--ease);
+  transition: border-color var(--fast) var(--ease), background var(--fast) var(--ease),
+    transform var(--fast) var(--ease);
 }
 
 .choice-card.compact {
@@ -1070,7 +1088,8 @@ h3 {
   font-size: 0.88rem;
   font-weight: 500;
   text-align: left;
-  transition: border-color var(--fast) var(--ease);
+  transition: border-color var(--fast) var(--ease),
+    transform var(--fast) var(--ease);
 }
 
 .topic-chip.selected {
@@ -1083,7 +1102,7 @@ h3 {
    Lessons page: results
    ========================================================================== */
 .results-panel {
-  padding-top: 1rem;
+  padding-top: 1.75rem;
 }
 
 .results-panel.is-locked {
@@ -1124,7 +1143,7 @@ h3 {
 .lessons-empty {
   padding: 2rem 1rem;
   border: 1px dashed var(--border-strong);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   text-align: center;
   color: var(--soft);
 }
@@ -1135,7 +1154,7 @@ h3 {
 .lesson-card {
   overflow: hidden;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   background: var(--surface);
   scroll-margin-top: calc(var(--header-h) + 12px);
 }
@@ -1157,6 +1176,7 @@ h3 {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 600ms var(--ease-out);
 }
 
 .lesson-media iframe,
@@ -1181,9 +1201,9 @@ h3 {
   content: "";
   width: 56px;
   height: 56px;
-  border-radius: var(--radius);
+  border-radius: 14px;
   background: var(--media-ui);
-  transition: background var(--fast) var(--ease);
+  transition: background var(--fast) var(--ease), transform var(--medium) var(--ease-out);
 }
 
 .play-badge::after {
@@ -1434,7 +1454,8 @@ h3 {
   font-size: 0.92rem;
   line-height: 1.4;
   cursor: pointer;
-  transition: border-color var(--fast) var(--ease), background var(--fast) var(--ease);
+  transition: border-color var(--fast) var(--ease), background var(--fast) var(--ease),
+    transform var(--fast) var(--ease);
 }
 
 .quiz-option-label input {
@@ -1565,10 +1586,253 @@ h3 {
 }
 
 /* ==========================================================================
+   Motion
+   Everything below runs only under html.anim, which the <head> script sets
+   unless the visitor prefers reduced motion. Only opacity and transform are
+   animated, so it stays smooth on phones.
+   ========================================================================== */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+/* the backdrop fades its colour, not its opacity, so the sheet inside stays solid */
+@keyframes backdrop-in {
+  from {
+    background-color: transparent;
+  }
+}
+
+@keyframes backdrop-out {
+  to {
+    background-color: transparent;
+  }
+}
+
+@keyframes marker-sweep {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+}
+
+@keyframes dialog-out {
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes sheet-down {
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes answer-pop {
+  40% {
+    transform: scale(1.025);
+  }
+}
+
+@keyframes answer-shake {
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(2px); }
+}
+
+@keyframes icon-turn {
+  from {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.6);
+  }
+}
+
+@keyframes reveal-fallback {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Hero and page headings: staggered entrance on load */
+.anim .hero .reveal-line,
+.anim .page-head .reveal-line {
+  animation: rise 0.9s var(--ease-out) backwards;
+}
+
+.anim .hero-title .reveal-line:nth-child(1),
+.anim .page-title .reveal-line { animation-delay: 90ms; }
+.anim .hero-title .reveal-line:nth-child(2) { animation-delay: 180ms; }
+.anim .hero-sub,
+.anim .page-sub { animation-delay: 280ms; }
+.anim .hero-actions { animation-delay: 380ms; }
+
+/* «за минуту»: the dark box sweeps in like a highlighter */
+.anim .hero-invert {
+  background: transparent;
+}
+
+.anim .hero-invert::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--ink);
+  transform-origin: left center;
+  animation: marker-sweep 0.75s var(--ease-out) 0.55s backwards;
+}
+
+/* Scroll reveal: main.js adds .visible when a block enters the screen */
+.anim .reveal:not(.visible) {
+  opacity: 0;
+  /* safety net: never leave content invisible if the observer doesn't fire */
+  animation: reveal-fallback 0.4s 3s forwards;
+}
+
+.anim .reveal.visible {
+  animation: rise 0.8s var(--ease-out) var(--stagger, 0ms) backwards;
+}
+
+.anim .grid > .reveal:nth-child(2) { --stagger: 90ms; }
+.anim .grid > .reveal:nth-child(3) { --stagger: 180ms; }
+.anim .grid > .reveal:nth-child(4) { --stagger: 270ms; }
+.anim .grid > .reveal:nth-child(5) { --stagger: 360ms; }
+
+.anim .lesson-flow > .reveal:nth-child(3) { --stagger: 60ms; }
+.anim .lesson-flow > .reveal:nth-child(4) { --stagger: 120ms; }
+.anim .lesson-flow > .reveal:nth-child(5) { --stagger: 180ms; }
+.anim .lesson-flow > .reveal:nth-child(6) { --stagger: 240ms; }
+.anim .lesson-flow > .reveal:nth-child(7) { --stagger: 300ms; }
+
+/* Lesson cards and topic chips cascade in whenever the list is rebuilt */
+.anim .lessons-grid > .lesson-card {
+  animation: rise 0.6s var(--ease-out) backwards;
+}
+
+.anim .lessons-grid > .lesson-card:nth-child(2) { animation-delay: 60ms; }
+.anim .lessons-grid > .lesson-card:nth-child(3) { animation-delay: 120ms; }
+.anim .lessons-grid > .lesson-card:nth-child(4) { animation-delay: 180ms; }
+.anim .lessons-grid > .lesson-card:nth-child(5) { animation-delay: 240ms; }
+.anim .lessons-grid > .lesson-card:nth-child(6) { animation-delay: 300ms; }
+.anim .lessons-grid > .lesson-card:nth-child(n + 7) { animation-delay: 360ms; }
+
+.anim .topic-choices > .topic-chip {
+  animation: rise 0.45s var(--ease-out) backwards;
+}
+
+.anim .topic-choices > .topic-chip:nth-child(2) { animation-delay: 35ms; }
+.anim .topic-choices > .topic-chip:nth-child(3) { animation-delay: 70ms; }
+.anim .topic-choices > .topic-chip:nth-child(4) { animation-delay: 105ms; }
+.anim .topic-choices > .topic-chip:nth-child(5) { animation-delay: 140ms; }
+.anim .topic-choices > .topic-chip:nth-child(n + 6) { animation-delay: 175ms; }
+
+/* Quiz: the box slides open, answers react to the check */
+.anim .quiz-box,
+.anim .quiz-result-msg,
+.anim .lesson-quiz {
+  animation: rise 0.45s var(--ease-out) backwards;
+}
+
+.anim .quiz-option-label.is-correct {
+  animation: answer-pop 0.4s var(--ease-out);
+}
+
+.anim .quiz-option-label.is-wrong {
+  animation: answer-shake 0.45s var(--ease);
+}
+
+/* Profile dialog / bottom sheet */
+.anim .modal-backdrop {
+  animation: backdrop-in 0.25s var(--ease) backwards;
+}
+
+.anim .modal {
+  animation: dialog-in 0.34s var(--ease-out) backwards;
+}
+
+.anim .modal-backdrop.closing {
+  animation: backdrop-out 0.22s var(--ease) forwards;
+}
+
+.anim .modal-backdrop.closing .modal {
+  animation: dialog-out 0.22s var(--ease) forwards;
+}
+
+/* Toasts rise from below */
+.toast-item {
+  transform: translateY(10px) scale(0.98);
+  transition: opacity 260ms var(--ease-out), transform 260ms var(--ease-out);
+}
+
+/* Theme switch: colours cross-fade, the icon turns */
+.theme-switching,
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition: background-color 0.35s var(--ease), color 0.35s var(--ease), border-color 0.35s var(--ease),
+    box-shadow 0.35s var(--ease) !important;
+}
+
+.theme-switching .theme-icon svg {
+  animation: icon-turn 0.45s var(--ease-out);
+}
+
+/* Phones: the profile is a bottom sheet, menu items cascade in */
+@media (max-width: 860px) {
+  .anim .modal {
+    animation: sheet-up 0.42s var(--ease-out) backwards;
+  }
+
+  .anim .modal-backdrop.closing .modal {
+    animation: sheet-down 0.22s var(--ease) forwards;
+  }
+
+  .anim .nav-links.open > * {
+    animation: rise 0.45s var(--ease-out) backwards;
+  }
+
+  .anim .nav-links.open > :nth-child(2) { animation-delay: 30ms; }
+  .anim .nav-links.open > :nth-child(3) { animation-delay: 60ms; }
+  .anim .nav-links.open > :nth-child(4) { animation-delay: 90ms; }
+  .anim .nav-links.open > :nth-child(5) { animation-delay: 120ms; }
+  .anim .nav-links.open > :nth-child(6) { animation-delay: 150ms; }
+  .anim .nav-links.open > :nth-child(7) { animation-delay: 180ms; }
+  .anim .nav-links.open > :nth-child(n + 8) { animation-delay: 210ms; }
+}
+
+/* Press feedback (works on touch screens too) */
+.btn:active,
+.card:active,
+.choice-card:active,
+.topic-chip:active,
+.filter-tab-btn:active,
+.quiz-option-label:active,
+.bottom-bar-item:active,
+.nav-quick-subject:active {
+  transform: scale(0.98);
+}
+
+/* ==========================================================================
    Hover effects only where a real pointer exists (no sticky hover on phones)
    ========================================================================== */
 @media (hover: hover) and (pointer: fine) {
-  .btn:hover { opacity: 0.85; }
+  .btn:hover { opacity: 0.88; transform: translateY(-1px); }
   .btn-ghost:hover,
   .btn-secondary:hover { opacity: 1; background: var(--surface-subtle); }
   .nav-link:hover { color: var(--ink); }
@@ -1585,8 +1849,10 @@ h3 {
   .filter-tab-btn:hover,
   .quiz-option-label:hover { border-color: var(--border-strong); }
   .filter-tab-btn:hover { color: var(--ink); }
-  .subject-card:hover .card-arrow { color: var(--ink); transform: translateX(3px); }
-  .lesson-media:hover .play-badge::before { background: rgba(0, 0, 0, 0.8); }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px -14px rgba(0, 0, 0, 0.25); }
+  .subject-card:hover .card-arrow { color: var(--ink); transform: translateX(4px); }
+  .lesson-media:hover .play-badge::before { background: rgba(0, 0, 0, 0.8); transform: scale(1.08); }
+  .lesson-media:not(.is-pending):hover img { transform: scale(1.035); }
   .quiz-check-btn:hover { opacity: 0.85; }
 }
 
@@ -1638,15 +1904,15 @@ h3 {
     border-bottom: 1px solid var(--border);
     visibility: hidden;
     opacity: 0;
-    transform: translateY(-6px);
-    transition: opacity var(--fast) var(--ease), transform var(--fast) var(--ease), visibility 0s linear var(--fast);
+    transform: translateY(-10px);
+    transition: opacity 200ms var(--ease), transform 200ms var(--ease), visibility 0s linear 200ms;
   }
 
   .nav-links.open {
     visibility: visible;
     opacity: 1;
     transform: none;
-    transition: opacity var(--fast) var(--ease), transform var(--fast) var(--ease);
+    transition: opacity 280ms var(--ease-out), transform 280ms var(--ease-out);
   }
 
   .nav-mobile-header {
@@ -1798,7 +2064,7 @@ h3 {
     max-height: 90dvh;
     padding: 1.5rem 1.25rem calc(1.5rem + env(safe-area-inset-bottom, 0px));
     border-width: 1px 0 0;
-    border-radius: 8px 8px 0 0;
+    border-radius: 16px 16px 0 0;
   }
 
   .sheet-handle {
