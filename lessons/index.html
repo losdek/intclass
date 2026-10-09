@@ -2,10 +2,22 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Видеоуроки и мини-тесты — за минуту</title>
   <meta name="description" content="Каталог видеоуроков и интерактивных мини-тестов по математике и русскому языку для 5–9 классов.">
-  <meta name="theme-color" content="#fafaf9">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="color-scheme" content="light dark">
+  <script>
+    // Apply the saved or system theme before the page paints (no light flash in dark mode)
+    (function () {
+      var theme;
+      try { theme = localStorage.getItem("intclass_theme"); } catch (e) {}
+      if (theme !== "dark" && theme !== "light") {
+        theme = window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
 
   <!-- Favicon & Mobile Touch Icon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%232563eb'/><text x='50%' y='68%' font-family='sans-serif' font-weight='800' font-size='60' fill='white' text-anchor='middle'>м</text></svg>">
@@ -39,12 +51,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="manifest" href="../manifest.webmanifest">
-  <link rel="stylesheet" href="../css/style.css?v=20261006_01">
+  <link rel="stylesheet" href="../css/style.css?v=20261009_01">
 </head>
 <body class="lessons-page">
   <!-- Header / Navigation -->
   <header class="nav" id="nav">
-    <div class="scroll-progress-bar" id="scrollProgressBar" aria-hidden="true"></div>
     <div class="container nav-inner">
       <a class="logo" href="../" aria-label="за минуту — на главную">
         за минуту<span class="logo-dot"></span>
@@ -54,7 +65,6 @@
       <nav class="nav-links" id="navLinks" aria-label="Основная навигация">
         <div class="nav-mobile-header">
           <div class="nav-user-greeting">
-            <span class="greeting-avatar">👋</span>
             <span id="navUserGreeting">Привет, друг!</span>
           </div>
         </div>
@@ -93,11 +103,10 @@
 
         <div class="nav-mobile-footer">
           <button class="btn btn-small register-open mobile-register-btn" type="button">
-            <span>👤</span>
             <span class="mobile-btn-text">Мой профиль</span>
           </button>
-          <button class="theme-toggle-btn mobile-theme-btn" type="button" style="margin-top: 0.5rem; width: 100%;">
-            <span class="theme-icon">🌙</span>
+          <button class="theme-toggle-btn mobile-theme-btn" type="button">
+            <span class="theme-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
             <span class="theme-label">Тёмная тема</span>
           </button>
         </div>
@@ -108,7 +117,7 @@
 
       <div class="nav-actions">
         <button class="theme-toggle-btn theme-toggle-icon-only" type="button" aria-label="Переключить тему" title="Сменить тему">
-          <span class="theme-icon">🌙</span>
+          <span class="theme-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
         </button>
         <button class="nav-profile-btn register-open" type="button" aria-label="Открыть профиль" title="Профиль">
           <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -136,10 +145,6 @@
           <p class="section-label reveal-line"><span>Библиотека знаний</span></p>
           <h1 class="page-title"><span class="reveal-line"><span>Выберите урок</span></span></h1>
           <p class="page-sub reveal-line"><span>Соберите короткий маршрут до нужного объяснения за 3 простых шага.</span></p>
-        </div>
-        <div class="page-head-note">
-          <span class="page-head-note-mark">3</span>
-          <span>простых шага<br><strong>до видео и теста</strong></span>
         </div>
       </div>
     </section>
@@ -170,7 +175,7 @@
         <!-- Overall Course Progress Card -->
         <div class="overall-progress-card reveal">
           <div class="overall-progress-header">
-            <span class="overall-progress-title">📊 Прогресс изучения</span>
+            <span class="overall-progress-title">Прогресс</span>
             <span class="overall-progress-text" id="overallProgressText">Пройдено 0 из 45 уроков (0%)</span>
           </div>
           <div class="progress-bar-track">
@@ -194,7 +199,7 @@
         <!-- Filter Tabs Bar (All / Bookmarks / Completed / In Progress) -->
         <div class="filter-tabs-bar reveal" role="tablist" aria-label="Фильтры уроков">
           <button class="filter-tab-btn active" type="button" data-filter="all">Все уроки</button>
-          <button class="filter-tab-btn" type="button" data-filter="video">🎬 С видео</button>
+          <button class="filter-tab-btn" type="button" data-filter="video">С видео</button>
           <button class="filter-tab-btn" type="button" data-filter="favorites">★ Избранное</button>
           <button class="filter-tab-btn" type="button" data-filter="completed">✓ Изученные</button>
           <button class="filter-tab-btn" type="button" data-filter="uncompleted">В процессе</button>

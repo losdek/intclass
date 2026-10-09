@@ -1,6 +1,6 @@
 {
   "name": "intclass",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Русскоязычный справочник видеоуроков и интерактивных мини-тестов за минуту для 5–9 классов",
   "scripts": {
     "test": "node --test test/*.test.js",
