@@ -145,34 +145,73 @@ const LESSONS = [
         "explanation": "Неизвестное слагаемое: x = 7 − 2 = 5. Проверка: 5 + 2 = 7."
       },
       {
-        "question": "Найдите корень уравнения x + 15 = 40.",
-        "options": [
-          "25",
-          "55",
-          "35"
+        "type": "strips",
+        "question": "Полоски — это уравнение x + 15 = 40. Подберите x, чтобы нижняя полоска стала такой же длины, как верхняя.",
+        "rows": [
+          [
+            {
+              "n": 40
+            }
+          ],
+          [
+            {
+              "k": 1
+            },
+            {
+              "n": 15
+            }
+          ]
         ],
-        "answer": 0,
-        "explanation": "Неизвестное слагаемое: 40 − 15 = 25. Проверка: 25 + 15 = 40."
+        "max": 40,
+        "solution": 25,
+        "explanation": "Неизвестное слагаемое = сумма − известное слагаемое: x = 40 − 15 = 25. Проверка: 25 + 15 = 40."
       },
       {
-        "question": "Решите уравнение x − 7 = 13.",
-        "options": [
-          "20",
-          "6",
-          "−6"
+        "type": "strips",
+        "question": "Уравнение x − 7 = 13: полоска x целиком равна 13 и 7 вместе. Подберите x.",
+        "rows": [
+          [
+            {
+              "k": 1
+            }
+          ],
+          [
+            {
+              "n": 13
+            },
+            {
+              "n": 7
+            }
+          ]
         ],
-        "answer": 0,
-        "explanation": "x — уменьшаемое: x = 13 + 7 = 20. Ответ 6 не проходит проверку: 6 − 7 ≠ 13."
+        "max": 40,
+        "solution": 20,
+        "explanation": "x — уменьшаемое: уменьшаемое = разность + вычитаемое, x = 13 + 7 = 20. Проверка: 20 − 7 = 13."
       },
       {
-        "question": "Решите уравнение 3 · x = 24.",
-        "options": [
-          "8",
-          "21",
-          "72"
+        "type": "strips",
+        "question": "Уравнение 3 · x = 24: три одинаковые полоски x вместе равны 24. Подберите x.",
+        "rows": [
+          [
+            {
+              "n": 24
+            }
+          ],
+          [
+            {
+              "k": 1
+            },
+            {
+              "k": 1
+            },
+            {
+              "k": 1
+            }
+          ]
         ],
-        "answer": 0,
-        "explanation": "Неизвестный множитель = произведение : известный множитель = 24 : 3 = 8."
+        "max": 15,
+        "solution": 8,
+        "explanation": "Неизвестный множитель = произведение : известный множитель = 24 : 3 = 8. Проверка: 3 · 8 = 24."
       }
     ]
   },
@@ -201,34 +240,41 @@ const LESSONS = [
         "explanation": "Острый угол меньше 90°, прямой — ровно 90°, тупой — больше 90°, но меньше 180°, развёрнутый — 180°."
       },
       {
-        "question": "Сколько квадратных сантиметров в 1 м²?",
-        "options": [
-          "10 000",
-          "100",
-          "1 000"
+        "type": "pick",
+        "figure": "lines",
+        "question": "Нажмите на луч.",
+        "solution": [
+          "ray"
         ],
-        "answer": 0,
-        "explanation": "1 м² — это квадрат 100 см × 100 см, значит 100 · 100 = 10 000 см²."
+        "reveal": "Луч CD: у него есть начало C, а в другую сторону он не кончается",
+        "explanation": "Отрезок AB ограничен двумя точками, у луча есть только начало, а прямая бесконечна в обе стороны."
       },
       {
-        "question": "Чему равен объём комнаты 5 м × 4 м × 3 м?",
-        "options": [
-          "60 м³",
-          "12 м³",
-          "47 м³"
+        "type": "rect",
+        "question": "Постройте прямоугольник площадью 12 см² и периметром 14 см: нажмите на клетку, где будет его дальний угол.",
+        "cols": 8,
+        "rows": 6,
+        "area": 12,
+        "perimeter": 14,
+        "solution": [
+          4,
+          3
         ],
-        "answer": 0,
-        "explanation": "V = a · b · c = 5 · 4 · 3 = 60 м³."
+        "explanation": "S = a · b = 12 и P = 2(a + b) = 14, значит a + b = 7. Подходят стороны 4 см и 3 см."
       },
       {
-        "question": "Сколько рёбер у прямоугольного параллелепипеда?",
-        "options": [
-          "12",
-          "8",
-          "6"
+        "type": "enter",
+        "figure": "box",
+        "size": [
+          4,
+          3,
+          2
         ],
-        "answer": 0,
-        "explanation": "У параллелепипеда 6 граней, 12 рёбер и 8 вершин."
+        "unit": "см³",
+        "label": "V =",
+        "question": "Коробка 4 × 3 × 2 см сложена из кубиков по 1 см³. Каков её объём?",
+        "solution": 24,
+        "explanation": "V = a · b · c = 4 · 3 · 2 = 24 см³ — ровно столько кубиков в коробке."
       }
     ]
   },
@@ -253,46 +299,37 @@ const LESSONS = [
         "explanation": "Модуль — это расстояние до нуля. На расстоянии 3 от нуля лежат два числа: −3 и 3."
       },
       {
-        "question": "Чему равна сумма чисел (-7) + 12?",
-        "options": [
-          "5",
-          "-5",
-          "19",
-          "-19"
+        "type": "numberline",
+        "question": "Вычислите 2 − 5: начните с 2 и нажмите, где окажетесь после пяти шагов влево.",
+        "min": -5,
+        "max": 5,
+        "start": 2,
+        "solution": [
+          -3
         ],
-        "answer": 0,
-        "explanation": "Из большего модуля (12) вычитаем меньший (7) и ставим знак (+), получаем 5."
+        "explanation": "Вычесть 5 — значит сделать пять шагов влево по оси: 2 − 5 = −3."
       },
       {
-        "question": "Чему равно произведение (-4) · (-5)?",
-        "options": [
-          "20",
-          "-20",
-          "9",
-          "-9"
+        "type": "numberline",
+        "question": "Отметьте все целые числа, которые больше −3, но меньше 1.",
+        "min": -5,
+        "max": 5,
+        "solution": [
+          -2,
+          -1,
+          0
         ],
-        "answer": 0,
-        "explanation": "Минус на минус при умножении даёт плюс: (-4) · (-5) = 20."
+        "explanation": "Между −3 и 1 лежат −2, −1 и 0. Чем правее число на оси, тем оно больше."
       },
       {
-        "question": "Какое число больше: −2 или −5?",
-        "options": [
-          "−2",
-          "−5",
-          "Они равны"
+        "type": "numberline",
+        "question": "Вычислите (−2) · (−2) и отметьте ответ на оси.",
+        "min": -5,
+        "max": 5,
+        "solution": [
+          4
         ],
-        "answer": 0,
-        "explanation": "На числовой оси −2 лежит правее, чем −5, значит −2 > −5."
-      },
-      {
-        "question": "Вычислите 2 − 5.",
-        "options": [
-          "−3",
-          "3",
-          "−7"
-        ],
-        "answer": 0,
-        "explanation": "Вычитание — это прибавление противоположного числа: 2 + (−5) = −3."
+        "explanation": "Минус на минус даёт плюс: (−2) · (−2) = 4."
       }
     ],
     "video": {
@@ -375,34 +412,60 @@ const LESSONS = [
         "explanation": "Сначала x = 3 — три шага вправо, потом y = −2 — два шага вниз. Точка (−2; 3) — ловушка: это другая точка."
       },
       {
-        "question": "В какой координатной четверти лежит точка A(-3; 5)?",
-        "options": [
-          "Во II четверти (x < 0, y > 0)",
-          "В I четверти",
-          "В III четверти",
-          "В IV четверти"
+        "type": "plane",
+        "question": "Поставьте любую точку M во II четверти.",
+        "quadrant": 2,
+        "name": "M",
+        "solution": [
+          -2,
+          3
         ],
-        "answer": 0,
-        "explanation": "Когда x отрицателен, а y положителен — это II координатная четверть."
+        "reveal": "Подходит любая точка с x < 0 и y > 0, например M(−2; 3)",
+        "explanation": "Во II четверти x < 0, а y > 0: точка левее оси y и выше оси x."
       },
       {
-        "question": "Совпадают ли точки (2; 5) и (5; 2)?",
-        "options": [
-          "Нет, это разные точки",
-          "Да, это одна и та же точка"
+        "type": "plane",
+        "question": "Поставьте точку B на оси ординат, у которой y = −3.",
+        "name": "B",
+        "solution": [
+          0,
+          -3
         ],
-        "answer": 0,
-        "explanation": "Порядок важен: первой всегда пишется абсцисса x, второй — ордината y."
+        "explanation": "На оси ординат x = 0, поэтому B(0; −3)."
       },
       {
-        "question": "Какова длина отрезка между точками (−2; −1) и (3; −1)?",
-        "options": [
-          "5",
-          "1",
-          "4"
+        "type": "plane",
+        "question": "A, B и D — вершины прямоугольника ABCD. Поставьте четвёртую вершину C.",
+        "given": [
+          [
+            -2,
+            -1,
+            "A"
+          ],
+          [
+            3,
+            -1,
+            "B"
+          ],
+          [
+            -2,
+            2,
+            "D"
+          ]
         ],
-        "answer": 0,
-        "explanation": "Точки лежат на одной горизонтали, длина равна разности абсцисс: 3 − (−2) = 5."
+        "shape": [
+          "A",
+          "B",
+          "?",
+          "D"
+        ],
+        "name": "C",
+        "solution": [
+          3,
+          2
+        ],
+        "reveal": "Верно: C(3; 2)",
+        "explanation": "C стоит над B (x = 3) на высоте D (y = 2): C(3; 2). Длина AB = 3 − (−2) = 5."
       }
     ],
     "video": {
@@ -436,44 +499,36 @@ const LESSONS = [
         "explanation": "Диаметр — хорда, которая проходит через центр. OA — радиус, DE — хорда, не проходящая через центр."
       },
       {
-        "question": "Какова длина окружности пиццы диаметром 30 см (π ≈ 3,14)?",
-        "options": [
-          "≈ 94 см",
-          "≈ 47 см",
-          "≈ 706 см"
+        "type": "roll",
+        "question": "Колесо диаметром 1 катится по линейке. Остановите его, когда красная метка снова коснётся земли.",
+        "accept": [
+          3.1,
+          3.18
         ],
-        "answer": 0,
-        "explanation": "C = πd = 3,14 · 30 ≈ 94,2 см."
+        "solution": 3.14,
+        "explanation": "За один оборот колесо проходит длину своей окружности: C = πd = π · 1 ≈ 3,14."
       },
       {
-        "question": "Чему равна площадь круга радиусом 15 см (π ≈ 3,14)?",
-        "options": [
-          "≈ 706,5 см²",
-          "≈ 94,2 см²",
-          "≈ 47,1 см²"
+        "type": "pick",
+        "figure": "cross",
+        "question": "Нажмите на угол, вертикальный углу 1.",
+        "solution": [
+          "3"
         ],
-        "answer": 0,
-        "explanation": "S = πr² = 3,14 · 15² = 3,14 · 225 = 706,5 см²."
+        "reveal": "Угол 3 лежит напротив угла 1",
+        "explanation": "Вертикальные углы лежат напротив друг друга и равны. Углы 2 и 4 смежные с углом 1: вместе с ним они дают 180°."
       },
       {
-        "question": "Чему равна сумма смежных углов?",
-        "options": [
-          "180°",
-          "90°",
-          "360°"
+        "type": "pick",
+        "figure": "solids",
+        "question": "Нажмите на все тела вращения — их можно получить, вращая плоскую фигуру вокруг оси.",
+        "solution": [
+          "cylinder",
+          "cone",
+          "ball"
         ],
-        "answer": 0,
-        "explanation": "Смежные углы вместе образуют развёрнутый угол — 180°."
-      },
-      {
-        "question": "Чему равно 15²?",
-        "options": [
-          "225",
-          "30",
-          "150"
-        ],
-        "answer": 0,
-        "explanation": "r² = r · r = 15 · 15 = 225 — это не 2r."
+        "reveal": "Цилиндр, конус и шар",
+        "explanation": "Цилиндр получается вращением прямоугольника, конус — треугольника, шар — полукруга. У куба и пирамиды плоские грани."
       }
     ]
   },
@@ -514,34 +569,60 @@ const LESSONS = [
         "explanation": "(3 + 7 + 2 + 5 + 3) : 5 = 20 : 5 = 4. На этом уровне выступы над линией ровно заполняют пустоты под ней."
       },
       {
-        "question": "Чему равна медиана ряда 3, 7, 2, 5, 3?",
-        "options": [
-          "3",
-          "2",
-          "5"
+        "type": "order",
+        "question": "Расставьте значения 3, 7, 2, 5, 3 по возрастанию: нажимайте на карточки по порядку.",
+        "items": [
+          3,
+          7,
+          2,
+          5,
+          3
         ],
-        "answer": 0,
-        "explanation": "Упорядочим ряд: 2, 3, 3, 5, 7. Посередине стоит 3."
+        "solution": [
+          2,
+          3,
+          3,
+          5,
+          7
+        ],
+        "middle": true,
+        "explanation": "Упорядоченный ряд: 2, 3, 3, 5, 7. Посередине стоит 3 — это медиана."
       },
       {
-        "question": "Какова вероятность выбросить шестёрку на игральном кубике?",
-        "options": [
-          "1/6",
-          "1/2",
-          "1/3"
+        "type": "pick",
+        "figure": "bars",
+        "question": "Мода — самое частое значение. Нажмите на все столбцы, которые показывают моду.",
+        "values": [
+          3,
+          7,
+          2,
+          5,
+          3
         ],
-        "answer": 0,
-        "explanation": "Всего 6 равновозможных граней, подходит одна: 1/6."
+        "labels": [
+          "Пн",
+          "Вт",
+          "Ср",
+          "Чт",
+          "Пт"
+        ],
+        "solution": [
+          "0",
+          "4"
+        ],
+        "reveal": "Мода = 3: в понедельник и в пятницу",
+        "explanation": "Значение 3 встречается дважды (Пн и Пт), остальные — по одному разу. Мода = 3."
       },
       {
-        "question": "Сколькими способами можно рассадить трёх друзей в ряд?",
-        "options": [
-          "6",
-          "3",
-          "9"
+        "type": "pick",
+        "figure": "dice",
+        "question": "Бросаем игральный кубик. Нажмите на все грани, при которых выпадет число больше 4.",
+        "solution": [
+          "5",
+          "6"
         ],
-        "answer": 0,
-        "explanation": "На первое место 3 варианта, на второе 2, на третье 1: 3 · 2 · 1 = 6."
+        "reveal": "Подходят 2 грани из 6: вероятность 2/6 = 1/3",
+        "explanation": "Больше 4 — это 5 и 6: 2 исхода из 6 равновозможных, вероятность 2/6 = 1/3."
       }
     ]
   },
@@ -570,45 +651,58 @@ const LESSONS = [
         "explanation": "Иксы влево, числа вправо: 3x − x = 9 − 1, 2x = 8, x = 4. Проверка: 3 · 4 + 1 = 13 и 4 + 9 = 13."
       },
       {
-        "question": "Чему равен корень уравнения 4x - 8 = 12?",
-        "options": [
-          "5",
-          "4",
-          "1",
-          "-5"
+        "type": "signs",
+        "question": "Раскройте скобки: поставьте верные знаки перед слагаемыми.",
+        "before": "−(x − 4) =",
+        "terms": [
+          "x",
+          "4"
         ],
-        "answer": 0,
-        "explanation": "4x = 12 + 8 = 20 => x = 20 / 4 = 5."
+        "solution": [
+          "−",
+          "+"
+        ],
+        "reveal": "−(x − 4) = −x + 4",
+        "explanation": "Минус перед скобкой меняет знак каждого слагаемого внутри: −(x − 4) = −x + 4."
       },
       {
-        "question": "Какое преобразование верное для уравнения 5x + 3 = 2x + 15?",
-        "options": [
-          "5x - 2x = 15 - 3",
-          "5x + 2x = 15 + 3",
-          "5x - 2x = 15 + 3"
+        "type": "move",
+        "question": "Уравнение 5x − 3 = 2x + 9. Перенесите слагаемые: иксы — влево, числа — вправо.",
+        "left": [
+          "5x",
+          "−3"
         ],
-        "answer": 0,
-        "explanation": "Переносим слагаемые со сменой знаков: 5x - 2x = 15 - 3."
+        "right": [
+          "2x",
+          "9"
+        ],
+        "reveal": "5x − 2x = 9 + 3, значит 3x = 12 и x = 4",
+        "explanation": "При переносе через «=» знак меняется: 5x − 2x = 9 + 3, 3x = 12, x = 4."
       },
       {
-        "question": "Раскройте скобки: −(x − 4).",
-        "options": [
-          "−x + 4",
-          "−x − 4",
-          "x − 4"
+        "type": "strips",
+        "question": "Велосипедист и пешеход: 200 + 50x = 500 + 20x. Подберите x, при котором полоски сравняются.",
+        "rows": [
+          [
+            {
+              "n": 200
+            },
+            {
+              "k": 50
+            }
+          ],
+          [
+            {
+              "n": 500
+            },
+            {
+              "k": 20
+            }
+          ]
         ],
-        "answer": 0,
-        "explanation": "Минус перед скобкой меняет знак каждого слагаемого внутри неё."
-      },
-      {
-        "question": "Решите уравнение 200 + 50x = 500 + 20x.",
-        "options": [
-          "10",
-          "7",
-          "30"
-        ],
-        "answer": 0,
-        "explanation": "Иксы влево, числа вправо: 50x − 20x = 500 − 200, 30x = 300, x = 10."
+        "max": 20,
+        "solution": 10,
+        "explanation": "50x − 20x = 500 − 200, 30x = 300, x = 10. Проверка: 200 + 500 = 700 и 500 + 200 = 700."
       }
     ],
     "video": {
@@ -635,32 +729,37 @@ const LESSONS = [
         "explanation": "Сумма углов треугольника 180°: 180° − 50° − 70° = 60°."
       },
       {
-        "question": "Первый признак равенства треугольников гласит о равенстве по...",
-        "options": [
-          "Двум сторонам и углу между ними",
-          "Трём углам",
-          "Стороне и двум любым углам"
-        ],
-        "answer": 0,
-        "explanation": "Если две стороны и угол между ними одного треугольника равны двум сторонам и углу между ними другого, то они равны."
+        "type": "sticks",
+        "question": "Есть палочки 3 см и 4 см. Подберите самую длинную третью палочку (целое число см), из которой ещё сложится треугольник.",
+        "a": 3,
+        "b": 4,
+        "max": 10,
+        "solution": 6,
+        "explanation": "Каждая сторона меньше суммы двух других: третья < 3 + 4 = 7, значит самая длинная — 6 см."
       },
       {
-        "question": "Можно ли сложить треугольник из палочек длиной 1, 2 и 5?",
-        "options": [
-          "Нет",
-          "Да"
-        ],
-        "answer": 0,
-        "explanation": "Каждая сторона должна быть меньше суммы двух других, а 5 > 1 + 2."
+        "type": "triangle-sum",
+        "question": "Треугольник ABC равнобедренный (AC = BC), ∠C = 40°. Поверните углы A и B — они равны.",
+        "angles": {
+          "A": null,
+          "B": null,
+          "C": 40
+        },
+        "isosceles": true,
+        "max": 90,
+        "solution": 70,
+        "explanation": "Углы при основании равнобедренного треугольника равны: (180° − 40°) : 2 = 70°."
       },
       {
-        "question": "Равны ли треугольники, у которых равны все три угла?",
-        "options": [
-          "Не обязательно — размеры могут быть разными",
-          "Да, всегда"
+        "type": "pick",
+        "figure": "triangles",
+        "question": "Нажмите на все треугольники, у которых обязательно есть два равных угла. Одинаковые чёрточки — равные стороны.",
+        "solution": [
+          "equi",
+          "iso"
         ],
-        "answer": 0,
-        "explanation": "Три равных угла дают одинаковую форму, но не размер: это не признак равенства."
+        "reveal": "Равносторонний и равнобедренный",
+        "explanation": "Против равных сторон лежат равные углы: у равнобедренного равны углы при основании, у равностороннего все три угла по 60°."
       }
     ],
     "video": {
@@ -690,35 +789,49 @@ const LESSONS = [
         "explanation": "(a + b)² = a² + 2ab + b²: кроме квадратов a² и b² в большом квадрате есть два прямоугольника a × b."
       },
       {
-        "question": "Чему равно выражение (x + 3)² в раскрытом виде?",
-        "options": [
-          "x² + 6x + 9",
-          "x² + 9",
-          "x² + 3x + 9",
-          "x² + 6x + 6"
+        "type": "signs",
+        "question": "Раскройте квадрат разности: поставьте верные знаки.",
+        "before": "(a − b)² = a²",
+        "terms": [
+          "2ab",
+          "b²"
         ],
-        "answer": 0,
-        "explanation": "(x + 3)² = x² + 2·x·3 + 3² = x² + 6x + 9."
+        "solution": [
+          "−",
+          "+"
+        ],
+        "reveal": "(a − b)² = a² − 2ab + b²",
+        "explanation": "(a − b)² = a² − 2ab + b²: удвоенное произведение идёт с минусом, квадраты — всегда с плюсом."
       },
       {
-        "question": "Вычислите в уме 101².",
-        "options": [
-          "10 201",
-          "10 001",
-          "1 201"
-        ],
-        "answer": 0,
+        "type": "enter",
+        "figure": "square101",
+        "buttons": false,
+        "label": "101² =",
+        "question": "Посчитайте в уме 101² = (100 + 1)², сложив части квадрата.",
+        "solution": 10201,
+        "reveal": "10 000 + 100 + 100 + 1 = 10 201",
         "explanation": "(100 + 1)² = 100² + 2 · 100 · 1 + 1² = 10 000 + 200 + 1 = 10 201."
       },
       {
-        "question": "Вычислите 99 · 101.",
-        "options": [
-          "9 999",
-          "10 099",
-          "9 899"
+        "type": "match",
+        "question": "Соедините каждую формулу с её раскрытием.",
+        "left": [
+          "(a + b)²",
+          "(a − b)²",
+          "(a − b)(a + b)"
         ],
-        "answer": 0,
-        "explanation": "(100 − 1)(100 + 1) = 100² − 1² = 9 999."
+        "right": [
+          "a² − b²",
+          "a² + 2ab + b²",
+          "a² − 2ab + b²"
+        ],
+        "solution": [
+          1,
+          2,
+          0
+        ],
+        "explanation": "Квадрат суммы — a² + 2ab + b², квадрат разности — a² − 2ab + b², произведение разности на сумму — разность квадратов a² − b²."
       }
     ],
     "video": {
@@ -783,43 +896,57 @@ const LESSONS = [
         "explanation": "При x = 0 получаем y = b, значит b = −1. Из точки (2; 3): 3 = 2k − 1, k = 2. Ответ: y = 2x − 1."
       },
       {
-        "question": "Принадлежит ли точка (−2; −3) графику y = 2x + 1?",
-        "options": [
-          "Да",
-          "Нет"
+        "type": "table",
+        "question": "Заполните таблицу для y = 2x − 1: нажимайте на сетку над каждым x, чтобы поставить точку.",
+        "k": 2,
+        "b": -1,
+        "xs": [
+          -1,
+          0,
+          1,
+          2
         ],
-        "answer": 0,
-        "explanation": "Подставим x = −2: 2 · (−2) + 1 = −3 — равенство верно."
+        "solution": [
+          -3,
+          -1,
+          1,
+          3
+        ],
+        "explanation": "y(−1) = −3, y(0) = −1, y(1) = 1, y(2) = 3 — все точки ложатся на одну прямую."
       },
       {
-        "question": "Как расположены прямые y = 2x + 1 и y = 2x − 3?",
-        "options": [
-          "Параллельны",
-          "Пересекаются в точке (0; 1)",
-          "Совпадают"
+        "type": "plane",
+        "question": "Поставьте на графике y = 2x + 1 точку P с абсциссой −2.",
+        "graph": {
+          "k": 2,
+          "b": 1
+        },
+        "name": "P",
+        "solution": [
+          -2,
+          -3
         ],
-        "answer": 0,
-        "explanation": "Одинаковый коэффициент k — одинаковый наклон, поэтому прямые параллельны."
+        "reveal": "Верно: P(−2; −3)",
+        "explanation": "Подставим x = −2: y = 2 · (−2) + 1 = −3, точка P(−2; −3)."
       },
       {
-        "question": "Такси: посадка 100 ₽ и 30 ₽ за километр. Сколько стоит поездка на 10 км?",
-        "options": [
-          "400 ₽",
-          "300 ₽",
-          "130 ₽"
+        "type": "line",
+        "question": "Подберите k и b: прямая должна быть параллельна y = 2x − 3 (пунктир) и пройти через точку (0; 1).",
+        "points": [
+          [
+            0,
+            1
+          ]
         ],
-        "answer": 0,
-        "explanation": "y = 30 · 10 + 100 = 400 ₽."
-      },
-      {
-        "question": "В какой точке прямая y = 3x − 2 пересекает ось y?",
-        "options": [
-          "(0; −2)",
-          "(0; 3)",
-          "(−2; 0)"
-        ],
-        "answer": 0,
-        "explanation": "На оси y x = 0, значит y = b = −2."
+        "parallel": {
+          "k": 2,
+          "b": -3
+        },
+        "solution": {
+          "k": 2,
+          "b": 1
+        },
+        "explanation": "У параллельных прямых одинаковый k = 2, а b — точка пересечения с осью y: b = 1. Ответ: y = 2x + 1."
       }
     ]
   },
@@ -1560,28 +1687,56 @@ const lessonSearchInput = document.getElementById("lessonSearch");
 const clearSearchBtn = document.getElementById("clearSearch");
 const overallProgressBar = document.getElementById("overallProgressBar");
 const overallProgressText = document.getElementById("overallProgressText");
+const flowBox = document.getElementById("flowBox");
+
+// the furthest step the pupil has reached: 1 subject, 2 grade, 3 video
+let maxPane = 1;
+// no motion while the page restores a choice from the link
+let booting = true;
+
+/**
+ * Steps live in one box: a choice swaps in the next step in place instead of scrolling down
+ */
+function showPane(n) {
+  if (!flowBox) return;
+  const prev = Number(flowBox.dataset.pane);
+  maxPane = Math.max(maxPane, n);
+  if (prev !== n) {
+    const from = flowBox.offsetHeight;
+    flowBox.dataset.pane = String(n);
+    if (!booting && motionOn()) {
+      const to = flowBox.offsetHeight;
+      const ease = "cubic-bezier(0.16, 1, 0.3, 1)";
+      flowBox.animate([{ height: `${from}px` }, { height: `${to}px` }], { duration: 340, easing: ease });
+      flowBox.querySelector(`[data-pane-id="${n}"]`)?.animate(
+        [{ opacity: 0, transform: `translateX(${n > prev ? 28 : -28}px)` }, { opacity: 1, transform: "none" }],
+        { duration: 340, easing: ease }
+      );
+    }
+  }
+  updateProgressIndicator();
+  if (!booting) {
+    // keep the box in sight when it was scrolled half away
+    const top = flowBox.getBoundingClientRect().top;
+    if (top < 0) flowBox.scrollIntoView({ block: "start", behavior: motionOn() ? "smooth" : "auto" });
+    flowBox.querySelector(`[data-pane-id="${n}"] .flow-back, [data-pane-id="${n}"] button`)?.focus({ preventScroll: true });
+  }
+}
 
 /**
  * Update step progress indicator
  */
 function updateProgressIndicator() {
   if (!flowProgress) return;
-  const p1 = flowProgress.querySelector('[data-step-indicator="1"]');
-  const p2 = flowProgress.querySelector('[data-step-indicator="2"]');
-  const p3 = flowProgress.querySelector('[data-step-indicator="3"]');
-
-  if (p1) {
-    p1.classList.toggle("completed", Boolean(state.subject));
-    p1.classList.toggle("active", !state.subject);
-  }
-  if (p2) {
-    p2.classList.toggle("completed", Boolean(state.grade));
-    p2.classList.toggle("active", Boolean(state.subject));
-  }
-  if (p3) {
-    p3.classList.toggle("completed", Boolean(state.topic));
-    p3.classList.toggle("active", Boolean(state.subject) && Boolean(state.grade));
-  }
+  const pane = Number(flowBox?.dataset.pane || 1);
+  flowProgress.querySelectorAll("[data-step-indicator]").forEach((step) => {
+    const n = Number(step.dataset.stepIndicator);
+    step.classList.toggle("active", n === pane);
+    step.classList.toggle("completed", n < pane || (n === 3 && Boolean(state.topic)));
+    step.disabled = n > maxPane;
+    if (n === pane) step.setAttribute("aria-current", "step");
+    else step.removeAttribute("aria-current");
+  });
 }
 
 /**
@@ -1641,6 +1796,21 @@ function shuffledIndices(n) {
   return order;
 }
 
+// 1 вопрос, 2 вопроса, 5 вопросов
+function plural(n, [one, few, many]) {
+  const d = n % 10, h = n % 100;
+  if (d === 1 && h !== 11) return one;
+  if (d >= 2 && d <= 4 && (h < 12 || h > 14)) return few;
+  return many;
+}
+
+function quizSummary(lesson) {
+  const n = lesson.quiz.length;
+  const tasks = lesson.quiz.filter((q) => q.type).length;
+  const what = tasks === n ? plural(n, ["задание", "задания", "заданий"]) : plural(n, ["вопрос", "вопроса", "вопросов"]);
+  return `Мини-тест: ${n} ${what}${lesson.video || lesson.videoId ? " после видео" : ""}`;
+}
+
 /**
  * Build lesson card HTML element
  */
@@ -1663,7 +1833,6 @@ function createCard(lesson) {
 
   const quizData = lesson.quiz || [];
   const hasQuiz = quizData.length > 0;
-  const hasVideo = Boolean(lesson.video || lesson.videoId);
 
   const takeawayHtml = lesson.takeaway
     ? `<div class="lesson-takeaway">
@@ -1676,49 +1845,12 @@ function createCard(lesson) {
     ? `
       <div class="quiz-lock-status" id="quiz-status-${lesson.id}">
         <div class="quiz-lock-badge">
-          <span class="quiz-lock-icon">${isCompleted ? "✓" : hasVideo ? "🔒" : "📝"}</span>
-          <span class="quiz-lock-text">${isCompleted ? "Тест успешно пройден" : hasVideo ? "Мини-тест откроется после видео" : "Видео скоро появится — тест уже доступен"}</span>
+          <span class="quiz-lock-icon">${isCompleted ? "✓" : ""}</span>
+          <span class="quiz-lock-text">${isCompleted ? "Тест успешно пройден" : quizSummary(lesson)}</span>
         </div>
         <button class="quiz-unlock-btn" type="button" data-unlock="${lesson.id}">
           ${isCompleted ? "Пройти снова →" : "Пройти тест →"}
         </button>
-      </div>
-      <div class="lesson-quiz" data-lesson-id="${lesson.id}" hidden>
-        <div class="quiz-header">
-          <span class="quiz-tag">Мини-тест (${quizData.length} вопр.)</span>
-          <button class="quiz-toggle-btn" type="button" aria-expanded="false">
-            Развернуть тест
-          </button>
-        </div>
-        <div class="quiz-box" hidden>
-          ${quizData
-            .map(
-              (q, qIndex) => `
-            <div class="quiz-question-item${q.type ? " is-task" : ""}" data-q-index="${qIndex}">
-              <p class="quiz-q-title"><span class="q-num">${qIndex + 1}.</span> ${q.question}</p>
-              ${q.type ? `<div class="task task-${q.type}" data-task="${q.type}"></div>` : `
-              <div class="quiz-options">
-                ${shuffledIndices(q.options.length)
-                  .map(
-                    (optIndex) => `
-                  <label class="quiz-option-label" data-opt="${optIndex}">
-                    <input type="radio" name="quiz-${lesson.id}-${qIndex}" value="${optIndex}">
-                    <span>${q.options[optIndex]}</span>
-                  </label>
-                `
-                  )
-                  .join("")}
-              </div>`}
-            </div>
-          `
-            )
-            .join("")}
-          <div class="quiz-actions">
-            <button class="quiz-check-btn" type="button">Проверить ответы</button>
-            <button class="quiz-retry-btn" type="button" hidden>Пройти снова</button>
-          </div>
-          <div class="quiz-result-msg" hidden aria-live="polite"></div>
-        </div>
       </div>
     `
     : "";
@@ -1770,14 +1902,6 @@ function createCard(lesson) {
     </div>
   `;
 
-  // interactive tasks (scales, protractor, grid…) are drawn by js/tasks.js
-  if (window.IntTasks) {
-    card.querySelectorAll(".task[data-task]").forEach((el) => {
-      const qIndex = Number(el.closest(".quiz-question-item").dataset.qIndex);
-      window.IntTasks.mount(el, quizData[qIndex]);
-    });
-  }
-
   return card;
 }
 
@@ -1824,7 +1948,6 @@ function renderTopics() {
   if (!state.subject) {
     topicStep?.classList.add("is-locked");
     if (topicChoices) topicChoices.innerHTML = "";
-    if (topicHint) topicHint.hidden = false;
     return;
   }
 
@@ -1851,7 +1974,6 @@ function renderTopics() {
 
   if (topicChoices) topicChoices.innerHTML = topicChips;
   topicStep?.classList.remove("is-locked");
-  if (topicHint) topicHint.hidden = true;
   updateProgressIndicator();
 }
 
@@ -1935,8 +2057,8 @@ function playVideo(media) {
       });
     });
     video.addEventListener("ended", () => {
-      const lessonId = card?.querySelector(".lesson-quiz")?.dataset.lessonId;
-      if (lessonId) unlockQuiz(lessonId, true);
+      const lessonId = card?.querySelector(".quiz-unlock-btn")?.dataset.unlock;
+      if (lessonId) openQuizAfterVideo(lessonId);
     });
     video.play()?.catch(() => {});
   } else {
@@ -1953,189 +2075,247 @@ function playVideo(media) {
 }
 
 /**
- * Unlock Quiz smoothly on demand or after video completion
+ * Quiz dialog: one question at a time. «Проверить» grades it and shows the right answer,
+ * «Дальше» moves on, and after the last question the dialog shows the score.
  */
-function unlockQuiz(lessonId, smoothScroll = false) {
-  const quizElem = document.querySelector(`.lesson-quiz[data-lesson-id="${lessonId}"]`);
-  if (!quizElem) return;
+const quizDialog = (() => {
+  const root = document.createElement("div");
+  root.className = "modal-backdrop quiz-backdrop";
+  root.hidden = true;
+  root.innerHTML = `
+    <section class="modal quiz-modal" role="dialog" aria-modal="true" aria-labelledby="quizModalTitle" tabindex="-1">
+      <div class="sheet-handle" aria-hidden="true"></div>
+      <button class="modal-close" type="button" aria-label="Закрыть тест">×</button>
+      <header class="qm-head">
+        <p class="section-label">Мини-тест</p>
+        <h2 class="qm-title" id="quizModalTitle"></h2>
+        <div class="qm-progress" aria-hidden="true"></div>
+        <p class="qm-count"></p>
+      </header>
+      <div class="qm-scroll">
+        <div class="qm-body"></div>
+        <div class="qm-feedback" hidden aria-live="polite"></div>
+      </div>
+      <footer class="qm-foot">
+        <button class="btn qm-main" type="button">Проверить</button>
+      </footer>
+    </section>`;
+  document.body.appendChild(root);
 
-  const card = quizElem.closest(".lesson-card");
-  const statusBox = card?.querySelector(".quiz-lock-status");
-  const quizBox = quizElem.querySelector(".quiz-box");
-  const toggleBtn = quizElem.querySelector(".quiz-toggle-btn");
+  const dialog = root.querySelector(".quiz-modal");
+  const title = root.querySelector(".qm-title");
+  const progress = root.querySelector(".qm-progress");
+  const count = root.querySelector(".qm-count");
+  const scroller = root.querySelector(".qm-scroll");
+  const body = root.querySelector(".qm-body");
+  const feedback = root.querySelector(".qm-feedback");
+  const main = root.querySelector(".qm-main");
 
-  if (statusBox) statusBox.hidden = true;
-  quizElem.hidden = false;
+  let lesson = null;
+  let index = 0;
+  let results = [];
+  let phase = "answer"; // answer → checked → (next question) … → done
+  let task = null; // controller of an interactive task
+  let opener = null;
 
-  if (quizBox) {
-    quizBox.hidden = false;
-    if (toggleBtn) {
-      toggleBtn.textContent = "Свернуть тест";
-      toggleBtn.setAttribute("aria-expanded", "true");
-    }
+  function showFeedback(kind, html) {
+    feedback.hidden = false;
+    feedback.className = `qm-feedback ${kind}`;
+    feedback.innerHTML = html;
   }
 
-  if (smoothScroll) {
-    quizElem.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  }
-}
-
-/**
- * Interactive Quiz grading & interactions
- */
-function handleQuizInteraction(event) {
-  const target = event.target;
-
-  // 1. Direct Unlock Button
-  const unlockBtn = target.closest(".quiz-unlock-btn");
-  if (unlockBtn) {
-    const lessonId = unlockBtn.dataset.unlock;
-    unlockQuiz(lessonId, true);
-    return;
+  function renderProgress() {
+    progress.innerHTML = lesson.quiz
+      .map((_, i) => {
+        const state = results[i] === true ? "is-right" : results[i] === false ? "is-wrong" : i === index && phase !== "done" ? "is-current" : "";
+        return `<span class="qm-seg ${state}"></span>`;
+      })
+      .join("");
   }
 
-  // 2. Collapse / Expand Quiz
-  const toggleBtn = target.closest(".quiz-toggle-btn");
-  if (toggleBtn) {
-    const quizBox = toggleBtn.closest(".lesson-quiz")?.querySelector(".quiz-box");
-    if (quizBox) {
-      const isHidden = quizBox.hidden;
-      quizBox.hidden = !isHidden;
-      toggleBtn.textContent = isHidden ? "Свернуть тест" : "Развернуть тест";
-      toggleBtn.setAttribute("aria-expanded", String(isHidden));
-    }
-    return;
+  function renderQuestion() {
+    const q = lesson.quiz[index];
+    phase = "answer";
+    task = null;
+    feedback.hidden = true;
+    count.textContent = `${q.type ? "Задание" : "Вопрос"} ${index + 1} из ${lesson.quiz.length}`;
+    body.innerHTML = `
+      <div class="quiz-question-item${q.type ? " is-task" : ""}">
+        <p class="quiz-q-title">${q.question}</p>
+        ${q.type
+          ? `<div class="task task-${q.type}" data-task="${q.type}"></div>`
+          : `<div class="quiz-options" role="radiogroup">${shuffledIndices(q.options.length)
+              .map((optIndex) => `
+                <label class="quiz-option-label" data-opt="${optIndex}">
+                  <input type="radio" name="qm-answer" value="${optIndex}">
+                  <span>${q.options[optIndex]}</span>
+                </label>`)
+              .join("")}</div>`}
+      </div>`;
+    if (q.type && window.IntTasks) task = window.IntTasks.mount(body.querySelector(".task"), q);
+    main.textContent = "Проверить";
+    renderProgress();
+    scroller.scrollTop = 0;
   }
 
-  // 3. Radio Option Selection
-  const optionInput = target.closest('input[type="radio"]');
-  if (optionInput) {
-    const question = optionInput.closest(".quiz-question-item");
-    if (question) {
-      question.querySelectorAll(".quiz-option-label").forEach((label) => {
-        label.classList.toggle("checked", label.contains(optionInput));
-      });
-    }
-    return;
+  function currentAnswer() {
+    if (task) return task.value();
+    const selected = body.querySelector('input[type="radio"]:checked');
+    return selected ? Number(selected.value) : null;
   }
 
-  // 4. Check Answers
-  const checkBtn = target.closest(".quiz-check-btn");
-  if (checkBtn) {
-    const quizElem = checkBtn.closest(".lesson-quiz");
-    const lessonId = quizElem?.dataset.lessonId;
-    const lesson = LESSONS.find((l) => l.id === lessonId);
-    if (!lesson || !lesson.quiz) return;
-
-    const resultMsg = quizElem.querySelector(".quiz-result-msg");
-    const retryBtn = quizElem.querySelector(".quiz-retry-btn");
-    const questions = quizElem.querySelectorAll(".quiz-question-item");
-
-    // a radio question answers with the option index, an interactive task with its widget value
-    const answers = [...questions].map((qElem) => {
-      const task = qElem.querySelector(".task")?.taskCtrl;
-      if (task) return task.value();
-      const selected = qElem.querySelector('input[type="radio"]:checked');
-      return selected ? Number(selected.value) : null;
-    });
-    const allAnswered = answers.every((a) => a !== null);
-    let correctCount = 0;
-
-    if (allAnswered) {
-      questions.forEach((qElem, qIdx) => {
-        const q = lesson.quiz[qIdx];
-        const userVal = answers[qIdx];
-        const task = qElem.querySelector(".task")?.taskCtrl;
-
-        if (task) {
-          const ok = window.IntTasks.check(q, userVal);
-          qElem.classList.add(ok ? "is-correct" : "is-wrong");
-          if (!ok) task.reveal();
-          task.lock(true);
-          if (ok) correctCount++;
-          return;
-        }
-
-        qElem.querySelectorAll(".quiz-option-label").forEach((label) => {
-          const lIdx = Number(label.dataset.opt);
-          label.classList.remove("is-correct", "is-wrong");
-          if (lIdx === q.answer) {
-            label.classList.add("is-correct");
-          } else if (lIdx === userVal) {
-            label.classList.add("is-wrong");
-          }
-        });
-        if (userVal === q.answer) correctCount++;
-      });
-    }
-
-    if (!allAnswered) {
-      if (resultMsg) {
-        resultMsg.hidden = false;
-        resultMsg.className = "quiz-result-msg info";
-        resultMsg.textContent = "Пожалуйста, ответьте на все вопросы и выполните задания перед проверкой.";
-      }
+  function check() {
+    const q = lesson.quiz[index];
+    const answer = currentAnswer();
+    if (answer === null) {
+      showFeedback("info", q.type ? "Сначала выполните задание на чертеже." : "Сначала выберите ответ.");
       return;
     }
-
-    if (resultMsg) {
-      resultMsg.hidden = false;
-      const explanations = lesson.quiz.map((q, idx) => `Вопрос ${idx + 1}: ${q.explanation}`).join(" ");
-
-      if (correctCount === questions.length) {
-        resultMsg.className = "quiz-result-msg success";
-        resultMsg.textContent = `✓ Отлично! Все ответы верны (${correctCount} из ${questions.length}). ${explanations}`;
-        saveProgress(lesson.id);
-        launchConfetti();
-        if (typeof window.showToast === "function") {
-          window.showToast("Поздравляем! Урок и тест успешно пройдены 🎉", "success");
-        }
-        const card = quizElem.closest(".lesson-card");
-        if (card && !card.querySelector(".lesson-completed-ribbon")) {
-          card.classList.add("is-completed");
-          const media = card.querySelector(".lesson-media");
-          if (media) {
-            const ribbon = document.createElement("div");
-            ribbon.className = "lesson-completed-ribbon";
-            ribbon.textContent = "✓ Изучено";
-            media.appendChild(ribbon);
-          }
-        }
-        updateOverallProgressStats();
-      } else {
-        resultMsg.className = "quiz-result-msg error";
-        resultMsg.textContent = `Результат: ${correctCount} из ${questions.length}. Правильные ответы подсвечены зелёным, в заданиях показано верное решение. ${explanations}`;
-      }
-      checkBtn.hidden = true;
-      if (retryBtn) retryBtn.hidden = false;
-    }
-    return;
-  }
-
-  // 5. Retry Quiz
-  const retryBtn = target.closest(".quiz-retry-btn");
-  if (retryBtn) {
-    const quizElem = retryBtn.closest(".lesson-quiz");
-    const checkBtn = quizElem?.querySelector(".quiz-check-btn");
-    const resultMsg = quizElem?.querySelector(".quiz-result-msg");
-
-    if (quizElem) {
-      quizElem.querySelectorAll('input[type="radio"]').forEach((input) => {
-        input.checked = false;
-      });
-      quizElem.querySelectorAll(".quiz-option-label").forEach((label) => {
-        label.classList.remove("checked", "is-correct", "is-wrong");
-      });
-      quizElem.querySelectorAll(".quiz-question-item").forEach((item) => {
-        item.classList.remove("is-correct", "is-wrong");
-        item.querySelector(".task")?.taskCtrl?.reset();
+    const ok = q.type ? window.IntTasks.check(q, answer) : answer === q.answer;
+    results[index] = ok;
+    const item = body.querySelector(".quiz-question-item");
+    item.classList.add(ok ? "is-correct" : "is-wrong");
+    if (task) {
+      if (!ok) task.reveal();
+      task.lock(true);
+    } else {
+      body.querySelectorAll(".quiz-option-label").forEach((label) => {
+        const opt = Number(label.dataset.opt);
+        if (opt === q.answer) label.classList.add("is-correct");
+        else if (opt === answer) label.classList.add("is-wrong");
+        label.querySelector("input").disabled = true;
       });
     }
-
-    if (resultMsg) resultMsg.hidden = true;
-    if (checkBtn) checkBtn.hidden = false;
-    retryBtn.hidden = true;
+    showFeedback(ok ? "success" : "error", `<strong>${ok ? "Верно!" : "Неверно."}</strong> ${q.explanation}`);
+    phase = "checked";
+    main.textContent = index < lesson.quiz.length - 1 ? "Дальше →" : "Показать результат";
+    renderProgress();
+    feedback.scrollIntoView({ block: "nearest", behavior: motionOn() ? "smooth" : "auto" });
   }
+
+  function finish() {
+    phase = "done";
+    const right = results.filter(Boolean).length;
+    const total = lesson.quiz.length;
+    const all = right === total;
+    count.textContent = "Результат";
+    feedback.hidden = true;
+    body.innerHTML = `
+      <div class="qm-result ${all ? "is-all" : ""}">
+        <p class="qm-score"><span>${right}</span> из ${total}</p>
+        <p class="qm-result-text">${all
+          ? "Отлично! Все ответы верны — урок отмечен как изученный."
+          : right >= total / 2
+          ? "Хороший результат. Пересмотрите видео и пройдите тест ещё раз, чтобы набрать все ответы."
+          : "Стоит ещё раз посмотреть видео — потом тест пойдёт легче."}</p>
+      </div>`;
+    main.textContent = "Пройти снова";
+    renderProgress();
+    if (all) markCompleted(lesson.id);
+  }
+
+  function onMain() {
+    if (phase === "answer") check();
+    else if (phase === "checked") {
+      if (index < lesson.quiz.length - 1) {
+        index++;
+        renderQuestion();
+      } else finish();
+    } else start();
+  }
+
+  function start() {
+    index = 0;
+    results = [];
+    renderQuestion();
+  }
+
+  function open(lessonId) {
+    lesson = LESSONS.find((l) => l.id === lessonId);
+    if (!lesson || !lesson.quiz?.length) return;
+    opener = document.activeElement;
+    title.textContent = lesson.title;
+    start();
+    root.classList.remove("closing");
+    root.hidden = false;
+    document.body.classList.add("modal-open");
+    dialog.focus({ preventScroll: true });
+  }
+
+  function close() {
+    if (root.hidden || root.classList.contains("closing")) return;
+    const done = () => {
+      root.classList.remove("closing");
+      root.hidden = true;
+      body.innerHTML = "";
+      document.body.classList.remove("modal-open");
+      opener?.focus?.({ preventScroll: true });
+    };
+    if (!motionOn()) return done();
+    root.classList.add("closing");
+    setTimeout(() => root.classList.contains("closing") && done(), 220);
+  }
+
+  main.addEventListener("click", onMain);
+  root.querySelector(".modal-close").addEventListener("click", close);
+  root.addEventListener("click", (event) => {
+    if (event.target === root) close();
+  });
+  body.addEventListener("change", (event) => {
+    if (event.target.matches('input[type="radio"]')) {
+      body.querySelectorAll(".quiz-option-label").forEach((label) => label.classList.toggle("checked", label.contains(event.target)));
+      feedback.hidden = true;
+    }
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !root.hidden) close();
+  });
+
+  return { open, close };
+})();
+
+function motionOn() {
+  return document.documentElement.classList.contains("anim");
+}
+
+// The video has ended: leave full screen first, then open the questions
+function openQuizAfterVideo(lessonId) {
+  const go = () => quizDialog.open(lessonId);
+  if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().then(go, go);
+  else go();
+}
+
+// All answers right: save progress, celebrate, mark the card
+function markCompleted(lessonId) {
+  saveProgress(lessonId);
+  launchConfetti();
+  if (typeof window.showToast === "function") {
+    window.showToast("Поздравляем! Урок и тест успешно пройдены 🎉", "success");
+  }
+  const card = document.getElementById(`card-${lessonId}`);
+  if (card) {
+    card.classList.add("is-completed");
+    const text = card.querySelector(".quiz-lock-text");
+    const icon = card.querySelector(".quiz-lock-icon");
+    const btn = card.querySelector(".quiz-unlock-btn");
+    if (text) text.textContent = "Тест успешно пройден";
+    if (icon) icon.textContent = "✓";
+    if (btn) btn.textContent = "Пройти снова →";
+    const media = card.querySelector(".lesson-media");
+    if (media && !card.querySelector(".lesson-completed-ribbon")) {
+      const ribbon = document.createElement("div");
+      ribbon.className = "lesson-completed-ribbon";
+      ribbon.textContent = "✓ Изучено";
+      media.appendChild(ribbon);
+    }
+  }
+  updateOverallProgressStats();
+}
+
+// «Пройти тест» on a card
+function handleQuizInteraction(event) {
+  const unlockBtn = event.target.closest(".quiz-unlock-btn");
+  if (unlockBtn) quizDialog.open(unlockBtn.dataset.unlock);
 }
 
 /**
@@ -2205,15 +2385,16 @@ function selectSubject(subject) {
   });
 
   gradeStep?.classList.remove("is-locked");
-  if (gradeHint) gradeHint.hidden = true;
 
   document.querySelectorAll("[data-grade]").forEach((btn) => {
     const isSelected = (!state.grade && btn.dataset.grade === "all") || btn.dataset.grade === state.grade;
     btn.classList.toggle("selected", isSelected);
   });
 
+  if (gradeHint) gradeHint.textContent = `${SUBJECT_LABELS[subject]} — выберите класс`;
   renderTopics();
   renderLessons();
+  showPane(2);
 }
 
 function selectGrade(gradeVal) {
@@ -2227,8 +2408,12 @@ function selectGrade(gradeVal) {
     btn.classList.toggle("selected", isSelected);
   });
 
+  if (topicHint) {
+    topicHint.textContent = `${SUBJECT_LABELS[state.subject]} · ${state.grade ? `${state.grade} класс` : "все классы"} — выберите тему, откроется видео и тест`;
+  }
   renderTopics();
   renderLessons();
+  showPane(3);
 }
 
 function selectTopic(topicVal) {
@@ -2260,6 +2445,13 @@ function selectTopic(topicVal) {
 window.reloadLessonsProgress = function () {
   renderLessons();
 };
+
+// Event Listeners: step tabs and back arrows inside the box
+flowBox?.addEventListener("click", (event) => {
+  const go = event.target.closest("[data-go], [data-step-indicator]");
+  if (!go || go.disabled) return;
+  showPane(Number(go.dataset.go || go.dataset.stepIndicator));
+});
 
 // Event Listeners: Step buttons
 document.querySelectorAll("[data-subject]").forEach((button) => {
@@ -2372,12 +2564,9 @@ resetFlowBtn?.addEventListener("click", () => {
   gradeStep?.classList.add("is-locked");
   topicStep?.classList.add("is-locked");
   resultsPanel?.classList.add("is-locked");
-  if (gradeHint) gradeHint.hidden = false;
-  if (topicHint) topicHint.hidden = false;
-
-  updateProgressIndicator();
+  maxPane = 1;
+  showPane(1);
   updateUrl();
-  subjectStep?.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
 // Initialize from URL parameters
@@ -2408,6 +2597,7 @@ resetFlowBtn?.addEventListener("click", () => {
     updateProgressIndicator();
     updateOverallProgressStats();
   }
+  booting = false;
 })();
 
 // Listen for YouTube video ended message to unlock quiz
@@ -2418,8 +2608,8 @@ window.addEventListener("message", (event) => {
     if (data?.event !== "onStateChange" || data.info !== 0) return;
     document.querySelectorAll(".lesson-card iframe").forEach((iframe) => {
       if (iframe.contentWindow === event.source) {
-        const quiz = iframe.closest(".lesson-card")?.querySelector(".lesson-quiz");
-        if (quiz?.dataset.lessonId) unlockQuiz(quiz.dataset.lessonId, true);
+        const lessonId = iframe.closest(".lesson-card")?.querySelector(".quiz-unlock-btn")?.dataset.unlock;
+        if (lessonId) openQuizAfterVideo(lessonId);
       }
     });
   } catch {}
