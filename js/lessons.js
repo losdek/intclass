@@ -1590,56 +1590,17 @@ const state = {
   activeFilter: "all" // all | uncompleted | completed | favorites | video
 };
 
-// Progress & Bookmark Storage Keys
-const PROGRESS_KEY = "intclass_progress";
-const BOOKMARKS_KEY = "intclass_bookmarks";
-
+// Progress and bookmarks live in cookies (js/store.js), so nothing needs registration
 function getProgressSet() {
-  try {
-    const raw = localStorage.getItem(PROGRESS_KEY);
-    return new Set(raw ? JSON.parse(raw) : []);
-  } catch {
-    return new Set();
-  }
-}
-
-function saveProgress(lessonId) {
-  try {
-    const set = getProgressSet();
-    set.add(lessonId);
-    localStorage.setItem(PROGRESS_KEY, JSON.stringify([...set]));
-    if (typeof window.updateProfileUI === "function") {
-      window.updateProfileUI();
-    }
-  } catch {}
+  return window.IntStore ? window.IntStore.completed() : new Set();
 }
 
 function getBookmarksSet() {
-  try {
-    const raw = localStorage.getItem(BOOKMARKS_KEY);
-    return new Set(raw ? JSON.parse(raw) : []);
-  } catch {
-    return new Set();
-  }
+  return window.IntStore ? window.IntStore.bookmarks() : new Set();
 }
 
 function toggleBookmark(lessonId) {
-  try {
-    const set = getBookmarksSet();
-    const isSaved = set.has(lessonId);
-    if (isSaved) {
-      set.delete(lessonId);
-    } else {
-      set.add(lessonId);
-    }
-    localStorage.setItem(BOOKMARKS_KEY, JSON.stringify([...set]));
-    if (typeof window.updateProfileUI === "function") {
-      window.updateProfileUI();
-    }
-    return !isSaved;
-  } catch {
-    return false;
-  }
+  return window.IntStore ? window.IntStore.toggleBookmark(lessonId) : false;
 }
 
 // Celebration Confetti
@@ -1671,6 +1632,8 @@ if (typeof document !== "undefined") {
 }
 
 function initLessonsApp() {
+  window.IntStore?.setLessons(LESSONS);
+  window.updateProfileUI?.();
   const subjectStep = document.getElementById("subjectStep");
 const gradeStep = document.getElementById("gradeStep");
 const topicStep = document.getElementById("topicStep");
@@ -2198,6 +2161,8 @@ const quizDialog = (() => {
     const right = results.filter(Boolean).length;
     const total = lesson.quiz.length;
     const all = right === total;
+    const record = window.IntStore?.recordQuiz(lesson.id, right, total);
+    const gained = record ? record.after.xp - record.before.xp : 0;
     count.textContent = "Результат";
     feedback.hidden = true;
     body.innerHTML = `
@@ -2208,10 +2173,14 @@ const quizDialog = (() => {
           : right >= total / 2
           ? "Хороший результат. Пересмотрите видео и пройдите тест ещё раз, чтобы набрать все ответы."
           : "Стоит ещё раз посмотреть видео — потом тест пойдёт легче."}</p>
+        ${record ? `<p class="qm-xp">${gained > 0 ? `+${gained} XP` : "Опыт за этот тест уже получен"}<span>Уровень ${record.after.level} · ${record.after.name} · ${record.after.xp} XP</span></p>` : ""}
       </div>`;
     main.textContent = "Пройти снова";
     renderProgress();
     if (all) markCompleted(lesson.id);
+    if (record && record.after.level > record.before.level && typeof window.showToast === "function") {
+      window.showToast(`Новый уровень: ${record.after.level} · ${record.after.name}!`, "success", 3200);
+    }
   }
 
   function onMain() {
@@ -2280,14 +2249,17 @@ function motionOn() {
 
 // The video has ended: leave full screen first, then open the questions
 function openQuizAfterVideo(lessonId) {
+  const watched = window.IntStore?.markWatched(lessonId);
+  if (watched && typeof window.showToast === "function") {
+    window.showToast(`+${watched.after.xp - watched.before.xp} XP за просмотр видео`, "success");
+  }
   const go = () => quizDialog.open(lessonId);
   if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().then(go, go);
   else go();
 }
 
-// All answers right: save progress, celebrate, mark the card
+// All answers right (already saved by the store): celebrate and mark the card
 function markCompleted(lessonId) {
-  saveProgress(lessonId);
   launchConfetti();
   if (typeof window.showToast === "function") {
     window.showToast("Поздравляем! Урок и тест успешно пройдены 🎉", "success");
