@@ -746,6 +746,21 @@
       ];
       return { viewBox: "0 0 350 170", parts, points: [], kind: "line" };
     },
+    // circles with a shaded share each, like the pie charts in the percentages video; task.shares: [0.5, 0.25, 0.1]
+    pies(fig, t) {
+      const shares = t.shares, r = 46, step = 112;
+      const parts = shares.map((sh, i) => {
+        const x = 58 + i * step, y = 58;
+        return { id: `p${Math.round(sh * 100)}`, name: `Круг ${i + 1}`,
+          d: `M${x - r} ${y} a${r} ${r} 0 1 0 ${2 * r} 0 a${r} ${r} 0 1 0 ${-2 * r} 0 Z` };
+      });
+      const overlay = (g) => shares.forEach((sh, i) => {
+        const x = 58 + i * step, y = 58, a = sh * 2 * Math.PI;
+        const ex = x + r * Math.sin(a), ey = y - r * Math.cos(a);
+        svg("path", { d: `M${x} ${y} L${x} ${y - r} A${r} ${r} 0 ${sh > 0.5 ? 1 : 0} 1 ${ex} ${ey} Z`, class: "f-pie-slice" }, g);
+      });
+      return { viewBox: `0 0 ${shares.length * step + 4} 116`, parts, points: [], kind: "area", overlay };
+    },
     // ten balls in a box: four red, six blue
     balls(fig) {
       svg("rect", { x: 6, y: 6, width: 338, height: 148, rx: 16, class: "f-box-frame" }, fig);
@@ -1328,6 +1343,15 @@
       label(fig, ...mid(P(0, b, 0), P(0, b, c)).map((v, i) => v + (i ? 4 : -10)), `${c} см`, "f-side f-side-c", "end");
       const right = P(a, 0, 0)[0], bottom = P(a, b, 0)[1];
       return `0 0 ${right + 46} ${bottom + 28}`;
+    },
+    // a square of 100 cells with task.shaded of them filled: one cell is one percent
+    grid100(fig, t) {
+      const c = 17, x0 = 10, y0 = 10;
+      for (let i = 0; i < 100; i++) {
+        const x = x0 + (i % 10) * c, y = y0 + Math.floor(i / 10) * c;
+        svg("rect", { x: x + 1, y: y + 1, width: c - 2, height: c - 2, rx: 2, class: `f-cell${i < t.shaded ? " is-filled" : ""}` }, fig);
+      }
+      return `0 0 ${x0 * 2 + 10 * c} ${y0 * 2 + 10 * c}`;
     },
     // (100 + 1)² as a square cut into 100², two strips 100 · 1 and a tiny 1²
     square101(fig) {
