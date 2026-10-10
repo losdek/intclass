@@ -1344,6 +1344,41 @@
       const right = P(a, 0, 0)[0], bottom = P(a, b, 0)[1];
       return `0 0 ${right + 46} ${bottom + 28}`;
     },
+    // a rectangle a × b on squared paper with its sides labelled, as in the perimeter and area video
+    rectab(fig, t) {
+      const [a, b] = t.size, u = Math.min(26, 220 / a), x0 = 70, y0 = 30;
+      for (let i = 0; i <= a; i++) svg("line", { x1: x0 + i * u, y1: y0, x2: x0 + i * u, y2: y0 + b * u, class: "f-grid" }, fig);
+      for (let j = 0; j <= b; j++) svg("line", { x1: x0, y1: y0 + j * u, x2: x0 + a * u, y2: y0 + j * u, class: "f-grid" }, fig);
+      svg("rect", { x: x0, y: y0, width: a * u, height: b * u, class: "f-room" }, fig);
+      label(fig, x0 + (a * u) / 2, y0 - 10, `${a} см`, "f-side f-side-b");
+      label(fig, x0 - 34, y0 + (b * u) / 2 + 5, `${b} см`, "f-side f-side-a");
+      return `0 0 ${x0 + a * u + 24} ${y0 + b * u + 16}`;
+    },
+    // a/b = c/d with the cross of the main property drawn between the terms; one term is «x»
+    proportion(fig, t) {
+      const [n1, d1, n2, d2] = t.terms, xs = [70, 190], yN = 46, yD = 112;
+      svg("path", { d: `M${xs[0] + 18} ${yN + 10} L${xs[1] - 18} ${yD - 22} M${xs[0] + 18} ${yD - 22} L${xs[1] - 18} ${yN + 10}`, class: "f-cross-line" }, fig);
+      [[n1, d1], [n2, d2]].forEach(([n, d], i) => {
+        label(fig, xs[i], yN + 10, n, `f-prop-term${n === "x" ? " is-x" : ""}`);
+        svg("line", { x1: xs[i] - 32, y1: 70, x2: xs[i] + 32, y2: 70, class: "f-frac-bar" }, fig);
+        label(fig, xs[i], yD, d, `f-prop-term${d === "x" ? " is-x" : ""}`);
+      });
+      label(fig, 130, 80, "=", "f-prop-term");
+      return "0 0 260 130";
+    },
+    // numbers broken into prime factors, one row each: 12 = (2)(2)(3)
+    factors(fig, t) {
+      t.rows.forEach(([n, ps], r) => {
+        const y = 34 + r * 58;
+        label(fig, 78, y + 10, `${n} =`, "f-prop-term", "end");
+        ps.forEach((p, i) => {
+          const x = 110 + i * 50;
+          svg("circle", { cx: x, cy: y, r: 20, class: "f-prime" }, fig);
+          label(fig, x, y + 7, String(p), "f-prime-text");
+        });
+      });
+      return `0 0 ${110 + 50 * Math.max(...t.rows.map((r) => r[1].length))} ${t.rows.length * 58 + 12}`;
+    },
     // a square of 100 cells with task.shaded of them filled: one cell is one percent
     grid100(fig, t) {
       const c = 17, x0 = 10, y0 = 10;
