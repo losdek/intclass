@@ -2503,6 +2503,12 @@ html:has(> body.home-page) {
 .f-sq-a { fill: var(--fig-teal-soft); stroke: var(--ink); stroke-width: 2; }
 .f-cell { fill: var(--fig-paper); stroke: var(--ink); stroke-opacity: 0.35; stroke-width: 1; }
 .f-cell.is-filled { fill: var(--fig-teal); stroke-opacity: 0.6; }
+.f-cross-line { stroke: var(--fig-red); stroke-width: 2.5; stroke-dasharray: 6 5; fill: none; }
+.f-frac-bar { stroke: var(--ink); stroke-width: 3; }
+.f-prop-term { fill: var(--ink); font-family: var(--font-display); font-size: 30px; font-weight: 700; }
+.f-prop-term.is-x { fill: var(--fig-red); }
+.f-prime { fill: var(--fig-teal); }
+.f-prime-text { fill: #ffffff; font-family: var(--font-display); font-size: 20px; font-weight: 700; text-anchor: middle; }
 .f-pie-slice { fill: var(--fig-red); stroke: var(--ink); stroke-width: 1.6; pointer-events: none; }
 .f-sq-ab { fill: var(--fig-red-soft); stroke: var(--ink); stroke-width: 2; }
 .f-sq-b { fill: var(--fig-mustard); stroke: var(--ink); stroke-width: 2; }
