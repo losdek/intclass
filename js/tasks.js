@@ -1211,6 +1211,17 @@
   /* ------------------------------------------------------------------ enter
    * A drawing and a typed number. task: { figure?: "box" | "square101", unit?, buttons?, solution } */
   const ENTER_FIGURES = {
+    // a word as letter tiles, like in the phonetics video
+    letters(fig, t) {
+      const n = t.word.length, w = 56, gap = 12;
+      [...t.word].forEach((ch, i) => {
+        const x = 12 + i * (w + gap);
+        svg("rect", { x, y: 12, width: w, height: 64, rx: 10, class: "f-letter" }, fig);
+        label(fig, x + w / 2, 56, ch, "f-letter-text");
+      });
+      fig.style.maxWidth = `${Math.min(400, 40 + n * 80)}px`;
+      return `0 0 ${24 + n * (w + gap) - gap} 88`;
+    },
     // two equations joined by a brace
     system(fig, t) {
       label(fig, 18, 70, "{", "f-brace", "start");
@@ -1972,9 +1983,269 @@
     },
   };
 
+  /* ------------------------------------------------------------------ words
+   * Tap words (or letters) of a sentence. task: { tokens, solution: [indices], tiles?: true, hint? }
+   * One right token behaves like a single choice, several like a multiple choice. */
+  const wordsTask = {
+    check: (t, v) => sameSet(v, t.solution),
+    build(el, t) {
+      const multi = t.solution.length > 1;
+      const row = document.createElement("div");
+      row.className = `tok-row${t.tiles ? " is-tiles" : ""}`;
+      row.setAttribute("role", multi ? "group" : "radiogroup");
+      el.appendChild(row);
+      const picked = new Set();
+      const btns = t.tokens.map((tok, i) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "tok";
+        b.textContent = tok;
+        b.setAttribute("role", multi ? "checkbox" : "radio");
+        b.setAttribute("aria-checked", "false");
+        b.addEventListener("click", () => {
+          if (picked.has(i)) picked.delete(i);
+          else {
+            if (!multi) picked.clear();
+            picked.add(i);
+          }
+          btns.forEach((x, j) => {
+            x.classList.toggle("is-on", picked.has(j));
+            x.setAttribute("aria-checked", String(picked.has(j)));
+          });
+          if (picked.has(i)) pop(b);
+        });
+        row.appendChild(b);
+        return b;
+      });
+      const hint = document.createElement("p");
+      hint.className = "task-hint";
+      hint.textContent = t.hint || (multi ? "Нажмите на все подходящие слова" : "Нажмите на нужное слово");
+      el.appendChild(hint);
+      const lock = lockable(el);
+      return {
+        value: () => (picked.size ? [...picked] : null),
+        lock,
+        reveal() {
+          btns.forEach((b, i) => {
+            b.classList.toggle("is-answer", t.solution.includes(i));
+            b.classList.toggle("is-miss", picked.has(i) && !t.solution.includes(i));
+          });
+          answerLine(el, t.reveal || `Верно: ${listJoin(t.solution.map((i) => `«${t.tokens[i]}»`))}`);
+        },
+        reset() {
+          picked.clear();
+          btns.forEach((b) => {
+            b.classList.remove("is-on", "is-answer", "is-miss");
+            b.setAttribute("aria-checked", "false");
+          });
+          lock(false);
+        },
+      };
+    },
+  };
+
+  /* ------------------------------------------------------------------ punct
+   * Put punctuation into the gaps between words. task: { tokens, marks?: [","], solution: { gap: mark } }
+   * Tapping a gap again goes to the next mark, then clears it. Gap i sits after token i. */
+  const punctSame = (a, b) => {
+    const ka = Object.keys(a), kb = Object.keys(b);
+    return ka.length === kb.length && ka.every((k) => a[k] === b[k]);
+  };
+  const punctText = (tokens, marks) =>
+    tokens.map((tok, i) => tok + (marks[i] === undefined ? "" : marks[i] === "—" ? " —" : marks[i])).join(" ");
+  const punct = {
+    check: (t, v) => Boolean(v) && typeof v === "object" && punctSame(v, t.solution),
+    build(el, t) {
+      const marks = t.marks || [","];
+      const row = document.createElement("div");
+      row.className = "punct-row";
+      el.appendChild(row);
+      let state = {};
+      const gaps = [];
+      t.tokens.forEach((tok, i) => {
+        const w = document.createElement("span");
+        w.className = "punct-word";
+        w.textContent = tok;
+        row.appendChild(w);
+        if (i < t.tokens.length - 1) {
+          const g = document.createElement("button");
+          g.type = "button";
+          g.className = "punct-gap";
+          g.dataset.gap = String(i);
+          g.setAttribute("aria-label", `Между «${tok}» и «${t.tokens[i + 1]}»`);
+          g.addEventListener("click", () => {
+            const next = (state[i] === undefined ? -1 : marks.indexOf(state[i])) + 1;
+            if (next >= marks.length) delete state[i];
+            else state[i] = marks[next];
+            render();
+            pop(g);
+          });
+          row.appendChild(g);
+          gaps.push(g);
+        }
+      });
+      const render = () => {
+        gaps.forEach((g, i) => {
+          g.textContent = state[i] === undefined ? "" : state[i];
+          g.classList.toggle("is-on", state[i] !== undefined);
+        });
+      };
+      const hint = document.createElement("p");
+      hint.className = "task-hint";
+      hint.textContent = t.hint || (marks.length > 1 ? "Нажимайте между словами: знак меняется с каждым нажатием" : "Нажмите между словами, чтобы поставить запятую");
+      el.appendChild(hint);
+      const lock = lockable(el);
+      return {
+        value: () => (Object.keys(state).length ? { ...state } : null),
+        lock,
+        reveal() {
+          const sol = t.solution;
+          gaps.forEach((g, i) => {
+            const mine = state[i], right = sol[i];
+            g.classList.toggle("is-answer", right !== undefined && mine === right);
+            g.classList.toggle("is-miss", mine !== undefined && mine !== right);
+            g.classList.toggle("is-missing", right !== undefined && mine !== right);
+          });
+          answerLine(el, t.reveal || `Верно: ${punctText(t.tokens, sol)}`);
+        },
+        reset() {
+          state = {};
+          gaps.forEach((g) => g.classList.remove("is-answer", "is-miss", "is-missing"));
+          render();
+          lock(false);
+        },
+      };
+    },
+  };
+
+  /* ----------------------------------------------------------------- choice
+   * A list of answer cards. task: { options, solution: [indices] } — several right answers make it a multiple choice. */
+  const choice = {
+    check: (t, v) => sameSet(v, t.solution),
+    build(el, t) {
+      const multi = t.solution.length > 1;
+      const list = document.createElement("div");
+      list.className = "choice-list";
+      list.setAttribute("role", multi ? "group" : "radiogroup");
+      el.appendChild(list);
+      const picked = new Set();
+      const btns = t.options.map((opt, i) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "choice-opt";
+        b.textContent = opt;
+        b.setAttribute("role", multi ? "checkbox" : "radio");
+        b.setAttribute("aria-checked", "false");
+        b.addEventListener("click", () => {
+          if (picked.has(i)) picked.delete(i);
+          else {
+            if (!multi) picked.clear();
+            picked.add(i);
+          }
+          btns.forEach((x, j) => {
+            x.classList.toggle("is-on", picked.has(j));
+            x.setAttribute("aria-checked", String(picked.has(j)));
+          });
+        });
+        list.appendChild(b);
+        return b;
+      });
+      if (multi) {
+        const hint = document.createElement("p");
+        hint.className = "task-hint";
+        hint.textContent = "Можно выбрать несколько вариантов";
+        el.appendChild(hint);
+      }
+      const lock = lockable(el);
+      return {
+        value: () => (picked.size ? [...picked] : null),
+        lock,
+        reveal() {
+          btns.forEach((b, i) => {
+            b.classList.toggle("is-answer", t.solution.includes(i));
+            b.classList.toggle("is-miss", picked.has(i) && !t.solution.includes(i));
+          });
+          if (t.reveal) answerLine(el, t.reveal);
+        },
+        reset() {
+          picked.clear();
+          btns.forEach((b) => {
+            b.classList.remove("is-on", "is-answer", "is-miss");
+            b.setAttribute("aria-checked", "false");
+          });
+          lock(false);
+        },
+      };
+    },
+  };
+
+  /* ------------------------------------------------------------------- sort
+   * Put every item into one of the groups: a tap sends it to the next group. task: { items, buckets, tags?, solution: [group per item] } */
+  const sort = {
+    check: (t, v) => sameList(v, t.solution),
+    build(el, t) {
+      const tags = t.tags || t.buckets.map((_, i) => String(i + 1));
+      const legend = document.createElement("div");
+      legend.className = "sort-legend";
+      legend.innerHTML = t.buckets.map((b, i) => `<span class="sort-key b${i}"><i>${tags[i]}</i></span>`).join("");
+      t.buckets.forEach((b, i) => (legend.children[i].append(` ${b}`)));
+      el.appendChild(legend);
+      const list = document.createElement("div");
+      list.className = "sort-list";
+      el.appendChild(list);
+      let state = t.items.map(() => null);
+      const chips = t.items.map((item, i) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "sort-chip";
+        b.innerHTML = `<span class="sort-tag"></span><span class="sort-word"></span>`;
+        b.querySelector(".sort-word").textContent = item;
+        b.addEventListener("click", () => {
+          state[i] = state[i] === null ? 0 : (state[i] + 1) % t.buckets.length;
+          render();
+          pop(b);
+        });
+        list.appendChild(b);
+        return b;
+      });
+      const render = () => {
+        chips.forEach((b, i) => {
+          b.dataset.b = state[i] === null ? "" : String(state[i]);
+          b.querySelector(".sort-tag").textContent = state[i] === null ? "?" : tags[state[i]];
+        });
+      };
+      const hint = document.createElement("p");
+      hint.className = "task-hint";
+      hint.textContent = t.hint || "Нажимайте на слово, чтобы отправить его в группу";
+      el.appendChild(hint);
+      render();
+      const lock = lockable(el);
+      return {
+        value: () => (state.every((v) => v !== null) ? [...state] : null),
+        lock,
+        reveal() {
+          chips.forEach((b, i) => {
+            b.classList.toggle("is-miss", state[i] !== t.solution[i]);
+            b.classList.toggle("is-answer", state[i] === t.solution[i]);
+          });
+          state = [...t.solution];
+          render();
+          answerLine(el, t.reveal || "Верные группы показаны цветом");
+        },
+        reset() {
+          state = t.items.map(() => null);
+          chips.forEach((b) => b.classList.remove("is-answer", "is-miss"));
+          render();
+          lock(false);
+        },
+      };
+    },
+  };
+
   const TASK_TYPES = {
     scales, angle, numberline, plane, pick, level, "triangle-sum": triangleSum, line,
     strips, rect: rectangle, enter, roll, order, signs, move, sticks, match, table, parabola, ray,
+    words: wordsTask, punct, choice, sort,
   };
 
   const IntTasks = {
