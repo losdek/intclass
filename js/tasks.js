@@ -1512,7 +1512,7 @@
     check: (t, v) => sameList(v, t.solution),
     build(el, t) {
       const box = document.createElement("div");
-      box.className = "order-board";
+      box.className = `order-board${t.items.some((v) => typeof v !== "number") ? " is-text" : ""}`;
       box.innerHTML = `<div class="order-slots" aria-label="Ряд"></div><div class="order-pool" aria-label="Карточки"></div>`;
       el.appendChild(box);
       const slots = box.querySelector(".order-slots"), pool = box.querySelector(".order-pool");

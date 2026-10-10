@@ -2610,6 +2610,29 @@ html:has(> body.home-page) {
   visibility: hidden;
 }
 
+/* phrases instead of numbers: full-width rows, one under another */
+.order-board.is-text .order-slots,
+.order-board.is-text .order-pool {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.order-board.is-text .order-slot,
+.order-board.is-text .order-card {
+  width: auto;
+  min-height: 46px;
+  height: auto;
+  padding: 0.45rem 0.9rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.order-board.is-text .order-card.is-gone {
+  display: none;
+}
+
 .order-slot.is-middle,
 .order-card.is-middle {
   box-shadow: 0 0 0 3px var(--fig-mustard);
