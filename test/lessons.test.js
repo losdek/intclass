@@ -9,9 +9,9 @@ const IntStore = require("../js/store.js");
 const ROOT = path.join(__dirname, "..");
 
 describe("Lessons Dataset Validation", () => {
-  test("LESSONS array contains 45 curriculum lessons", () => {
+  test("LESSONS array contains 51 curriculum lessons", () => {
     assert.ok(Array.isArray(LESSONS));
-    assert.strictEqual(LESSONS.length, 45, `Expected 45 lessons, got ${LESSONS.length}`);
+    assert.strictEqual(LESSONS.length, 51, `Expected 51 lessons, got ${LESSONS.length}`);
   });
 
   test("Every lesson has valid unique ID", () => {
