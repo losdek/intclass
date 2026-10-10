@@ -116,7 +116,9 @@ function toggleTheme(event) {
     const x = rect.left + rect.width / 2;
     const y = rect.top + rect.height / 2;
     const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+    root.classList.add("theme-vt");
     const transition = document.startViewTransition(() => applyTheme(next));
+    transition.finished.finally(() => root.classList.remove("theme-vt"));
     transition.ready
       .then(() => {
         root.animate(
@@ -271,24 +273,44 @@ window.updateProfileUI = updateProfileUI;
 // 5. High-performance Nav Scroll & Interactive Reading Progress
 let scrollScheduled = false;
 
-// Header hides while scrolling down past the first screen and returns on any scroll up
+// Header: hides while reading downwards (after the top of the page) and comes back on any scroll up.
+// Direction is tracked with a little hysteresis so small jitters and the iOS address bar don't flicker it.
 const firstScreen = document.querySelector(".hero, .page-head");
-let lastDirectionY = window.scrollY;
+const HIDE_AFTER = 28; // px scrolled down in one go before the header slides away
+const SHOW_AFTER = 10; // px scrolled up before it returns
+let headerLastY = window.scrollY;
+let headerAnchorY = window.scrollY;
+let headerDirection = 0;
 
-function updateHeaderVisibility(scrollY) {
+function updateHeaderVisibility(rawY) {
   if (!nav) return;
-  const firstScreenEnd = firstScreen ? firstScreen.offsetTop + firstScreen.offsetHeight : 240;
-  const busy = document.body.classList.contains("menu-open") || document.body.classList.contains("modal-open");
-  if (busy || scrollY <= firstScreenEnd) {
+  const y = Math.max(0, rawY); // rubber-banding at the top reports negative values
+  const maxY = document.documentElement.scrollHeight - window.innerHeight;
+  const firstScreenH = firstScreen ? firstScreen.offsetTop + firstScreen.offsetHeight : 400;
+  const hideFrom = Math.min(Math.max(firstScreenH * 0.35, 140), 420);
+  const locked = document.body.classList.contains("menu-open") || document.body.classList.contains("modal-open");
+
+  const direction = y > headerLastY ? 1 : y < headerLastY ? -1 : 0;
+  if (direction !== 0 && direction !== headerDirection) {
+    headerDirection = direction;
+    headerAnchorY = headerLastY; // distance counts from where this direction started
+  }
+  headerLastY = y;
+
+  if (locked || y <= hideFrom) {
     nav.classList.remove("nav-hidden");
-    lastDirectionY = scrollY;
+    headerAnchorY = y;
     return;
   }
-  const delta = scrollY - lastDirectionY;
-  if (Math.abs(delta) < 8) return; // ignore jitter; small moves add up until they count
-  nav.classList.toggle("nav-hidden", delta > 0);
-  lastDirectionY = scrollY;
+  if (y >= maxY - 2) return; // bounce at the very bottom must not toggle it
+
+  const travelled = Math.abs(y - headerAnchorY);
+  if (headerDirection > 0 && travelled > HIDE_AFTER) nav.classList.add("nav-hidden");
+  else if (headerDirection < 0 && travelled > SHOW_AFTER) nav.classList.remove("nav-hidden");
 }
+
+// keyboard users tabbing into the header must always see it
+nav?.addEventListener("focusin", () => nav.classList.remove("nav-hidden"));
 
 function onScroll() {
   const scrollY = window.scrollY;
