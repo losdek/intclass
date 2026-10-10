@@ -2288,6 +2288,60 @@ html:has(> body.home-page) {
 .f-hop-text { fill: var(--ink); font-weight: 700; }
 .f-root { fill: var(--fig-red); stroke: var(--surface); stroke-width: 2.5; }
 
+/* inequality ray, graphs given on the grid, balls in a box, an equation system */
+.f-ray-band { stroke: var(--accent); stroke-width: 7; stroke-linecap: round; stroke-opacity: 0.75; }
+.f-ray-head { fill: var(--accent); }
+.f-ray-dot { fill: var(--fig-paper); stroke: var(--accent); stroke-width: 3.5; }
+.f-ray-dot.is-closed { fill: var(--accent); }
+.f-graph-given.f-graph-0 { stroke: var(--fig-teal); stroke-dasharray: none; }
+.f-graph-given.f-graph-1 { stroke: var(--fig-mustard); stroke-dasharray: none; }
+.f-graph-given.f-curve { stroke: var(--accent); stroke-dasharray: none; }
+.f-box-frame { fill: var(--fig-paper); stroke: var(--ink); stroke-width: 2.5; }
+.f-ball-red { fill: var(--fig-red); }
+.f-ball-blue { fill: var(--accent); }
+.f-part-ball .f-part-shape { stroke: transparent; stroke-width: 4; transition: stroke var(--fast) var(--ease); }
+.f-part-ball.is-on .f-part-shape { stroke: var(--ink); stroke-width: 5; }
+.f-part-ball.is-answer .f-part-shape { stroke: var(--success); stroke-width: 6; }
+.f-part-ball.is-miss .f-part-shape { stroke: var(--danger); stroke-width: 6; stroke-dasharray: 4 3; }
+.f-brace { fill: var(--ink); font-size: 96px; font-weight: 300; }
+.f-eq-text { fill: var(--ink); font-family: var(--font-display); font-size: 28px; font-weight: 700; }
+
+.task-toggle {
+  display: inline-flex;
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+}
+
+.task-toggle button {
+  min-height: 44px;
+  padding: 0 0.85rem;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: background var(--fast) var(--ease), color var(--fast) var(--ease);
+}
+
+.task-toggle button + button {
+  border-left: 1px solid var(--border-strong);
+}
+
+.task-toggle button.is-on {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.task-pick .task-fig.fig-parabs,
+.task-pick .task-fig.fig-balls,
+.task-enter .task-fig.fig-balls {
+  max-width: 400px;
+}
+
+.task-enter .task-fig.fig-system {
+  max-width: 320px;
+}
+
 /* bar model */
 .f-strip rect { stroke: var(--fig-paper); stroke-width: 2; transition: fill var(--fast) var(--ease); }
 .f-strip-n rect { fill: var(--fig-teal); }

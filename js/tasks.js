@@ -494,13 +494,25 @@
     };
   }
 
+  // y = ax² + bx + c across the grid, clipped to it
+  function parabolaPath(fig, R, C, O, q, cls) {
+    const clip = svg("clipPath", { id: `clip-${Math.random().toString(36).slice(2)}` }, fig);
+    svg("rect", { x: O - R * C, y: O - R * C, width: 2 * R * C, height: 2 * R * C }, clip);
+    let d = "";
+    for (let i = 0; i <= 100; i++) {
+      const x = -R - 1 + (2 * R + 2) * i / 100, y = q.a * x * x + q.b * x + q.c;
+      d += `${i ? "L" : "M"}${O + x * C} ${O - clamp(y, -R - 4, R + 4) * C} `;
+    }
+    return svg("path", { d, class: cls, fill: "none", "clip-path": `url(#${clip.id})` }, fig);
+  }
+
   const QUADRANT = { 1: [1, 1], 2: [-1, 1], 3: [-1, -1], 4: [1, -1] };
 
   /* ------------------------------------------------------------------ plane
    * Put a point on the grid. task: { range, solution: [x, y], name?, quadrant?, given?, shape?, graph? }
    *   quadrant: any point of that quarter is right (solution is just an example)
    *   given: [[x, y, "B"], …] fixed points; shape: names in order, "?" for the pupil's point
-   *   graph: { k, b } draws y = kx + b */
+   *   graph: { k, b } draws y = kx + b; graphs: [{ k, b }, …] several lines; curves: [{ a, b, c }, …] parabolas */
   const plane = {
     check: (t, v) => {
       if (!Array.isArray(v)) return false;
@@ -523,9 +535,10 @@
           x: sx > 0 ? O : O - R * C, y: sy > 0 ? O - R * C : O, width: R * C, height: R * C, class: "f-quadrant",
         }, fig);
       }
-      if (t.graph) {
-        graphLine(fig, R, C, O, "f-graph f-graph-given")(t.graph.k, t.graph.b);
-      }
+      [...(t.graph ? [t.graph] : []), ...(t.graphs || [])].forEach((g, i) => {
+        graphLine(fig, R, C, O, `f-graph f-graph-given f-graph-${i}`)(g.k, g.b);
+      });
+      (t.curves || []).forEach((q, i) => parabolaPath(fig, R, C, O, q, `f-graph f-graph-given f-curve f-graph-${i + 2}`));
       const shape = t.shape ? svg("path", { class: "f-shape" }, fig) : null;
       const points = {};
       (t.given || []).forEach(([x, y, n]) => {
@@ -716,6 +729,33 @@
       const points = [["A", ...A, -14, 4], ["B", ...B, 12, 14], ["C", ...C, -14, 16]];
       return { viewBox: "0 0 290 196", parts, points, kind: "line", overlay };
     },
+    // three parabolas side by side: narrow up, down, wide up
+    parabs() {
+      const graph = (cx, a, w) => {
+        let d = "";
+        for (let i = 0; i <= 40; i++) {
+          const x = -1 + i / 20, y = a * x * x;
+          d += `${i ? "L" : "M"}${cx + x * w} ${90 - y * 60 + (a < 0 ? -30 : 30)} `;
+        }
+        return d;
+      };
+      const parts = [
+        { id: "narrow", name: "Первый график", d: graph(60, 1.4, 34) },
+        { id: "down", name: "Второй график", d: graph(170, -1, 50) },
+        { id: "wide", name: "Третий график", d: graph(285, 0.5, 60) },
+      ];
+      return { viewBox: "0 0 350 170", parts, points: [], kind: "line" };
+    },
+    // ten balls in a box: four red, six blue
+    balls(fig) {
+      svg("rect", { x: 6, y: 6, width: 338, height: 148, rx: 16, class: "f-box-frame" }, fig);
+      const parts = Array.from({ length: 10 }, (_, i) => {
+        const x = 42 + (i % 5) * 66, y = 46 + Math.floor(i / 5) * 68, r = 24;
+        return { id: `b${i}`, name: `${i < 4 ? "Красный" : "Синий"} шар ${i + 1}`, ball: i < 4 ? "red" : "blue",
+          d: `M${x - r} ${y} a${r} ${r} 0 1 0 ${2 * r} 0 a${r} ${r} 0 1 0 ${-2 * r} 0 Z` };
+      });
+      return { viewBox: "0 0 350 160", parts, points: [], kind: "ball" };
+    },
     // equilateral, isosceles and scalene triangles; equal sides carry the same tick marks
     triangles() {
       const tri = (pts) => `M${pts.map((p) => p.join(" ")).join(" L")} Z`;
@@ -764,7 +804,7 @@
           "aria-label": part.name,
         }, fig);
         if (kind === "line") svg("path", { d: part.d, class: "f-hit-line" }, g);
-        svg("path", { d: part.d, class: "f-part-shape" }, g);
+        svg("path", { d: part.d, class: `f-part-shape${part.ball ? ` f-ball-${part.ball}` : ""}` }, g);
         if (part.text) label(g, part.c[0], part.c[1] + (part.textClass ? 0 : 6), part.text, part.textClass || (part.always ? "f-wedge-num" : "f-area-text"));
         toggleable(g, () => {
           if (!multi) {
@@ -1171,6 +1211,20 @@
   /* ------------------------------------------------------------------ enter
    * A drawing and a typed number. task: { figure?: "box" | "square101", unit?, buttons?, solution } */
   const ENTER_FIGURES = {
+    // two equations joined by a brace
+    system(fig, t) {
+      label(fig, 18, 70, "{", "f-brace", "start");
+      t.lines.forEach((ln, i) => label(fig, 48, 46 + i * 46, ln, "f-eq-text", "start"));
+      return "0 0 300 110";
+    },
+    // ten balls in a box: four red, six blue
+    balls(fig) {
+      svg("rect", { x: 6, y: 6, width: 338, height: 148, rx: 16, class: "f-box-frame" }, fig);
+      for (let i = 0; i < 10; i++) {
+        svg("circle", { cx: 42 + (i % 5) * 66, cy: 46 + Math.floor(i / 5) * 68, r: 24, class: i < 4 ? "f-ball-red" : "f-ball-blue" }, fig);
+      }
+      return "0 0 350 160";
+    },
     // a right triangle with its sides labelled, e.g. legs 6 and 8, hypotenuse «?»
     righttri(fig, t) {
       const [la, lb] = t.legs;
@@ -1223,6 +1277,8 @@
     cards(fig, t) {
       const n = t.cards.length, w = 52, gap = 22, y = 50;
       const x0 = 14;
+      // a short row of cards must not blow up to the full width
+      fig.style.maxWidth = `${Math.min(400, 40 + n * 80)}px`;
       t.cards.forEach((v, i) => {
         const x = x0 + i * (w + gap);
         if (v === "…") {
@@ -1836,9 +1892,89 @@
     },
   };
 
+  /* -------------------------------------------------------------------- ray
+   * The solution of an inequality on the number line: tap the boundary, then choose
+   * the direction and whether the point is filled. task: { min, max, solution: { at, dir: ">" | "<", closed } } */
+  const ray = {
+    check: (t, v) => Boolean(v) && v.at === t.solution.at && v.dir === t.solution.dir && v.closed === t.solution.closed,
+    build(el, t) {
+      const n = t.max - t.min, X0 = 18, STEP = 294 / n, Y = 40, H = 76;
+      const at = (v) => X0 + (v - t.min) * STEP;
+      const fig = figure(el, `0 0 340 ${H}`, "Числовая ось");
+      fig.classList.add("is-tappable");
+      svg("line", { x1: 4, y1: Y, x2: 334, y2: Y, class: "f-axis" }, fig);
+      svg("path", { d: `M336 ${Y} l-9 -5 v10 Z`, class: "f-ink" }, fig);
+      const band = svg("line", { y1: Y, y2: Y, class: "f-ray-band", visibility: "hidden" }, fig);
+      const head = svg("path", { class: "f-ray-head", visibility: "hidden" }, fig);
+      for (let v = t.min; v <= t.max; v++) {
+        svg("line", { x1: at(v), y1: Y - 6, x2: at(v), y2: Y + 6, class: "f-tick" }, fig);
+        label(fig, at(v), Y + 26, num(v), v === 0 ? "f-label f-zero" : "f-label");
+      }
+      const dot = svg("circle", { r: 8, cy: Y, class: "f-ray-dot", visibility: "hidden" }, fig);
+      const box = controls(el);
+      box.innerHTML = `
+        <div class="task-toggle" role="group" aria-label="Направление">
+          <button type="button" data-dir="<">← меньше</button><button type="button" data-dir=">">больше →</button>
+        </div>
+        <div class="task-toggle" role="group" aria-label="Граница">
+          <button type="button" data-closed="0">○ не входит</button><button type="button" data-closed="1">● входит</button>
+        </div>`;
+      let state = { at: null, dir: null, closed: null };
+      const draw = () => {
+        const ready = state.at !== null;
+        dot.setAttribute("visibility", ready ? "visible" : "hidden");
+        if (ready) dot.setAttribute("cx", at(state.at));
+        dot.classList.toggle("is-closed", state.closed === true);
+        const show = ready && state.dir !== null;
+        band.setAttribute("visibility", show ? "visible" : "hidden");
+        head.setAttribute("visibility", show ? "visible" : "hidden");
+        if (show) {
+          const end = state.dir === ">" ? 330 : 10;
+          band.setAttribute("x1", at(state.at));
+          band.setAttribute("x2", end);
+          head.setAttribute("d", state.dir === ">" ? `M336 ${Y} l-12 -8 v16 Z` : `M4 ${Y} l12 -8 v16 Z`);
+        }
+        box.querySelectorAll("[data-dir]").forEach((b) => b.classList.toggle("is-on", b.dataset.dir === state.dir));
+        box.querySelectorAll("[data-closed]").forEach((b) => b.classList.toggle("is-on", state.closed !== null && b.dataset.closed === (state.closed ? "1" : "0")));
+        const sign = state.dir === null ? "?" : state.dir === ">" ? (state.closed ? "≥" : ">") : (state.closed ? "≤" : "<");
+        fig.setAttribute("aria-label", ready ? `x ${sign} ${num(state.at)}` : "Числовая ось");
+      };
+      fig.addEventListener("click", (event) => {
+        const p = pointer(fig, event);
+        state.at = clamp(Math.round((p.x - X0) / STEP) + t.min, t.min, t.max);
+        draw();
+        pop(dot);
+      });
+      box.addEventListener("click", (event) => {
+        const b = event.target.closest("button");
+        if (!b) return;
+        if (b.dataset.dir) state.dir = b.dataset.dir;
+        if (b.dataset.closed) state.closed = b.dataset.closed === "1";
+        draw();
+      });
+      draw();
+      const lock = lockable(el);
+      return {
+        value: () => (state.at !== null && state.dir !== null && state.closed !== null ? { ...state } : null),
+        lock,
+        reveal() {
+          state = { ...t.solution };
+          draw();
+          const sign = t.solution.dir === ">" ? (t.solution.closed ? "≥" : ">") : (t.solution.closed ? "≤" : "<");
+          answerLine(el, t.reveal || `Верно: x ${sign} ${num(t.solution.at)}`);
+        },
+        reset() {
+          state = { at: null, dir: null, closed: null };
+          draw();
+          lock(false);
+        },
+      };
+    },
+  };
+
   const TASK_TYPES = {
     scales, angle, numberline, plane, pick, level, "triangle-sum": triangleSum, line,
-    strips, rect: rectangle, enter, roll, order, signs, move, sticks, match, table, parabola,
+    strips, rect: rectangle, enter, roll, order, signs, move, sticks, match, table, parabola, ray,
   };
 
   const IntTasks = {
