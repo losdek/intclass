@@ -55,7 +55,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@600;700&display=swap" rel="stylesheet">
   <link rel="manifest" href="../manifest.webmanifest">
-  <link rel="stylesheet" href="../css/style.css?v=20261009_06">
+  <link rel="stylesheet" href="../css/style.css?v=20261010_01">
 </head>
 <body class="lessons-page">
   <!-- Header / Navigation -->
@@ -157,22 +157,74 @@
     <section class="section lessons-section">
       <div class="container lesson-flow">
 
-        <!-- Progress Indicator -->
-        <div class="flow-progress" id="flowProgress" aria-label="Маршрут подбора урока">
-          <span class="progress-caption">Маршрут:</span>
-          <div class="progress-step active" data-step-indicator="1">
-            <span class="step-dot">1</span>
-            <span class="step-text">Предмет</span>
+        <!-- Steps: one box; each choice swaps in the next step in place -->
+        <div class="flow-box reveal" id="flowBox" data-pane="1">
+          <nav class="flow-progress" id="flowProgress" aria-label="Маршрут подбора урока">
+            <button class="progress-step active" type="button" data-step-indicator="1" aria-current="step">
+              <span class="step-dot">1</span>
+              <span class="step-text">Предмет</span>
+            </button>
+            <span class="progress-divider" aria-hidden="true"></span>
+            <button class="progress-step" type="button" data-step-indicator="2" disabled>
+              <span class="step-dot">2</span>
+              <span class="step-text">Класс</span>
+            </button>
+            <span class="progress-divider" aria-hidden="true"></span>
+            <button class="progress-step" type="button" data-step-indicator="3" disabled>
+              <span class="step-dot">3</span>
+              <span class="step-text">Видео</span>
+            </button>
+          </nav>
+
+          <!-- Step 1: Subject -->
+          <div class="flow-step" id="subjectStep" data-pane-id="1">
+            <div class="flow-heading">
+              <h2>Выберите предмет</h2>
+            </div>
+            <p class="flow-description">Начните с предмета, тему по которому хотите разобрать сегодня.</p>
+            <div class="choice-grid subject-choices">
+              <button class="choice-card" type="button" data-subject="math">
+                <span class="choice-icon" aria-hidden="true">∑</span>
+                <div class="choice-info">
+                  <strong>Математика</strong>
+                  <small>Алгебра, геометрия, дроби и подготовка к экзаменам</small>
+                </div>
+              </button>
+              <button class="choice-card" type="button" data-subject="russian">
+                <span class="choice-icon" aria-hidden="true">А</span>
+                <div class="choice-info">
+                  <strong>Русский язык</strong>
+                  <small>Орфография, пунктуация, правила и синтаксис</small>
+                </div>
+              </button>
+            </div>
           </div>
-          <div class="progress-divider"></div>
-          <div class="progress-step" data-step-indicator="2">
-            <span class="step-dot">2</span>
-            <span class="step-text">Класс</span>
+
+          <!-- Step 2: Grade -->
+          <div class="flow-step" id="gradeStep" data-pane-id="2">
+            <div class="flow-heading">
+              <button class="flow-back" type="button" data-go="1" aria-label="Назад к выбору предмета">←</button>
+              <h2>Выберите класс</h2>
+            </div>
+            <p class="flow-description" id="gradeHint">Выберите класс</p>
+            <div class="choice-grid grade-choices" role="group" aria-label="Выбор класса">
+              <button class="choice-card compact selected" type="button" data-grade="all"><span>Все классы</span></button>
+              <button class="choice-card compact" type="button" data-grade="5"><span>5 класс</span></button>
+              <button class="choice-card compact" type="button" data-grade="6"><span>6 класс</span></button>
+              <button class="choice-card compact" type="button" data-grade="7"><span>7 класс</span></button>
+              <button class="choice-card compact" type="button" data-grade="8"><span>8 класс</span></button>
+              <button class="choice-card compact" type="button" data-grade="9"><span>9 класс</span></button>
+            </div>
           </div>
-          <div class="progress-divider"></div>
-          <div class="progress-step" data-step-indicator="3">
-            <span class="step-dot">3</span>
-            <span class="step-text">Видео</span>
+
+          <!-- Step 3: Video / topic -->
+          <div class="flow-step" id="topicStep" data-pane-id="3">
+            <div class="flow-heading">
+              <button class="flow-back" type="button" data-go="2" aria-label="Назад к выбору класса">←</button>
+              <h2>Выберите видео</h2>
+            </div>
+            <p class="flow-description" id="topicHint">Выберите тему — откроется видео и тест к нему</p>
+            <div class="choice-grid topic-choices" id="topicChoices"></div>
           </div>
         </div>
 
@@ -207,67 +259,6 @@
           <button class="filter-tab-btn" type="button" data-filter="favorites">★ Избранное</button>
           <button class="filter-tab-btn" type="button" data-filter="completed">✓ Изученные</button>
           <button class="filter-tab-btn" type="button" data-filter="uncompleted">В процессе</button>
-        </div>
-
-        <!-- Step 1: Subject Selection -->
-        <div class="flow-step reveal" id="subjectStep">
-          <div class="flow-heading">
-            <span class="flow-number">01</span>
-            <div>
-              <p class="section-label">Первый шаг</p>
-              <h2>Выберите предмет</h2>
-            </div>
-          </div>
-          <p class="flow-description">Начните с предмета, тему по которому хотите разобрать сегодня.</p>
-          <div class="choice-grid subject-choices">
-            <button class="choice-card" type="button" data-subject="math">
-              <span class="choice-icon" aria-hidden="true">∑</span>
-              <div class="choice-info">
-                <strong>Математика</strong>
-                <small>Алгебра, геометрия, дроби и подготовка к экзаменам</small>
-              </div>
-            </button>
-            <button class="choice-card" type="button" data-subject="russian">
-              <span class="choice-icon" aria-hidden="true">А</span>
-              <div class="choice-info">
-                <strong>Русский язык</strong>
-                <small>Орфография, пунктуация, правила и синтаксис</small>
-              </div>
-            </button>
-          </div>
-        </div>
-
-        <!-- Step 2: Grade Selection (Horizontal Swipeable Pill Bar on Mobile) -->
-        <div class="flow-step reveal is-locked" id="gradeStep">
-          <div class="flow-heading">
-            <span class="flow-number">02</span>
-            <div>
-              <p class="section-label">Второй шаг</p>
-              <h2>Выберите класс</h2>
-            </div>
-          </div>
-          <p class="flow-hint" id="gradeHint">Сначала выберите предмет на шаге 1</p>
-          <div class="choice-grid grade-choices" role="region" aria-label="Выбор класса">
-            <button class="choice-card compact selected" type="button" data-grade="all"><span>Все классы</span></button>
-            <button class="choice-card compact" type="button" data-grade="5"><span>5 класс</span></button>
-            <button class="choice-card compact" type="button" data-grade="6"><span>6 класс</span></button>
-            <button class="choice-card compact" type="button" data-grade="7"><span>7 класс</span></button>
-            <button class="choice-card compact" type="button" data-grade="8"><span>8 класс</span></button>
-            <button class="choice-card compact" type="button" data-grade="9"><span>9 класс</span></button>
-          </div>
-        </div>
-
-        <!-- Step 3: Topic Selection -->
-        <div class="flow-step reveal is-locked" id="topicStep">
-          <div class="flow-heading">
-            <span class="flow-number">03</span>
-            <div>
-              <p class="section-label">Третий шаг</p>
-              <h2>Выберите видео</h2>
-            </div>
-          </div>
-          <p class="flow-hint" id="topicHint">Выберите конкретное видео, чтобы сфокусироваться на одной теме</p>
-          <div class="choice-grid topic-choices" id="topicChoices"></div>
         </div>
 
         <!-- Results: Lessons Grid & Quizzes -->

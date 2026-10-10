@@ -38,7 +38,7 @@ document.addEventListener(
 const RIPPLE_TARGETS = [
   ".btn", ".card", ".choice-card", ".topic-chip", ".filter-tab-btn", ".quiz-option-label",
   ".nav-quick-subject", ".theme-toggle-btn", ".nav-profile-btn", ".reset-button", ".quiz-unlock-btn",
-  ".quiz-toggle-btn", ".quiz-check-btn", ".quiz-retry-btn", ".card-icon-action"
+  ".card-icon-action", ".order-card", ".match-btn", ".term-btn", ".sign-btn"
 ].join(", ");
 
 document.addEventListener(

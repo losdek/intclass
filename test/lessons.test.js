@@ -82,14 +82,16 @@ describe("Lessons Dataset Validation", () => {
     });
   });
 
-  test("Every lesson with a video has an interactive task, and every task accepts its own solution", () => {
+  test("Every lesson with a video has four interactive questions, and every task accepts its own solution", () => {
     LESSONS.filter((l) => l.video).forEach((lesson) => {
-      assert.ok(lesson.quiz.some((q) => q.type), `No interactive task in ${lesson.id}`);
+      assert.strictEqual(lesson.quiz.length, 4, `${lesson.id} should have 4 questions`);
+      assert.ok(lesson.quiz.every((q) => q.type), `${lesson.id} has a question that is not interactive`);
     });
     LESSONS.flatMap((l) => l.quiz.map((q) => [l.id, q])).filter(([, q]) => q.type).forEach(([id, q]) => {
       assert.ok(IntTasks.TASK_TYPES[q.type], `Unknown task type ${q.type} in ${id}`);
-      assert.ok(q.solution !== undefined, `Task without solution in ${id}`);
-      assert.ok(IntTasks.check(q, q.solution), `The solution of ${id} (${q.type}) does not pass its own check`);
+      const solution = IntTasks.solutionOf(q);
+      assert.ok(solution !== undefined, `Task without solution in ${id}`);
+      assert.ok(IntTasks.check(q, solution), `The solution of ${id} (${q.type}) does not pass its own check`);
       assert.strictEqual(IntTasks.check(q, null), false, `Unanswered task counts as correct in ${id}`);
     });
   });
@@ -128,6 +130,54 @@ describe("Lessons Dataset Validation", () => {
     const line = { type: "line", points: [[0, -1], [2, 3]], solution: { k: 2, b: -1 } };
     assert.ok(check(line, { k: 2, b: -1 }));
     assert.ok(!check(line, { k: 1, b: -1 }) && !check(line, { k: 2, b: 1 }));
+
+    const parallel = { type: "line", points: [[0, 1]], parallel: { k: 2, b: -3 }, solution: { k: 2, b: 1 } };
+    assert.ok(check(parallel, { k: 2, b: 1 }));
+    assert.ok(!check(parallel, { k: 1, b: 1 }), "a line through the point but not parallel");
+
+    const quadrant = { type: "plane", quadrant: 2, solution: [-2, 3] };
+    assert.ok(check(quadrant, [-4, 1]) && check(quadrant, [-1, 5]));
+    assert.ok(!check(quadrant, [2, 3]) && !check(quadrant, [0, 3]) && !check(quadrant, [-2, -3]));
+
+    const strips = { type: "strips", solution: 25 };
+    assert.ok(check(strips, 25) && !check(strips, 55));
+
+    const rect = { type: "rect", area: 12, perimeter: 14, solution: [4, 3] };
+    assert.ok(check(rect, [4, 3]) && check(rect, [3, 4]));
+    assert.ok(!check(rect, [6, 2]) && !check(rect, [12, 1]), "same area, wrong perimeter");
+
+    const roll = { type: "roll", accept: [3.1, 3.18], solution: 3.14 };
+    assert.ok(check(roll, 3.14) && check(roll, 3.1));
+    assert.ok(!check(roll, 3) && !check(roll, 1));
+
+    const order = { type: "order", items: [3, 7, 2, 5, 3], solution: [2, 3, 3, 5, 7] };
+    assert.ok(check(order, [2, 3, 3, 5, 7]));
+    assert.ok(!check(order, [3, 7, 2, 5, 3]) && !check(order, [7, 5, 3, 3, 2]));
+
+    const signs = { type: "signs", terms: ["a²", "2ab", "b²"], solution: ["+", "−", "+"] };
+    assert.ok(check(signs, ["+", "−", "+"]));
+    assert.ok(!check(signs, ["+", "+", "+"]) && !check(signs, ["−", "−", "−"]));
+
+    const move = { type: "move", left: ["5x", "−3"], right: ["2x", "9"] };
+    assert.ok(check(move, ["L", "R", "L", "R"]));
+    assert.ok(!check(move, ["L", "L", "R", "R"]), "nothing moved");
+    assert.ok(!check(move, ["L", "R", "R", "R"]), "only the number moved");
+
+    const sticks = { type: "sticks", a: 3, b: 4, max: 10, solution: 6 };
+    assert.ok(check(sticks, 6) && !check(sticks, 7));
+
+    const match = { type: "match", solution: [1, 2, 0] };
+    assert.ok(check(match, [1, 2, 0]) && !check(match, [2, 1, 0]));
+
+    const table = { type: "table", k: 2, b: -1, xs: [-1, 0, 1, 2], solution: [-3, -1, 1, 3] };
+    assert.ok(check(table, [-3, -1, 1, 3]));
+    assert.ok(!check(table, [-1, 0, 1, 2]) && !check(table, [-3, -1, 1]));
+
+    const enter = { type: "enter", solution: 10201 };
+    assert.ok(check(enter, 10201) && !check(enter, 10001));
+
+    const isosceles = { type: "triangle-sum", angles: { A: null, B: null, C: 40 }, solution: 70 };
+    assert.ok(check(isosceles, 70) && !check(isosceles, 140));
 
     assert.ok(!check({ type: "no-such-type", solution: 1 }, 1));
   });
