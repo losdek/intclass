@@ -2501,6 +2501,9 @@ html:has(> body.home-page) {
 .f-cube-right { fill: var(--fig-teal-mid); stroke: var(--ink); stroke-width: 1.8; stroke-linejoin: round; }
 .f-cube-lines { fill: none; stroke: var(--ink); stroke-width: 1; stroke-opacity: 0.5; }
 .f-sq-a { fill: var(--fig-teal-soft); stroke: var(--ink); stroke-width: 2; }
+.f-cell { fill: var(--fig-paper); stroke: var(--ink); stroke-opacity: 0.35; stroke-width: 1; }
+.f-cell.is-filled { fill: var(--fig-teal); stroke-opacity: 0.6; }
+.f-pie-slice { fill: var(--fig-red); stroke: var(--ink); stroke-width: 1.6; pointer-events: none; }
 .f-sq-ab { fill: var(--fig-red-soft); stroke: var(--ink); stroke-width: 2; }
 .f-sq-b { fill: var(--fig-mustard); stroke: var(--ink); stroke-width: 2; }
 .f-area-label { fill: var(--ink); font-size: 12px; font-weight: 600; text-anchor: middle; }
