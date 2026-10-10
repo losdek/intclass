@@ -62,14 +62,25 @@ document.addEventListener(
   { passive: true }
 );
 
-// 2. Theme Management (Light / Dark with localStorage & System OS detection)
+// 2. Theme Management (Light / Dark, kept in a cookie, or the system setting)
 const THEME_STORAGE_KEY = "intclass_theme";
+const Store = window.IntStore;
+
+function savedTheme() {
+  let saved = Store?.theme();
+  if (!saved) {
+    try {
+      saved = localStorage.getItem(THEME_STORAGE_KEY);
+    } catch {}
+  }
+  return saved === "dark" || saved === "light" ? saved : null;
+}
 const MOON_ICON = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
 const SUN_ICON = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>';
 
 function getPreferredTheme() {
-  const saved = localStorage.getItem(THEME_STORAGE_KEY);
-  if (saved === "dark" || saved === "light") return saved;
+  const saved = savedTheme();
+  if (saved) return saved;
   return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
     ? "dark"
     : "light";
@@ -107,7 +118,7 @@ function toggleTheme(event) {
   const root = document.documentElement;
   const current = root.getAttribute("data-theme") || getPreferredTheme();
   const next = current === "dark" ? "light" : "dark";
-  localStorage.setItem(THEME_STORAGE_KEY, next);
+  Store?.setTheme(next);
 
   const button = event?.currentTarget;
   if (motionEnabled() && document.startViewTransition && button) {
@@ -145,7 +156,7 @@ applyTheme(getPreferredTheme());
 // Listen for OS theme changes if user hasn't set explicit manual preference
 if (window.matchMedia) {
   window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
-    if (!localStorage.getItem(THEME_STORAGE_KEY)) {
+    if (!savedTheme()) {
       applyTheme(e.matches ? "dark" : "light");
     }
   });
@@ -160,82 +171,137 @@ const scrollProgressBar = document.getElementById("scrollProgressBar");
 const modal = document.getElementById("registerModal");
 const form = document.getElementById("registerForm");
 const status = document.getElementById("formStatus");
-const headerProfileDot = document.getElementById("headerProfileDot");
+const headerLevel = document.getElementById("headerLevel");
 const navUserGreeting = document.getElementById("navUserGreeting");
 
-// 3. Cookie & Progress Utilities
-function readCookie(name) {
-  return document.cookie
-    .split("; ")
-    .find((part) => part.startsWith(`${name}=`))
-    ?.split("=")[1];
+// 3. Profile: level, XP and registration for the leaderboard (state lives in cookies, js/store.js)
+const escapeHtml = (text) =>
+  String(text).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+
+function levelCardHtml(sum) {
+  const left = sum.to - sum.xp;
+  return `
+    <span class="level-badge" aria-hidden="true">${sum.level}</span>
+    <div class="level-info">
+      <strong>Уровень ${sum.level} · ${sum.name}</strong>
+      <span>${sum.xp} XP · до уровня ${sum.level + 1} — ${left} XP</span>
+      <div class="xp-track" role="progressbar" aria-label="Опыт до следующего уровня" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(sum.progress * 100)}">
+        <div class="xp-fill" style="width: ${Math.round(sum.progress * 100)}%"></div>
+      </div>
+    </div>`;
 }
 
-function getCompletedLessonsCount() {
-  try {
-    const raw = localStorage.getItem("intclass_progress");
-    if (!raw) return 0;
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed.length : 0;
-  } catch {
-    return 0;
-  }
-}
-
-function getBookmarkedLessonsCount() {
-  try {
-    const raw = localStorage.getItem("intclass_bookmarks");
-    if (!raw) return 0;
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed.length : 0;
-  } catch {
-    return 0;
-  }
-}
-
-// Update profile badge, greeting, and learning stats in header & mobile drawer
 function updateProfileUI() {
-  const saved = readCookie("intclass_profile");
-  const completedCount = getCompletedLessonsCount();
-  const bookmarksCount = getBookmarkedLessonsCount();
+  if (!Store) return null;
+  const sum = Store.summary();
+  const p = sum.player;
 
-  // Profile modal stats element
+  if (headerLevel) {
+    headerLevel.textContent = String(sum.level);
+    headerLevel.setAttribute("aria-label", `Уровень ${sum.level}`);
+  }
+  if (navUserGreeting) navUserGreeting.textContent = p ? `Привет, ${p.name}! · уровень ${sum.level}` : `Привет, друг! · уровень ${sum.level}`;
+  document.querySelectorAll(".mobile-btn-text").forEach((el) => {
+    el.textContent = p ? `Профиль: ${p.name}` : "Мой профиль";
+  });
+
+  // desktop header button: level, and the nickname once registered
+  document.querySelectorAll(".nav-inner > .register-open").forEach((btn) => {
+    btn.textContent = p ? `${p.name} · ур. ${sum.level}` : `Ур. ${sum.level} · Регистрация`;
+  });
+
+  const levelCard = document.getElementById("levelCard");
+  if (levelCard) levelCard.innerHTML = levelCardHtml(sum);
+
   const statsElem = document.getElementById("profileStats");
   if (statsElem) {
     statsElem.innerHTML = `
       <div class="profile-stats-grid">
-        <div class="profile-stat-box">
-          <span class="stat-number">${completedCount}</span>
-          <span class="stat-label">Изучено уроков</span>
-        </div>
-        <div class="profile-stat-box">
-          <span class="stat-number">${bookmarksCount}</span>
-          <span class="stat-label">В избранном</span>
-        </div>
-      </div>
-    `;
+        <div class="profile-stat-box"><span class="stat-number">${sum.completed.length}</span><span class="stat-label">Изучено уроков</span></div>
+        <div class="profile-stat-box"><span class="stat-number">${sum.watched.length}</span><span class="stat-label">Видео досмотрено</span></div>
+        <div class="profile-stat-box"><span class="stat-number">${sum.bookmarks.length}</span><span class="stat-label">В избранном</span></div>
+      </div>`;
   }
 
-  if (saved) {
-    try {
-      const profile = JSON.parse(decodeURIComponent(saved));
-      if (profile.name) {
-        if (headerProfileDot) headerProfileDot.hidden = false;
-        if (navUserGreeting) navUserGreeting.textContent = `Привет, ${profile.name}!`;
-        document.querySelectorAll(".mobile-btn-text").forEach((el) => {
-          el.textContent = `Профиль: ${profile.name}`;
-        });
-        return profile;
-      }
-    } catch {}
+  const registerText = document.getElementById("registerText");
+  const submit = form?.querySelector("button[type='submit']");
+  if (registerText) {
+    registerText.textContent = p
+      ? Store.leaderboardEnabled()
+        ? `Вы в таблице лидеров как «${p.name}». Опыт обновляется сам после каждого теста.`
+        : `Вы зарегистрированы как «${p.name}». Общая таблица лидеров скоро заработает — ваш опыт уже копится.`
+      : "Учиться можно без регистрации: прогресс и опыт хранятся в cookies на этом устройстве. Зарегистрируйтесь, чтобы попасть в таблицу лидеров.";
   }
-
-  if (headerProfileDot) headerProfileDot.hidden = completedCount === 0;
-  if (navUserGreeting) navUserGreeting.textContent = "Привет, друг!";
-  return null;
+  if (submit) submit.textContent = p ? "Сменить никнейм" : "Зарегистрироваться";
+  renderLeaders(sum);
+  return p;
 }
 
+// Leaderboard on the home page: your own row always, the shared table once the server is connected
+let leadersCache = null;
+async function renderLeaders(sum = Store?.summary()) {
+  const you = document.getElementById("youRow");
+  const list = document.getElementById("leadersList");
+  const note = document.getElementById("leadersNote");
+  if (!you || !sum) return;
+  const p = sum.player;
+  you.innerHTML = `
+    <span class="level-badge" aria-hidden="true">${sum.level}</span>
+    <div class="you-info">
+      <strong>${p ? escapeHtml(p.name) : "Вы"}</strong>
+      <span>Уровень ${sum.level} · ${sum.name}${p ? "" : " · без регистрации"}</span>
+    </div>
+    <span class="you-xp">${sum.xp} XP</span>`;
+  document.querySelectorAll(".leaders-register").forEach((btn) => (btn.hidden = Boolean(p)));
+
+  if (!Store.leaderboardEnabled()) {
+    list.innerHTML = "";
+    note.textContent = "Общая таблица лидеров скоро заработает. Опыт уже копится — после подключения он появится в таблице сам.";
+    return;
+  }
+  try {
+    if (!leadersCache) {
+      note.textContent = "Загружаем таблицу…";
+      leadersCache = await Store.leaders(20);
+    }
+    note.textContent = leadersCache.length ? "" : "Пока здесь пусто — станьте первым!";
+    list.innerHTML = leadersCache
+      .map((row, i) => `
+        <li class="leader-row${p && row.player === p.id ? " is-you" : ""}">
+          <span class="leader-rank">${i + 1}</span>
+          <span class="leader-name">${escapeHtml(row.name)}</span>
+          <span class="leader-level">ур. ${row.level}</span>
+          <span class="leader-xp">${row.xp} XP</span>
+        </li>`)
+      .join("");
+  } catch {
+    leadersCache = null;
+    note.textContent = "Не удалось загрузить таблицу. Проверьте интернет и обновите страницу.";
+  }
+}
+
+Store?.onChange(() => {
+  leadersCache = null;
+  updateProfileUI();
+});
 updateProfileUI();
+
+// One-time notice: the site keeps progress in cookies, so no registration is needed
+if (Store && !Store.cookiesAcknowledged()) {
+  const bar = document.createElement("div");
+  bar.className = "cookie-bar";
+  bar.setAttribute("role", "region");
+  bar.setAttribute("aria-label", "Cookies");
+  bar.innerHTML = `
+    <p>Мы храним ваш прогресс, опыт и настройки в cookies на этом устройстве — регистрация не нужна.</p>
+    <button class="btn btn-small" type="button">Понятно</button>`;
+  bar.querySelector("button").addEventListener("click", () => {
+    Store.acknowledgeCookies();
+    bar.classList.add("closing");
+    setTimeout(() => bar.remove(), motionEnabled() ? 220 : 0);
+  });
+  document.body.appendChild(bar);
+}
 
 // 4. Toast Notification System
 function showToast(message, type = "info", duration = 2600) {
@@ -418,15 +484,9 @@ function openModal() {
   document.body.classList.add("modal-open");
   updateProfileUI();
 
-  const saved = readCookie("intclass_profile");
-  if (saved && form) {
-    try {
-      const profile = JSON.parse(decodeURIComponent(saved));
-      if (form.elements.name) form.elements.name.value = profile.name || "";
-      if (form.elements.email) form.elements.email.value = profile.email || "";
-    } catch {}
-  }
-  setTimeout(() => form?.elements.name?.focus(), 60);
+  const p = Store?.player();
+  if (form?.elements.name) form.elements.name.value = p ? p.name : "";
+  if (status) status.textContent = "";
 }
 
 function closeModal() {
@@ -462,45 +522,37 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-form?.addEventListener("submit", (event) => {
+form?.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const nameInput = form.elements.name;
-  const emailInput = form.elements.email;
+  if (!Store) return;
   const submitBtn = form.querySelector("button[type='submit']");
-
-  const profile = {
-    name: nameInput?.value.trim() || "",
-    email: emailInput?.value.trim() || ""
-  };
-
-  document.cookie = `intclass_profile=${encodeURIComponent(
-    JSON.stringify(profile)
-  )}; max-age=31536000; path=/; SameSite=Lax`;
-
-  updateProfileUI();
-
-  if (status) {
-    status.textContent = `Профиль сохранён, ${profile.name || "друг"}!`;
+  const name = Store.cleanName(form.elements.name?.value);
+  if (!name) {
+    if (status) status.textContent = "Никнейм: от 2 до 20 букв или цифр (можно пробел, «_» и «-»).";
+    form.elements.name?.focus();
+    return;
   }
-  if (submitBtn) {
-    submitBtn.textContent = "Сохранено ✓";
-  }
-
-  showToast(`Профиль сохранён! Привет, ${profile.name || "друг"}!`, "success");
-
-  setTimeout(() => {
-    closeModal();
-    if (submitBtn) submitBtn.textContent = "Сохранить профиль";
+  const wasPlayer = Boolean(Store.player());
+  if (submitBtn) submitBtn.disabled = true;
+  try {
+    await Store.register(name);
     if (status) status.textContent = "";
-  }, 950);
+    showToast(wasPlayer ? `Никнейм изменён: ${name}` : `Готово, ${name}! Вы в таблице лидеров`, "success");
+    setTimeout(closeModal, 700);
+  } catch {
+    // the nickname is saved on this device; the leaderboard will be updated on the next try
+    if (status) status.textContent = "Никнейм сохранён, но таблица лидеров сейчас недоступна — попробуем позже.";
+  } finally {
+    if (submitBtn) submitBtn.disabled = false;
+    updateProfileUI();
+  }
 });
 
 // Reset progress button in modal
 const resetProgressBtn = document.getElementById("resetProgressBtn");
 resetProgressBtn?.addEventListener("click", () => {
-  if (confirm("Сбросить историю пройденных уроков и тестов?")) {
-    localStorage.removeItem("intclass_progress");
-    localStorage.removeItem("intclass_bookmarks");
+  if (confirm("Сбросить пройденные уроки, опыт и избранное?")) {
+    Store?.resetProgress();
     updateProfileUI();
     if (typeof window.reloadLessonsProgress === "function") {
       window.reloadLessonsProgress();

@@ -4,6 +4,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { LESSONS, SUBJECT_LABELS } = require("../js/lessons.js");
 const IntTasks = require("../js/tasks.js");
+const IntStore = require("../js/store.js");
 
 const ROOT = path.join(__dirname, "..");
 
@@ -180,6 +181,35 @@ describe("Lessons Dataset Validation", () => {
     assert.ok(check(isosceles, 70) && !check(isosceles, 140));
 
     assert.ok(!check({ type: "no-such-type", solution: 1 }, 1));
+  });
+
+  test("XP comes from the best score, finished lessons and watched videos; levels grow", () => {
+    const { computeXp, levelFor, maxXp, XP } = IntStore;
+    const empty = { best: {}, completed: [], watched: [] };
+    assert.strictEqual(computeXp(empty, LESSONS), 0);
+    const four = LESSONS.find((l) => l.id === "math-7-2");
+    const state = { best: { "math-7-2": 4, "no-such-lesson": 9 }, completed: ["math-7-2"], watched: ["math-7-2"] };
+    assert.strictEqual(computeXp(state, LESSONS), 4 * XP.perAnswer + XP.perLesson + XP.perVideo);
+    // a best score can never count more answers than the quiz has
+    assert.strictEqual(computeXp({ ...empty, best: { "math-7-2": 99 } }, LESSONS), four.quiz.length * XP.perAnswer);
+
+    assert.deepStrictEqual([0, 99, 100, 299, 300, 600].map((xp) => levelFor(xp).level), [1, 1, 2, 2, 3, 4]);
+    const l2 = levelFor(150);
+    assert.strictEqual(l2.from, 100);
+    assert.strictEqual(l2.to, 300);
+    assert.ok(Math.abs(l2.progress - 0.25) < 1e-9);
+    // the database accepts at most 5000 XP (supabase/leaderboard.sql)
+    assert.ok(maxXp(LESSONS) <= 5000, `max XP ${maxXp(LESSONS)} is above the database limit`);
+  });
+
+  test("Leaderboard nicknames are 2–20 letters, digits, spaces, _ or -", () => {
+    const { cleanName } = IntStore;
+    assert.strictEqual(cleanName("  Маша_7Б  "), "Маша_7Б");
+    assert.strictEqual(cleanName("Petya   Ivanov"), "Petya Ivanov");
+    assert.strictEqual(cleanName("a"), null);
+    assert.strictEqual(cleanName("x".repeat(21)), null);
+    assert.strictEqual(cleanName("<script>"), null);
+    assert.strictEqual(cleanName(""), null);
   });
 
   test("All grades 5–9 have at least 4 math and 4 russian lessons", () => {

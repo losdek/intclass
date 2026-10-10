@@ -11,7 +11,9 @@
     // Apply the saved or system theme before the page paints (no light flash in dark mode)
     (function () {
       var theme;
-      try { theme = localStorage.getItem("intclass_theme"); } catch (e) {}
+      var m = document.cookie.match(/(?:^|; )intclass_theme=(dark|light)/);
+      theme = m ? m[1] : null;
+      if (!theme) { try { theme = localStorage.getItem("intclass_theme"); } catch (e) {} }
       if (theme !== "dark" && theme !== "light") {
         theme = window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
       }
@@ -55,7 +57,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@600;700&display=swap" rel="stylesheet">
   <link rel="manifest" href="../manifest.webmanifest">
-  <link rel="stylesheet" href="../css/style.css?v=20261010_01">
+  <link rel="stylesheet" href="../css/style.css?v=20261010_02">
 </head>
 <body class="lessons-page">
   <!-- Header / Navigation -->
@@ -100,6 +102,10 @@
           <span>Классы</span>
           <span class="nav-link-arrow">→</span>
         </a>
+        <a class="nav-link" href="../#leaders">
+          <span>Лидеры</span>
+          <span class="nav-link-arrow">→</span>
+        </a>
         <a class="nav-link active" href="./">
           <span>Видеоуроки</span>
           <span class="nav-link-arrow">→</span>
@@ -128,7 +134,7 @@
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
-          <span class="profile-status-dot" id="headerProfileDot" hidden></span>
+          <span class="profile-level" id="headerLevel" aria-label="Уровень 1">1</span>
         </button>
 
         <button class="burger" id="burger" type="button" aria-label="Открыть меню" aria-expanded="false">
@@ -291,31 +297,32 @@
 
   <!-- Profile Modal / Native Mobile Bottom Sheet -->
   <div class="modal-backdrop" id="registerModal" hidden>
-    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="registerTitle">
+    <section class="modal profile-modal" role="dialog" aria-modal="true" aria-labelledby="registerTitle">
       <div class="sheet-handle" aria-hidden="true"></div>
       <button class="modal-close" type="button" aria-label="Закрыть">×</button>
       <p class="section-label">Ваш профиль</p>
       <h2 id="registerTitle">Профиль ученика</h2>
-      <p class="modal-text">Имя и email сохраняются в браузере. Пароль не нужен и никуда не отправляется.</p>
-      <form id="registerForm">
-        <label>
-          Имя
-          <input name="name" required maxlength="60" autocomplete="name" placeholder="Как к вам обращаться?">
-        </label>
-        <label>
-          Email
-          <input name="email" type="email" required maxlength="120" autocomplete="email" placeholder="you@example.com">
-        </label>
-        <button class="btn" type="submit">Сохранить профиль</button>
-      </form>
-      <p class="form-status" id="formStatus" aria-live="polite"></p>
+      <div class="level-card" id="levelCard"></div>
       <div id="profileStats"></div>
-      <div style="margin-top: 1rem; display: flex; justify-content: flex-end;">
+      <div class="register-box">
+        <p class="modal-text" id="registerText">Учиться можно без регистрации: прогресс и опыт хранятся в cookies на этом устройстве. Зарегистрируйтесь, чтобы попасть в таблицу лидеров.</p>
+        <form id="registerForm" novalidate>
+          <label>
+            Никнейм для таблицы лидеров
+            <input name="name" required minlength="2" maxlength="20" autocomplete="nickname" placeholder="Например, Маша_7Б">
+          </label>
+          <button class="btn" type="submit">Зарегистрироваться</button>
+        </form>
+        <p class="form-status" id="formStatus" aria-live="polite"></p>
+      </div>
+      <div class="profile-foot">
+        <a class="profile-leaders-link" href="../#leaders">Таблица лидеров →</a>
         <button class="btn btn-secondary btn-small" type="button" id="resetProgressBtn">Сбросить прогресс</button>
       </div>
     </section>
   </div>
 
+  <script src="../js/store.js"></script>
   <script src="../js/main.js"></script>
   <script src="../js/tasks.js"></script>
   <script src="../js/lessons.js"></script>

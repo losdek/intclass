@@ -4,7 +4,7 @@
   "description": "Русскоязычный справочник видеоуроков и интерактивных мини-тестов за минуту для 5–9 классов",
   "scripts": {
     "test": "node --test test/*.test.js",
-    "check": "node --check js/main.js && node --check js/tasks.js && node --check js/lessons.js && node --check sw.js"
+    "check": "node --check js/store.js && node --check js/main.js && node --check js/tasks.js && node --check js/lessons.js && node --check sw.js"
   },
   "keywords": ["education", "math", "russian", "pwa", "video-lessons"],
   "author": "losdek",
