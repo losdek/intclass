@@ -633,6 +633,39 @@ h2,
   border-bottom: 1px solid var(--border);
 }
 
+/* Home page: one section per screen. Each section fills the screen minus a thin strip, so at
+   its start you see only this section and the top edge of the next one. Gentle snapping settles
+   the scroll on section starts, so the previous section is never left half on screen. */
+html:has(> body.home-page) {
+  scroll-snap-type: y proximity;
+  scroll-padding-top: 0;
+}
+
+.home-page {
+  --peek: clamp(56px, 9vh, 96px);
+}
+
+.home-page .hero {
+  scroll-snap-align: start;
+  /* the sticky header sits above the hero: a margin taller than the header clamps this snap point
+     to the very top of the page, whatever the header's exact height */
+  scroll-margin-top: 50vh;
+}
+
+.home-page main > .section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100vh - var(--peek));
+  min-height: calc(100svh - var(--peek));
+  padding-block: clamp(3rem, 7vh, 5.5rem);
+  scroll-snap-align: start;
+}
+
+.home-page main > .section .section-head {
+  margin-bottom: clamp(1.75rem, 4vh, 2.75rem);
+}
+
 .section-head {
   max-width: 42rem;
   margin-bottom: clamp(2.5rem, 7vw, 3.75rem);
@@ -2218,6 +2251,16 @@ h2,
 .f-part-bar.is-miss .f-part-shape { fill: var(--danger); }
 .f-part-bar .f-value { pointer-events: none; }
 
+.task-pick .task-fig.fig-righttri {
+  max-width: 300px;
+}
+
+.task-enter .task-fig.fig-righttri,
+.task-enter .task-fig.fig-pifsquares,
+.task-enter .task-fig.fig-room {
+  max-width: 300px;
+}
+
 .task-pick .task-fig.fig-lines,
 .task-pick .task-fig.fig-solids,
 .task-pick .task-fig.fig-bars,
@@ -2225,6 +2268,25 @@ h2,
 .task-pick .task-fig.fig-triangles {
   max-width: 400px;
 }
+
+/* right triangles, squares on the sides, the room, number cards, the parabola */
+.f-stick-hyp { stroke: var(--fig-red); }
+.f-sq-teal { fill: var(--fig-teal); stroke: var(--ink); stroke-width: 1.5; }
+.f-sq-mustard { fill: var(--fig-mustard); stroke: var(--ink); stroke-width: 1.5; }
+.f-sq-red { fill: var(--fig-red); stroke: var(--ink); stroke-width: 1.5; }
+.f-sq-teal + .f-cube-lines,
+.f-sq-mustard + .f-cube-lines,
+.f-sq-red + .f-cube-lines { stroke: #ffffff; stroke-opacity: 0.45; }
+.f-big-label { font-size: 18px; font-weight: 700; }
+.f-room { fill: var(--fig-teal-soft); stroke: var(--ink); stroke-width: 3; }
+.f-card { fill: var(--fig-teal); }
+.f-card-ask { fill: var(--fig-paper); stroke: var(--fig-red); stroke-width: 2.5; stroke-dasharray: 5 4; }
+.f-card-text { fill: #ffffff; font-family: var(--font-display); font-size: 18px; font-weight: 700; text-anchor: middle; }
+.f-card-ask + .f-card-text { fill: var(--fig-red); }
+.f-dots { fill: var(--ink); font-size: 22px; font-weight: 700; }
+.f-hop { fill: none; stroke: var(--fig-mustard); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.f-hop-text { fill: var(--ink); font-weight: 700; }
+.f-root { fill: var(--fig-red); stroke: var(--surface); stroke-width: 2.5; }
 
 /* bar model */
 .f-strip rect { stroke: var(--fig-paper); stroke-width: 2; transition: fill var(--fast) var(--ease); }

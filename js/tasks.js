@@ -389,13 +389,13 @@
     build(el, t) {
       const n = t.max - t.min;
       const hasStart = t.start !== undefined;
-      const X0 = 20, STEP = 300 / n, Y = hasStart ? 54 : 34, H = Y + 32;
+      const X0 = 18, STEP = 294 / n, Y = hasStart ? 54 : 34, H = Y + 32;
       const multi = t.solution.length > 1;
       const at = (v) => X0 + (v - t.min) * STEP;
       const fig = figure(el, `0 0 340 ${H}`, "Числовая ось");
       fig.setAttribute("role", multi ? "group" : "radiogroup");
-      svg("line", { x1: 6, y1: Y, x2: 330, y2: Y, class: "f-axis" }, fig);
-      svg("path", { d: `M330 ${Y} l-9 -5 v10 Z`, class: "f-ink" }, fig);
+      svg("line", { x1: 4, y1: Y, x2: 334, y2: Y, class: "f-axis" }, fig);
+      svg("path", { d: `M336 ${Y} l-9 -5 v10 Z`, class: "f-ink" }, fig);
       const jump = svg("path", { class: "f-jump", visibility: "hidden" }, fig);
       if (hasStart) {
         const sx = at(t.start);
@@ -702,6 +702,19 @@
       });
       const overlay = (g) => parts.forEach((p) => p.pips.forEach(([x, y]) => svg("circle", { cx: x, cy: y, r: 3.6, class: "f-ink f-decor" }, g)));
       return { viewBox: "0 0 330 62", parts, points: [], kind: "area", overlay };
+    },
+    // a right triangle: two legs and the hypotenuse, right angle at C
+    righttri(fig) {
+      const C = [50, 170], A = [50, 30], B = [260, 170];
+      svg("path", { d: "M50 170 L50 30 L260 170 Z", class: "f-tri-fill" }, fig);
+      const parts = [
+        { id: "legA", name: "Сторона AC", d: seg(A, C) },
+        { id: "legB", name: "Сторона CB", d: seg(C, B) },
+        { id: "hyp", name: "Сторона AB", d: seg(A, B) },
+      ];
+      const overlay = (g) => svg("path", { d: "M50 150 H70 V170", class: "f-decor-line f-thin" }, g);
+      const points = [["A", ...A, -14, 4], ["B", ...B, 12, 14], ["C", ...C, -14, 16]];
+      return { viewBox: "0 0 290 196", parts, points, kind: "line", overlay };
     },
     // equilateral, isosceles and scalene triangles; equal sides carry the same tick marks
     triangles() {
@@ -1158,6 +1171,76 @@
   /* ------------------------------------------------------------------ enter
    * A drawing and a typed number. task: { figure?: "box" | "square101", unit?, buttons?, solution } */
   const ENTER_FIGURES = {
+    // a right triangle with its sides labelled, e.g. legs 6 and 8, hypotenuse «?»
+    righttri(fig, t) {
+      const [la, lb] = t.legs;
+      const u = Math.min(150 / la, 230 / lb);
+      const C = [44, 30 + la * u], A = [44, 30], B = [44 + lb * u, 30 + la * u];
+      svg("path", { d: `M${A} L${C} L${B} Z`, class: "f-tri-fill" }, fig);
+      svg("path", { d: `M${A} L${C}`, class: "f-stick f-stick-a" }, fig);
+      svg("path", { d: `M${C} L${B}`, class: "f-stick f-stick-b" }, fig);
+      svg("path", { d: `M${A} L${B}`, class: "f-stick f-stick-hyp" }, fig);
+      svg("path", { d: `M${C[0]} ${C[1] - 18} h18 v18`, class: "f-decor-line f-thin" }, fig);
+      label(fig, C[0] - 12, (A[1] + C[1]) / 2 + 5, t.labels[0], "f-side f-side-a", "end");
+      label(fig, (C[0] + B[0]) / 2, C[1] + 24, t.labels[1], "f-side f-side-b");
+      label(fig, (A[0] + B[0]) / 2 + 16, (A[1] + B[1]) / 2 - 8, t.labels[2], "f-side f-side-c", "start");
+      return `0 0 ${B[0] + 70} ${C[1] + 36}`;
+    },
+    // squares on the sides of the 3-4-5 triangle: 9 and 16 cells, the big one asks «?»
+    pifsquares(fig) {
+      const u = 15, P = [70, 120];
+      const S = (x, y) => [P[0] + x * u, P[1] - y * u];
+      const square = (p0, p1, p3, n, cls) => {
+        const at = (i, j) => [p0[0] + (p1[0] - p0[0]) * i / n + (p3[0] - p0[0]) * j / n,
+          p0[1] + (p1[1] - p0[1]) * i / n + (p3[1] - p0[1]) * j / n];
+        svg("path", { d: `M${at(0, 0)} L${at(n, 0)} L${at(n, n)} L${at(0, n)} Z`, class: cls }, fig);
+        let d = "";
+        for (let i = 1; i < n; i++) d += `M${at(i, 0)} L${at(i, n)} M${at(0, i)} L${at(n, i)} `;
+        svg("path", { d, class: "f-cube-lines" }, fig);
+        return at(n / 2, n / 2);
+      };
+      const a = square(S(0, 0), S(0, 3), S(-3, 0), 3, "f-sq-teal");
+      const b = square(S(0, 0), S(0, -4), S(4, 0), 4, "f-sq-mustard");
+      const c = square(S(0, 3), S(4, 0), S(3, 7), 5, "f-sq-red");
+      svg("path", { d: `M${S(0, 0)} L${S(4, 0)} L${S(0, 3)} Z`, class: "f-tri" }, fig);
+      label(fig, a[0], a[1] + 6, "9", "f-area-label");
+      label(fig, b[0], b[1] + 6, "16", "f-area-label");
+      label(fig, c[0], c[1] + 8, "?", "f-area-label f-big-label");
+      return "0 0 200 200";
+    },
+    // the room from the video: x by x + 2 metres, 24 m²
+    room(fig) {
+      const x0 = 50, y0 = 30, u = 34;
+      for (let i = 0; i <= 6; i++) svg("line", { x1: x0 + i * u, y1: y0, x2: x0 + i * u, y2: y0 + 4 * u, class: "f-grid" }, fig);
+      for (let j = 0; j <= 4; j++) svg("line", { x1: x0, y1: y0 + j * u, x2: x0 + 6 * u, y2: y0 + j * u, class: "f-grid" }, fig);
+      svg("rect", { x: x0, y: y0, width: 6 * u, height: 4 * u, class: "f-room" }, fig);
+      label(fig, x0 + 3 * u, y0 - 10, "x + 2", "f-side f-side-b");
+      label(fig, x0 - 10, y0 + 2 * u + 5, "x", "f-side f-side-a", "end");
+      label(fig, x0 + 3 * u, y0 + 2 * u + 9, "24 м²", "f-area-label f-big-label");
+      return `0 0 ${x0 + 6 * u + 20} ${y0 + 4 * u + 16}`;
+    },
+    // number cards of a sequence with «+d» hops between neighbours; «?» is the card to find
+    cards(fig, t) {
+      const n = t.cards.length, w = 52, gap = 22, y = 50;
+      const x0 = 14;
+      t.cards.forEach((v, i) => {
+        const x = x0 + i * (w + gap);
+        if (v === "…") {
+          label(fig, x + w / 2, y + 34, "…", "f-label f-dots");
+        } else {
+          svg("rect", { x, y, width: w, height: 48, rx: 8, class: v === "?" ? "f-card f-card-ask" : "f-card" }, fig);
+          label(fig, x + w / 2, y + 31, v, "f-card-text");
+        }
+        if (t.under) label(fig, x + w / 2, y + 68, t.under[i] || "", "f-label");
+        const next = t.cards[i + 1];
+        if (i < n - 1 && v !== "…" && next !== "…" && t.hop) {
+          const a = x + w / 2 + 6, b = x + w + gap + w / 2 - 6;
+          svg("path", { d: `M${a} ${y - 4} Q${(a + b) / 2} ${y - 30} ${b} ${y - 4} m-7 -6 l7 6 l-9 2`, class: "f-hop" }, fig);
+          label(fig, (a + b) / 2, y - 26, t.hop, "f-label f-hop-text");
+        }
+      });
+      return `0 0 ${x0 * 2 + n * (w + gap) - gap} ${y + 80}`;
+    },
     // a box of unit cubes, only its three visible faces
     box(fig, t) {
       const [a, b, c] = t.size, s = 22, cx = s * Math.cos(rad(30)), cy = s * Math.sin(rad(30));
@@ -1551,7 +1634,7 @@
       el.appendChild(box);
       const hint = document.createElement("p");
       hint.className = "task-hint";
-      hint.textContent = "Нажмите на формулу слева, затем на её пару справа";
+      hint.textContent = t.hint || "Нажмите на карточку слева, затем на её пару справа";
       el.appendChild(hint);
       let pairs = t.left.map(() => null), active = null;
       const render = () => {
@@ -1681,9 +1764,81 @@
     },
   };
 
+  /* --------------------------------------------------------------- parabola
+   * y = x² + bx + c: the pupil moves the parabola up and down with c until it has the asked number of roots.
+   * task: { b, roots: 0 | 1 | 2, solution } — with roots 1 the only right c is the solution (D = 0) */
+  const parabolaRoots = (b, c) => {
+    const D = b * b - 4 * c;
+    return D > 0 ? 2 : D === 0 ? 1 : 0;
+  };
+  const parabola = {
+    check: (t, v) => typeof v === "number" && (t.roots === 1 ? v === t.solution : parabolaRoots(t.b, v) === t.roots),
+    build(el, t) {
+      const R = 5, C = 22, O = R * C + 24, S = 2 * O;
+      const fig = figure(el, `0 0 ${S} ${S}`, "Парабола");
+      grid(fig, R, C, O);
+      const clip = svg("clipPath", { id: `clip-${Math.random().toString(36).slice(2)}` }, fig);
+      svg("rect", { x: O - R * C, y: O - R * C, width: 2 * R * C, height: 2 * R * C }, clip);
+      const curve = svg("path", { class: "f-graph", fill: "none", "clip-path": `url(#${clip.id})` }, fig);
+      const dots = [0, 1].map(() => svg("circle", { r: 7, class: "f-root", visibility: "hidden" }, fig));
+      const formula = document.createElement("p");
+      formula.className = "task-formula";
+      const box = controls(el);
+      box.before(formula);
+      const rootsText = document.createElement("p");
+      rootsText.className = "task-hint";
+      box.after(rootsText);
+      let c = 0, touched = false;
+      const draw = () => {
+        let d = "";
+        for (let i = 0; i <= 80; i++) {
+          const x = -R - 1 + (2 * R + 2) * i / 80, y = x * x + t.b * x + c;
+          d += `${i ? "L" : "M"}${O + x * C} ${O - clamp(y, -R - 4, R + 4) * C} `;
+        }
+        curve.setAttribute("d", d);
+        const D = t.b * t.b - 4 * c;
+        const xs = D < 0 ? [] : D === 0 ? [-t.b / 2] : [(-t.b - Math.sqrt(D)) / 2, (-t.b + Math.sqrt(D)) / 2];
+        dots.forEach((dot, i) => {
+          const on = i < xs.length && Math.abs(xs[i]) <= R;
+          dot.setAttribute("visibility", on ? "visible" : "hidden");
+          if (on) {
+            dot.setAttribute("cx", O + xs[i] * C);
+            dot.setAttribute("cy", O);
+          }
+        });
+        const bs = t.b === 0 ? "" : ` ${t.b > 0 ? "+" : "−"} ${t.b === 1 || t.b === -1 ? "" : num(Math.abs(t.b))}x`;
+        const cs = c === 0 ? "" : ` ${c > 0 ? "+" : "−"} ${num(Math.abs(c))}`;
+        formula.textContent = `y = x²${bs}${cs}`;
+        rootsText.textContent = `Точек на оси x: ${xs.length}`;
+        fig.setAttribute("aria-label", `${formula.textContent}: ${xs.length} общих точек с осью x`);
+      };
+      const cCtl = stepper(box, "c", -6, 6, (v) => { c = v; touched = true; draw(); });
+      const lock = lockable(el);
+      const reset = () => {
+        lock(false);
+        c = t.start ?? -3;
+        touched = false;
+        cCtl.set(c);
+        draw();
+      };
+      reset();
+      return {
+        value: () => (touched ? c : null),
+        lock,
+        reveal() {
+          c = t.solution;
+          cCtl.set(c);
+          draw();
+          answerLine(el, t.reveal || `Верно: c = ${num(t.solution)}`);
+        },
+        reset,
+      };
+    },
+  };
+
   const TASK_TYPES = {
     scales, angle, numberline, plane, pick, level, "triangle-sum": triangleSum, line,
-    strips, rect: rectangle, enter, roll, order, signs, move, sticks, match, table,
+    strips, rect: rectangle, enter, roll, order, signs, move, sticks, match, table, parabola,
   };
 
   const IntTasks = {
