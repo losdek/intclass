@@ -1945,6 +1945,19 @@ html:has(> body.home-page) {
   gap: 0.25rem;
 }
 
+/* phones: a long label («Закрашено», «Скидка») goes above the field so the unit stays inside the card */
+@media (max-width: 480px) {
+  .task-number {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .task-number .task-step-name {
+    flex-basis: 100%;
+    text-align: center;
+  }
+}
+
 .task-step-name {
   font-family: var(--font-display);
   font-size: 0.85rem;
