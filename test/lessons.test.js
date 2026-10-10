@@ -189,6 +189,20 @@ describe("Lessons Dataset Validation", () => {
     const vertex = { type: "parabola", b: -4, roots: 1, solution: 4 };
     assert.ok(check(vertex, 4) && !check(vertex, 3) && !check(vertex, 5));
 
+    const words = { type: "words", tokens: ["Он", "по-моему", "вряд ли", "придёт."], solution: [1] };
+    assert.ok(check(words, [1]) && !check(words, [2]) && !check(words, [1, 2]));
+
+    const punct = { type: "punct", tokens: ["Он", "конечно", "придёт."], solution: { 0: ",", 1: "," } };
+    assert.ok(check(punct, { 0: ",", 1: "," }));
+    assert.ok(!check(punct, { 0: "," }), "one comma is missing");
+    assert.ok(!check(punct, { 0: ",", 1: "—" }), "wrong mark");
+
+    const choice = { type: "choice", options: ["снежок", "снять", "подснежник", "смех"], solution: [0, 2] };
+    assert.ok(check(choice, [2, 0]) && !check(choice, [0]) && !check(choice, [0, 1, 2]));
+
+    const sort = { type: "sort", items: ["вода", "корова", "гора"], solution: [0, 1, 0] };
+    assert.ok(check(sort, [0, 1, 0]) && !check(sort, [0, 0, 0]));
+
     assert.ok(!check({ type: "no-such-type", solution: 1 }, 1));
   });
 

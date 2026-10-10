@@ -2342,6 +2342,145 @@ html:has(> body.home-page) {
   max-width: 320px;
 }
 
+/* Russian-language tasks: words to tap, punctuation gaps, answer cards, sorting chips */
+.tok-row,
+.punct-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem 0.4rem;
+  padding: 0.4rem 0;
+  font-family: var(--font-display);
+  font-size: 1.12rem;
+  font-weight: 600;
+}
+
+.tok {
+  min-height: 46px;
+  padding: 0 0.7rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  transition: background var(--fast) var(--ease), border-color var(--fast) var(--ease), color var(--fast) var(--ease);
+}
+
+.tok-row.is-tiles .tok {
+  min-width: 52px;
+  min-height: 62px;
+  padding: 0 0.5rem;
+  font-size: 1.6rem;
+}
+
+.tok.is-on { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-text); }
+.tok.is-answer { border-color: var(--success); background: var(--success-soft); color: var(--success); }
+.tok.is-miss { border-color: var(--danger); background: var(--danger-soft); color: var(--danger); }
+
+.punct-word { padding: 0.2rem 0; }
+
+.punct-gap {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  min-height: 46px;
+  border: 1.5px dashed var(--border-strong);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 1.25rem;
+  transition: background var(--fast) var(--ease), border-color var(--fast) var(--ease);
+}
+
+.punct-gap.is-on { border-style: solid; border-color: var(--accent); background: var(--accent-soft); color: var(--accent-text); }
+.punct-gap.is-answer { border-style: solid; border-color: var(--success); background: var(--success-soft); color: var(--success); }
+.punct-gap.is-miss { border-style: solid; border-color: var(--danger); background: var(--danger-soft); color: var(--danger); }
+.punct-gap.is-missing:not(.is-on) { border-color: var(--success); }
+
+.choice-list { display: grid; gap: 0.45rem; }
+
+.choice-opt {
+  min-height: 48px;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: left;
+  transition: background var(--fast) var(--ease), border-color var(--fast) var(--ease);
+}
+
+.choice-opt.is-on { border-color: var(--accent); background: var(--accent-soft); }
+.choice-opt.is-answer { border-color: var(--success); background: var(--success-soft); color: var(--success); }
+.choice-opt.is-miss { border-color: var(--danger); background: var(--danger-soft); color: var(--danger); }
+
+.sort-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem 1.1rem;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--soft);
+}
+
+.sort-key i,
+.sort-tag {
+  display: inline-grid;
+  place-items: center;
+  min-width: 26px;
+  height: 22px;
+  padding: 0 5px;
+  border-radius: 6px;
+  background: var(--border-strong);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.sort-key.b0 i,
+.sort-chip[data-b="0"] .sort-tag { background: var(--fig-teal); color: #ffffff; }
+.sort-key.b1 i,
+.sort-chip[data-b="1"] .sort-tag { background: var(--fig-mustard); color: var(--fig-on-color); }
+
+.sort-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.45rem;
+}
+
+.sort-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 48px;
+  padding: 0 0.8rem 0 0.5rem;
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background var(--fast) var(--ease), border-color var(--fast) var(--ease);
+}
+
+.sort-chip[data-b="0"] { border-color: var(--fig-teal); background: var(--fig-teal-soft); }
+.sort-chip[data-b="1"] { border-color: var(--fig-mustard); background: var(--fig-mustard-soft); }
+.sort-chip.is-answer { border-color: var(--success); }
+.sort-chip.is-miss { border-color: var(--danger); border-style: dashed; }
+
+.f-letter { fill: var(--fig-teal); }
+.f-letter-text { fill: #ffffff; font-family: var(--font-display); font-size: 30px; font-weight: 700; text-anchor: middle; }
+
 /* bar model */
 .f-strip rect { stroke: var(--fig-paper); stroke-width: 2; transition: fill var(--fast) var(--ease); }
 .f-strip-n rect { fill: var(--fig-teal); }
