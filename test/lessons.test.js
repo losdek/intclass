@@ -180,6 +180,15 @@ describe("Lessons Dataset Validation", () => {
     const isosceles = { type: "triangle-sum", angles: { A: null, B: null, C: 40 }, solution: 70 };
     assert.ok(check(isosceles, 70) && !check(isosceles, 140));
 
+    const ray = { type: "ray", solution: { at: -2, dir: ">", closed: true } };
+    assert.ok(check(ray, { at: -2, dir: ">", closed: true }));
+    assert.ok(!check(ray, { at: -2, dir: ">", closed: false }), "open point instead of a filled one");
+    assert.ok(!check(ray, { at: -2, dir: "<", closed: true }), "the sign was not flipped");
+    assert.ok(!check(ray, { at: 2, dir: ">", closed: true }));
+
+    const vertex = { type: "parabola", b: -4, roots: 1, solution: 4 };
+    assert.ok(check(vertex, 4) && !check(vertex, 3) && !check(vertex, 5));
+
     assert.ok(!check({ type: "no-such-type", solution: 1 }, 1));
   });
 
