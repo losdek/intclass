@@ -159,6 +159,35 @@
     return box;
   }
 
+  // A row of options where one is always active (the first at start): pick it, then tap where it goes.
+  // Replaces "tap again for the next option", which nobody finds on their own.
+  function palette(el, options, label) {
+    const row = document.createElement("div");
+    row.className = "task-toggle task-palette";
+    row.setAttribute("role", "radiogroup");
+    row.setAttribute("aria-label", label);
+    el.appendChild(row);
+    let active = 0;
+    const btns = options.map((html, i) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.setAttribute("role", "radio");
+      b.innerHTML = html;
+      b.addEventListener("click", () => set(i));
+      row.appendChild(b);
+      return b;
+    });
+    const set = (i) => {
+      active = i;
+      btns.forEach((b, j) => {
+        b.classList.toggle("is-on", j === i);
+        b.setAttribute("aria-checked", String(j === i));
+      });
+    };
+    set(0);
+    return { row, buttons: btns, get active() { return active; }, set };
+  }
+
   function answerLine(el, text) {
     let line = el.querySelector(".task-answer");
     if (!line) {
@@ -2105,7 +2134,8 @@
 
   /* ------------------------------------------------------------------ punct
    * Put punctuation into the gaps between words. task: { tokens, marks?: [","], solution: { gap: mark } }
-   * Tapping a gap again goes to the next mark, then clears it. Gap i sits after token i. */
+   * With several marks the active one is picked from a row of buttons; a tap on a gap puts it there,
+   * a tap on a gap that already holds it clears the gap. Gap i sits after token i. */
   const punctSame = (a, b) => {
     const ka = Object.keys(a), kb = Object.keys(b);
     return ka.length === kb.length && ka.every((k) => a[k] === b[k]);
@@ -2116,6 +2146,8 @@
     check: (t, v) => Boolean(v) && typeof v === "object" && punctSame(v, t.solution),
     build(el, t) {
       const marks = t.marks || [","];
+      const esc = (m) => m.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+      const pal = marks.length > 1 ? palette(el, marks.map((m) => `<span class="pal-mark">${esc(m)}</span>`), "Знак") : null;
       const row = document.createElement("div");
       row.className = "punct-row";
       el.appendChild(row);
@@ -2133,9 +2165,9 @@
           g.dataset.gap = String(i);
           g.setAttribute("aria-label", `Между «${tok}» и «${t.tokens[i + 1]}»`);
           g.addEventListener("click", () => {
-            const next = (state[i] === undefined ? -1 : marks.indexOf(state[i])) + 1;
-            if (next >= marks.length) delete state[i];
-            else state[i] = marks[next];
+            const mark = marks[pal ? pal.active : 0];
+            if (state[i] === mark) delete state[i];
+            else state[i] = mark;
             render();
             pop(g);
           });
@@ -2151,7 +2183,9 @@
       };
       const hint = document.createElement("p");
       hint.className = "task-hint";
-      hint.textContent = t.hint || (marks.length > 1 ? "Нажимайте между словами: знак меняется с каждым нажатием" : "Нажмите между словами, чтобы поставить запятую");
+      hint.textContent = t.hint || (marks.length > 1
+        ? "Выберите знак, затем нажмите между словами. Нажмите ещё раз, чтобы убрать знак"
+        : "Нажмите между словами, чтобы поставить запятую");
       el.appendChild(hint);
       const lock = lockable(el);
       return {
@@ -2169,6 +2203,7 @@
         },
         reset() {
           state = {};
+          if (pal) pal.set(0);
           gaps.forEach((g) => g.classList.remove("is-answer", "is-miss", "is-missing"));
           render();
           lock(false);
@@ -2239,16 +2274,17 @@
   };
 
   /* ------------------------------------------------------------------- sort
-   * Put every item into one of the groups: a tap sends it to the next group. task: { items, buckets, tags?, solution: [group per item] } */
+   * Put every item into one of the groups: pick a group from the buttons, then tap its items;
+   * a tap on an item already in that group takes it out. task: { items, buckets, tags?, solution: [group per item] } */
   const sort = {
     check: (t, v) => sameList(v, t.solution),
     build(el, t) {
       const tags = t.tags || t.buckets.map((_, i) => String(i + 1));
-      const legend = document.createElement("div");
-      legend.className = "sort-legend";
-      legend.innerHTML = t.buckets.map((b, i) => `<span class="sort-key b${i}"><i>${tags[i]}</i></span>`).join("");
-      t.buckets.forEach((b, i) => (legend.children[i].append(` ${b}`)));
-      el.appendChild(legend);
+      const pal = palette(el, t.buckets.map((_, i) => `<span class="sort-key b${i}"><i></i></span>`), "Группа");
+      pal.buttons.forEach((b, i) => {
+        b.querySelector("i").textContent = tags[i];
+        b.querySelector(".sort-key").append(` ${t.buckets[i]}`);
+      });
       const list = document.createElement("div");
       list.className = "sort-list";
       el.appendChild(list);
@@ -2260,7 +2296,7 @@
         b.innerHTML = `<span class="sort-tag"></span><span class="sort-word"></span>`;
         b.querySelector(".sort-word").textContent = item;
         b.addEventListener("click", () => {
-          state[i] = state[i] === null ? 0 : (state[i] + 1) % t.buckets.length;
+          state[i] = state[i] === pal.active ? null : pal.active;
           render();
           pop(b);
         });
@@ -2275,7 +2311,7 @@
       };
       const hint = document.createElement("p");
       hint.className = "task-hint";
-      hint.textContent = t.hint || "Нажимайте на слово, чтобы отправить его в группу";
+      hint.textContent = t.hint || "Выберите группу, затем нажмите на её слова";
       el.appendChild(hint);
       render();
       const lock = lockable(el);
@@ -2293,6 +2329,7 @@
         },
         reset() {
           state = t.items.map(() => null);
+          pal.set(0);
           chips.forEach((b) => b.classList.remove("is-answer", "is-miss"));
           render();
           lock(false);

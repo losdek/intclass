@@ -2432,15 +2432,17 @@ html:has(> body.home-page) {
 .choice-opt.is-answer { border-color: var(--success); background: var(--success-soft); color: var(--success); }
 .choice-opt.is-miss { border-color: var(--danger); background: var(--danger-soft); color: var(--danger); }
 
-.sort-legend {
-  display: flex;
+/* pick a mark or a group first, then tap where it goes */
+.task-palette {
+  justify-self: center;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.4rem 1.1rem;
-  font-size: 0.86rem;
-  font-weight: 600;
-  color: var(--soft);
+  max-width: 100%;
 }
+
+.task-palette button { min-width: 52px; }
+.pal-mark { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; line-height: 1; }
+.task-palette .sort-key { display: inline-flex; align-items: center; gap: 0.4rem; }
+.task-palette button.is-on .sort-key i { box-shadow: 0 0 0 2px var(--on-accent); }
 
 .sort-key i,
 .sort-tag {
