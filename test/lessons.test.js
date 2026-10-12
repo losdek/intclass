@@ -13,9 +13,9 @@ const variantsOf = (q) => q.variants || [q];
 const allTasks = (lesson) => lesson.quiz.flatMap(variantsOf);
 
 describe("Lessons Dataset Validation", () => {
-  test("LESSONS array contains 64 curriculum lessons", () => {
+  test("LESSONS array contains 68 curriculum lessons", () => {
     assert.ok(Array.isArray(LESSONS));
-    assert.strictEqual(LESSONS.length, 64, `Expected 64 lessons, got ${LESSONS.length}`);
+    assert.strictEqual(LESSONS.length, 68, `Expected 68 lessons, got ${LESSONS.length}`);
   });
 
   test("Every lesson has valid unique ID", () => {
