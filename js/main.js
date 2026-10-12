@@ -90,7 +90,7 @@ function applyTheme(theme) {
   document.documentElement.setAttribute("data-theme", theme);
   const themeMeta = document.querySelector('meta[name="theme-color"]');
   if (themeMeta) {
-    themeMeta.setAttribute("content", theme === "dark" ? "#070b14" : "#ffffff");
+    themeMeta.setAttribute("content", theme === "dark" ? "#0f1013" : "#ffffff");
   }
 
   // Update all theme toggle buttons
