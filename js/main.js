@@ -113,6 +113,17 @@ function motionEnabled() {
   return document.documentElement.classList.contains("anim");
 }
 
+// The heading entrance waits for the web fonts (at most 1.2 s): on a first visit they arrive
+// late, and an entrance played in the fallback font jumps when they swap in. Its delays,
+// the swiping finger's included, then count from the first frame the visitor actually sees.
+if (motionEnabled()) {
+  const go = () => requestAnimationFrame(() => document.documentElement.classList.add("anim-go"));
+  const fonts = document.fonts
+    ? Promise.all([document.fonts.load("700 1em Unbounded"), document.fonts.load("400 1em Onest")])
+    : Promise.resolve();
+  Promise.race([fonts, new Promise((resolve) => setTimeout(resolve, 1200))]).then(go, go);
+}
+
 let themeSwitchTimer;
 function toggleTheme(event) {
   const root = document.documentElement;
@@ -295,11 +306,18 @@ if (Store && !Store.cookiesAcknowledged()) {
   bar.innerHTML = `
     <p>Мы храним ваш прогресс, опыт и настройки в cookies на этом устройстве — регистрация не нужна.</p>
     <button class="btn btn-small" type="button">Понятно</button>`;
+  // the bar covers the «scroll down» finger: the finger waits and starts from the top once it's gone
+  const root = document.documentElement;
   bar.querySelector("button").addEventListener("click", () => {
     Store.acknowledgeCookies();
     bar.classList.add("closing");
-    setTimeout(() => bar.remove(), motionEnabled() ? 220 : 0);
+    setTimeout(() => {
+      bar.remove();
+      root.classList.remove("has-cookie-bar");
+      root.classList.add("cookie-closed");
+    }, motionEnabled() ? 220 : 0);
   });
+  root.classList.add("has-cookie-bar");
   document.body.appendChild(bar);
 }
 

@@ -21,6 +21,8 @@
       // motion design runs only when the visitor hasn't asked to reduce motion
       if (!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches)) {
         document.documentElement.classList.add("anim");
+        // main.js starts the entrance once the fonts are in; this only guards a page whose script never runs
+        setTimeout(function () { document.documentElement.classList.add("anim-go"); }, 2500);
       }
     })();
   </script>
@@ -57,7 +59,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@600;700&display=swap" rel="stylesheet">
   <link rel="manifest" href="../manifest.webmanifest">
-  <link rel="stylesheet" href="../css/style.css?v=20261010_09">
+  <link rel="stylesheet" href="../css/style.css?v=20261012_01">
 </head>
 <body class="lessons-page">
   <!-- Header / Navigation -->

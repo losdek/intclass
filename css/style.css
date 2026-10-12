@@ -544,8 +544,9 @@ h2,
   display: inline-block;
   margin-top: 0.08em;
   /* the words have no tall letters, only the tail of «у»: a tight line and more padding
-     below keep the letters optically centred and the tail inside the box */
-  padding: 0.06em 0.18em 0.4em;
+     below keep the letters optically centred and the tail inside the box; the right side
+     is wider because «у» overhangs its own advance, so both sides look the same */
+  padding: 0.13em 0.21em 0.33em 0.15em;
   line-height: 0.66;
   border-radius: 10px;
   background: var(--accent-gradient);
@@ -3360,6 +3361,35 @@ html:has(> body.home-page) {
 
 .anim .scroll-hint-mouse .wheel {
   animation: wheel-roll 1.6s var(--ease) 2s infinite;
+}
+
+/* The entrance stays on its first frame until main.js has the fonts (adds .anim-go);
+   !important because every `animation:` shorthand above resets the play state */
+.anim:not(.anim-go) .hero *,
+.anim:not(.anim-go) .hero *::before,
+.anim:not(.anim-go) .page-head *,
+.anim:not(.anim-go) .page-head *::before {
+  animation-play-state: paused !important;
+}
+
+/* The cookie bar on a first visit covers the finger: it waits hidden, then starts from the top */
+.anim.has-cookie-bar .scroll-hint,
+.anim.has-cookie-bar .scroll-hint-finger svg,
+.anim.has-cookie-bar .scroll-hint-finger::before,
+.anim.has-cookie-bar .scroll-hint-mouse .wheel {
+  animation: none;
+}
+
+.has-cookie-bar .scroll-hint {
+  visibility: hidden;
+}
+
+.anim.cookie-closed .scroll-hint { animation-delay: 0.1s; }
+
+.anim.cookie-closed .scroll-hint-finger svg,
+.anim.cookie-closed .scroll-hint-finger::before,
+.anim.cookie-closed .scroll-hint-mouse .wheel {
+  animation-delay: 0.7s;
 }
 
 /* «за минуту»: the blue box sweeps in like a highlighter */
