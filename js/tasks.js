@@ -2287,64 +2287,147 @@
   };
 
   /* ------------------------------------------------------------------- sort
-   * Put every item into one of the groups: pick a group from the buttons, then tap its items;
-   * a tap on an item already in that group takes it out. task: { items, buckets, tags?, solution: [group per item] } */
+   * Put every item into one of the groups by dragging it (finger or mouse) from the pool into a group's
+   * box; dragging it back to the pool takes it out. Keyboard: 1, 2… put the focused word into a group,
+   * 0 or Backspace gives it back, ← → move it between boxes. task: { items, buckets, tags?, solution } */
   const sort = {
     check: (t, v) => sameList(v, t.solution),
     build(el, t) {
       const tags = t.tags || t.buckets.map((_, i) => String(i + 1));
-      const pal = palette(el, t.buckets.map((_, i) => `<span class="sort-key b${i}"><i></i></span>`), "Группа");
-      pal.buttons.forEach((b, i) => {
-        b.querySelector("i").textContent = tags[i];
-        b.querySelector(".sort-key").append(` ${t.buckets[i]}`);
+      const board = document.createElement("div");
+      board.className = "sort-board";
+      const pool = document.createElement("div");
+      pool.className = "sort-pool";
+      pool.dataset.zone = "pool";
+      pool.setAttribute("aria-label", "Слова");
+      const zones = document.createElement("div");
+      zones.className = "sort-zones";
+      zones.style.setProperty("--n", t.buckets.length);
+      const bodies = t.buckets.map((name, b) => {
+        const z = document.createElement("div");
+        z.className = `sort-zone b${b}`;
+        z.dataset.zone = String(b);
+        z.innerHTML = `<div class="sort-zone-head"><i></i><span></span></div><div class="sort-zone-body"></div>`;
+        z.querySelector("i").textContent = tags[b];
+        z.querySelector("span").textContent = name;
+        z.setAttribute("aria-label", `Группа «${name}»`);
+        zones.appendChild(z);
+        return z.querySelector(".sort-zone-body");
       });
-      const list = document.createElement("div");
-      list.className = "sort-list";
-      el.appendChild(list);
-      let state = t.items.map(() => null);
+      board.append(pool, zones);
+      el.appendChild(board);
+      const order = shuffled(t.items.length);
+      const state = t.items.map(() => null);
       const chips = t.items.map((item, i) => {
-        const b = document.createElement("button");
-        b.type = "button";
-        b.className = "sort-chip";
-        b.innerHTML = `<span class="sort-tag"></span><span class="sort-word"></span>`;
-        b.querySelector(".sort-word").textContent = item;
-        b.addEventListener("click", () => {
-          state[i] = state[i] === pal.active ? null : pal.active;
-          render();
-          pop(b);
-        });
-        return b;
+        const c = document.createElement("button");
+        c.type = "button";
+        c.className = "sort-chip";
+        c.textContent = item;
+        c.dataset.i = String(i);
+        return c;
       });
-      shuffled(chips.length).forEach((i) => list.appendChild(chips[i]));
-      const render = () => {
-        chips.forEach((b, i) => {
-          b.dataset.b = state[i] === null ? "" : String(state[i]);
-          b.querySelector(".sort-tag").textContent = state[i] === null ? "?" : tags[state[i]];
-        });
+      const label = (i) => chips[i].setAttribute("aria-label",
+        `${t.items[i]}: ${state[i] === null ? "не разложено" : `в группе «${t.buckets[state[i]]}»`}`);
+      // moves chip i into its box; FLIP: it slides over from where it was instead of jumping
+      const place = (i, v, animate = true) => {
+        const c = chips[i];
+        const from = animate && c.isConnected ? c.getBoundingClientRect() : null;
+        state[i] = v;
+        if (v === null) {
+          // the pool keeps its shuffled order
+          const after = order.slice(order.indexOf(i) + 1).map((j) => chips[j]).find((x) => x.parentNode === pool);
+          pool.insertBefore(c, after || null);
+        } else bodies[v].appendChild(c);
+        c.dataset.b = v === null ? "" : String(v);
+        label(i);
+        if (from && motion() && c.animate) {
+          const to = c.getBoundingClientRect();
+          c.animate([{ transform: `translate(${from.left - to.left}px, ${from.top - to.top}px)` }, { transform: "none" }],
+            { duration: 260, easing: "cubic-bezier(.2,.8,.2,1)" });
+        }
+        board.classList.toggle("is-sorted", state.every((x) => x !== null));
       };
+      order.forEach((i) => place(i, null, false));
+
+      // dragging: the chip follows the pointer; the box under it lights up; letting go drops it there
+      const zoneAt = (x, y) => [pool, ...bodies.map((b) => b.parentNode)].find((z) => {
+        const r = z.getBoundingClientRect();
+        return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+      });
+      const highlight = (z) => board.querySelectorAll("[data-zone]").forEach((n) => n.classList.toggle("is-over", n === z));
+      let drag = null;
+      board.addEventListener("pointerdown", (e) => {
+        const c = e.target.closest(".sort-chip");
+        if (!c || c.disabled || el.classList.contains("is-locked") || (e.pointerType === "mouse" && e.button !== 0)) return;
+        drag = { c, i: Number(c.dataset.i), x: e.clientX, y: e.clientY, id: e.pointerId, moved: false };
+        c.setPointerCapture?.(e.pointerId);
+      });
+      board.addEventListener("pointermove", (e) => {
+        if (!drag || e.pointerId !== drag.id) return;
+        const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+        if (!drag.moved && Math.hypot(dx, dy) < 6) return;
+        if (!drag.moved) {
+          drag.moved = true;
+          drag.c.classList.add("is-dragging");
+          board.classList.add("is-dragging");
+        }
+        drag.c.style.transform = `translate(${dx}px, ${dy}px) rotate(${clamp(dx / 30, -6, 6)}deg)`;
+        highlight(zoneAt(e.clientX, e.clientY) || null);
+        e.preventDefault();
+      });
+      const drop = (e) => {
+        if (!drag || e.pointerId !== drag.id) return;
+        const { c, i, moved } = drag;
+        drag = null;
+        highlight(null);
+        board.classList.remove("is-dragging");
+        if (!moved) {
+          // a tap does not sort: the word hops to show that it has to be dragged
+          if (motion() && c.animate) c.animate([{ transform: "none" }, { transform: "translateY(-7px)" }, { transform: "none" }], { duration: 320 });
+          return;
+        }
+        const z = e.type === "pointercancel" ? null : zoneAt(e.clientX, e.clientY);
+        c.classList.remove("is-dragging");
+        c.style.transform = "";
+        place(i, !z ? state[i] : z === pool ? null : Number(z.dataset.zone));
+        if (z && z !== pool) pop(c);
+      };
+      board.addEventListener("pointerup", drop);
+      board.addEventListener("pointercancel", drop);
+      board.addEventListener("keydown", (e) => {
+        const c = e.target.closest(".sort-chip");
+        if (!c) return;
+        const i = Number(c.dataset.i), n = t.buckets.length;
+        let v;
+        if (/^[1-9]$/.test(e.key) && Number(e.key) <= n) v = Number(e.key) - 1;
+        else if (e.key === "0" || e.key === "Backspace" || e.key === "Delete") v = null;
+        else if (e.key === "ArrowRight") v = state[i] === null ? 0 : Math.min(n - 1, state[i] + 1);
+        else if (e.key === "ArrowLeft") v = state[i] === null || state[i] === 0 ? null : state[i] - 1;
+        else return;
+        e.preventDefault();
+        place(i, v);
+        c.focus();
+      });
+
       const hint = document.createElement("p");
       hint.className = "task-hint";
-      hint.textContent = t.hint || "Выберите группу, затем нажмите на её слова";
+      hint.textContent = t.hint || "Перетащите каждое слово в нужную группу";
       el.appendChild(hint);
-      render();
       const lock = lockable(el);
       return {
         value: () => (state.every((v) => v !== null) ? [...state] : null),
         lock,
         reveal() {
-          chips.forEach((b, i) => {
-            b.classList.toggle("is-miss", state[i] !== t.solution[i]);
-            b.classList.toggle("is-answer", state[i] === t.solution[i]);
+          chips.forEach((c, i) => {
+            c.classList.toggle("is-miss", state[i] !== t.solution[i]);
+            c.classList.toggle("is-answer", state[i] === t.solution[i]);
           });
-          state = [...t.solution];
-          render();
-          answerLine(el, t.reveal || "Верные группы показаны цветом");
+          t.solution.forEach((v, i) => place(i, v));
+          answerLine(el, t.reveal || "Слова разложены по верным группам; ошибки отмечены пунктиром");
         },
         reset() {
-          state = t.items.map(() => null);
-          pal.set(0);
-          chips.forEach((b) => b.classList.remove("is-answer", "is-miss"));
-          render();
+          chips.forEach((c) => c.classList.remove("is-answer", "is-miss"));
+          order.forEach((i) => place(i, null, false));
           lock(false);
         },
       };
