@@ -17,6 +17,15 @@
   const sameSet = (a, b) =>
     Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every((x) => b.includes(x));
   const sameList = (a, b) => Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every((x, i) => x === b[i]);
+  // indices 0..n-1 in a fresh random order: every attempt lays the same task out differently
+  const shuffled = (n) => {
+    const a = Array.from({ length: n }, (_, i) => i);
+    for (let i = n - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  };
   // "−3 и 3", "−2, −1 и 0"
   const listJoin = (items) => (items.length < 2 ? items.join("") : `${items.slice(0, -1).join(", ")} и ${items[items.length - 1]}`);
 
@@ -835,7 +844,9 @@
       const fig = figure(el, "0 0 10 10", "Чертёж");
       fig.setAttribute("role", "group");
       fig.classList.add(`fig-${t.figure}`);
-      const { viewBox, parts, points, kind, overlay } = FIGURES[t.figure](fig, t);
+      // circles carry no order of their own, so they swap places between attempts
+      const drawn = t.figure === "pies" ? { ...t, shares: shuffled(t.shares.length).map((i) => t.shares[i]) } : t;
+      const { viewBox, parts, points, kind, overlay } = FIGURES[t.figure](fig, drawn);
       fig.setAttribute("viewBox", viewBox);
       const multi = t.solution.length > 1;
       const picked = new Set();
@@ -1546,6 +1557,7 @@
       el.appendChild(box);
       const slots = box.querySelector(".order-slots"), pool = box.querySelector(".order-pool");
       let placed = [];
+      const poolOrder = shuffled(t.items.length);
       const render = () => {
         slots.innerHTML = t.items.map((_, i) => {
           const idx = placed[i];
@@ -1554,9 +1566,9 @@
             ? `<span class="order-slot${mid}"></span>`
             : `<button type="button" class="order-card is-placed${mid}" data-slot="${i}" aria-label="Убрать ${num(t.items[idx])}">${num(t.items[idx])}</button>`;
         }).join("");
-        pool.innerHTML = t.items.map((v, i) => (placed.includes(i)
-          ? `<span class="order-card is-gone" aria-hidden="true">${num(v)}</span>`
-          : `<button type="button" class="order-card" data-item="${i}">${num(v)}</button>`)).join("");
+        pool.innerHTML = poolOrder.map((i) => (placed.includes(i)
+          ? `<span class="order-card is-gone" aria-hidden="true">${num(t.items[i])}</span>`
+          : `<button type="button" class="order-card" data-item="${i}">${num(t.items[i])}</button>`)).join("");
       };
       box.addEventListener("click", (event) => {
         const card = event.target.closest("button.order-card");
@@ -1784,8 +1796,9 @@
     build(el, t) {
       const box = document.createElement("div");
       box.className = "match-board";
-      box.innerHTML = `<div class="match-col">${t.left.map((s, i) => `<button type="button" class="match-btn" data-side="L" data-i="${i}">${s}</button>`).join("")}</div>
-        <div class="match-col">${t.right.map((s, i) => `<button type="button" class="match-btn" data-side="R" data-i="${i}">${s}</button>`).join("")}</div>`;
+      const col = (list, side) => shuffled(list.length)
+        .map((i) => `<button type="button" class="match-btn" data-side="${side}" data-i="${i}">${list[i]}</button>`).join("");
+      box.innerHTML = `<div class="match-col">${col(t.left, "L")}</div><div class="match-col">${col(t.right, "R")}</div>`;
       el.appendChild(box);
       const hint = document.createElement("p");
       hint.className = "task-hint";
@@ -2241,9 +2254,9 @@
             x.setAttribute("aria-checked", String(picked.has(j)));
           });
         });
-        list.appendChild(b);
         return b;
       });
+      shuffled(btns.length).forEach((i) => list.appendChild(btns[i]));
       if (multi) {
         const hint = document.createElement("p");
         hint.className = "task-hint";
@@ -2300,9 +2313,9 @@
           render();
           pop(b);
         });
-        list.appendChild(b);
         return b;
       });
+      shuffled(chips.length).forEach((i) => list.appendChild(chips[i]));
       const render = () => {
         chips.forEach((b, i) => {
           b.dataset.b = state[i] === null ? "" : String(state[i]);
@@ -2338,10 +2351,246 @@
     },
   };
 
+  /* ----------------------------------------------------------------- slices
+   * Shade a fraction: tap the parts of a circle or a bar. task: { shape: "pie" | "bar", parts, solution,
+   * given? } — `given` parts are already filled (in the other colour) and can't be tapped, for sums */
+  const slices = {
+    check: (t, v) => v === t.solution,
+    build(el, t) {
+      const n = t.parts, given = t.given || 0, pie = t.shape !== "bar";
+      const fig = figure(el, pie ? "0 0 220 220" : "0 0 340 90", pie ? "Круг, разрезанный на доли" : "Полоска, разрезанная на доли");
+      fig.classList.add(pie ? "fig-slices-pie" : "fig-slices-bar");
+      const on = new Set();
+      const shapes = Array.from({ length: n }, (_, k) => {
+        let d;
+        if (pie) {
+          const c = 110, r = 100, a1 = (2 * Math.PI * k) / n, a2 = (2 * Math.PI * (k + 1)) / n;
+          const p1 = [c + r * Math.sin(a1), c - r * Math.cos(a1)], p2 = [c + r * Math.sin(a2), c - r * Math.cos(a2)];
+          d = n === 1 ? `M${c - r} ${c} a${r} ${r} 0 1 0 ${2 * r} 0 a${r} ${r} 0 1 0 ${-2 * r} 0 Z`
+            : `M${c} ${c} L${p1[0]} ${p1[1]} A${r} ${r} 0 0 1 ${p2[0]} ${p2[1]} Z`;
+        } else {
+          const w = 320 / n, x = 10 + k * w;
+          d = `M${x} 15 h${w} v60 h${-w} Z`;
+        }
+        const part = svg("path", { d, class: `f-slice${k < given ? " is-given" : ""}` }, fig);
+        if (k >= given) {
+          part.setAttribute("role", "checkbox");
+          part.setAttribute("aria-checked", "false");
+          part.setAttribute("aria-label", `Доля ${k + 1} из ${n}`);
+          toggleable(part, () => {
+            if (on.has(k)) on.delete(k);
+            else on.add(k);
+            render();
+          });
+        }
+        return part;
+      });
+      const render = () => shapes.forEach((part, k) => {
+        part.classList.toggle("is-on", on.has(k));
+        if (k >= given) part.setAttribute("aria-checked", String(on.has(k)));
+      });
+      const hint = document.createElement("p");
+      hint.className = "task-hint";
+      hint.textContent = t.hint || "Нажимайте на доли, чтобы закрасить их; повторное нажатие стирает";
+      el.appendChild(hint);
+      const lock = lockable(el);
+      return {
+        value: () => (on.size ? on.size : null),
+        lock,
+        reveal() {
+          on.clear();
+          for (let k = given; k < given + t.solution; k++) on.add(k);
+          render();
+          answerLine(el, t.reveal || `Верно: закрасить ${t.solution} ${t.solution === 1 ? "долю" : t.solution < 5 ? "доли" : "долей"} из ${n}`);
+        },
+        reset() {
+          on.clear();
+          render();
+          lock(false);
+        },
+      };
+    },
+  };
+
+  /* ------------------------------------------------------------------ place
+   * Put a point on a line between labelled marks: tap or drag, it snaps to `step` (fractions, decimals).
+   * task: { min, max, step, labels: [[value, "text"], …], solution } */
+  const place = {
+    check: (t, v) => typeof v === "number" && Math.abs(v - t.solution) < t.step / 2,
+    build(el, t) {
+      const X0 = 24, X1 = 316, Y = 46;
+      const at = (v) => X0 + ((v - t.min) / (t.max - t.min)) * (X1 - X0);
+      const fig = figure(el, "0 0 340 86", "Числовая прямая");
+      fig.classList.add("is-tappable");
+      svg("line", { x1: 8, y1: Y, x2: 332, y2: Y, class: "f-axis" }, fig);
+      (t.labels || [[t.min, num(t.min)], [t.max, num(t.max)]]).forEach(([v, text]) => {
+        svg("line", { x1: at(v), y1: Y - 9, x2: at(v), y2: Y + 9, class: "f-tick" }, fig);
+        label(fig, at(v), Y + 30, text, "f-label");
+      });
+      const marker = svg("g", { class: "f-place", visibility: "hidden" }, fig);
+      svg("line", { x1: 0, y1: Y - 22, x2: 0, y2: Y, class: "f-place-stem" }, marker);
+      svg("circle", { cx: 0, cy: Y, r: 9, class: "f-place-dot" }, marker);
+      const handle = svg("circle", { cx: 0, cy: Y, r: 22, class: "f-place-hit" }, marker);
+      let value = null;
+      const steps = Math.round((t.max - t.min) / t.step);
+      const set = (p) => {
+        const k = clamp(Math.round(((p.x - X0) / (X1 - X0)) * steps), 0, steps);
+        value = t.min + k * t.step;
+        marker.setAttribute("visibility", "visible");
+        marker.setAttribute("transform", `translate(${at(value)} 0)`);
+      };
+      drag(handle, fig, set);
+      const hint = document.createElement("p");
+      hint.className = "task-hint";
+      hint.textContent = t.hint || "Нажмите на прямую или перетащите точку";
+      el.appendChild(hint);
+      const lock = lockable(el);
+      return {
+        value: () => value,
+        lock,
+        reveal() {
+          set({ x: at(t.solution) });
+          marker.classList.add("is-answer");
+          answerLine(el, t.reveal || "Верное место отмечено на прямой");
+        },
+        reset() {
+          value = null;
+          marker.setAttribute("visibility", "hidden");
+          marker.classList.remove("is-answer");
+          lock(false);
+        },
+      };
+    },
+  };
+
+  /* ------------------------------------------------------------------- gaps
+   * Missing letters: pick a letter from the row of buttons, then tap a gap «_» in a word.
+   * task: { words: ["ж_раф", …], letters: ["и", "ы"], solution: [letter per gap, in reading order] } */
+  const gaps = {
+    check: (t, v) => sameList(v, t.solution),
+    build(el, t) {
+      const pal = palette(el, t.letters.map((l) => `<span class="pal-mark">${l === "" ? "—" : l}</span>`), "Буква");
+      const row = document.createElement("div");
+      row.className = "gap-row";
+      el.appendChild(row);
+      const state = [];
+      const holes = [];
+      t.words.forEach((w) => {
+        const word = document.createElement("span");
+        word.className = "gap-word";
+        w.split(/(_)/).forEach((piece) => {
+          if (piece !== "_") {
+            if (piece) word.append(piece);
+            return;
+          }
+          const i = holes.length;
+          const b = document.createElement("button");
+          b.type = "button";
+          b.className = "gap-hole";
+          b.setAttribute("aria-label", `Пропуск ${i + 1} в слове ${w.replace(/_/g, "…")}`);
+          b.addEventListener("click", () => {
+            const letter = t.letters[pal.active];
+            state[i] = state[i] === letter ? undefined : letter;
+            render();
+            pop(b);
+          });
+          holes.push(b);
+          state.push(undefined);
+          word.appendChild(b);
+        });
+        row.appendChild(word);
+      });
+      const render = () => holes.forEach((b, i) => {
+        b.textContent = state[i] === undefined ? "" : state[i] === "" ? "—" : state[i];
+        b.classList.toggle("is-on", state[i] !== undefined);
+      });
+      const hint = document.createElement("p");
+      hint.className = "task-hint";
+      hint.textContent = t.hint || "Выберите букву, затем нажмите на пропуск";
+      el.appendChild(hint);
+      const lock = lockable(el);
+      return {
+        value: () => (state.every((v) => v !== undefined) ? [...state] : null),
+        lock,
+        reveal() {
+          holes.forEach((b, i) => {
+            b.classList.toggle("is-miss", state[i] !== t.solution[i]);
+            b.classList.toggle("is-answer", state[i] === t.solution[i]);
+          });
+          t.solution.forEach((v, i) => (state[i] = v));
+          render();
+          let k = 0;
+          answerLine(el, t.reveal || `Верно: ${listJoin(t.words.map((w) => w.replace(/_/g, () => t.solution[k++])))}`);
+        },
+        reset() {
+          state.fill(undefined);
+          holes.forEach((b) => b.classList.remove("is-miss", "is-answer"));
+          pal.set(0);
+          render();
+          lock(false);
+        },
+      };
+    },
+  };
+
+  /* ------------------------------------------------------------------ build
+   * Put the answer together from tiles (some are spare). A tap on a tile adds it to the line,
+   * a tap on a tile in the line gives it back. task: { tiles, solution: [tile texts in order], alt?: [[…]] } */
+  const build = {
+    check: (t, v) => Array.isArray(v) && [t.solution, ...(t.alt || [])].some((s) => sameList(v, s)),
+    build(el, t) {
+      const box = document.createElement("div");
+      box.className = "build-board";
+      box.innerHTML = `<div class="build-line" aria-label="Ответ"></div><div class="build-pool" aria-label="Карточки"></div>`;
+      el.appendChild(box);
+      const line = box.querySelector(".build-line"), pool = box.querySelector(".build-pool");
+      const poolOrder = shuffled(t.tiles.length);
+      let placed = [];
+      const render = () => {
+        line.innerHTML = placed.length
+          ? placed.map((i, k) => `<button type="button" class="build-tile is-placed" data-slot="${k}" aria-label="Убрать ${t.tiles[i]}">${t.tiles[i]}</button>`).join("")
+          : `<span class="build-empty">нажимайте на карточки ниже</span>`;
+        pool.innerHTML = poolOrder.map((i) => (placed.includes(i)
+          ? `<span class="build-tile is-gone" aria-hidden="true">${t.tiles[i]}</span>`
+          : `<button type="button" class="build-tile" data-item="${i}">${t.tiles[i]}</button>`)).join("");
+      };
+      box.addEventListener("click", (event) => {
+        const tile = event.target.closest("button.build-tile");
+        if (!tile) return;
+        if (tile.dataset.item !== undefined) placed.push(Number(tile.dataset.item));
+        else placed.splice(Number(tile.dataset.slot), 1);
+        render();
+        if (tile.dataset.item !== undefined) pop(line.lastElementChild);
+      });
+      render();
+      const lock = lockable(el);
+      return {
+        value: () => (placed.length ? placed.map((i) => t.tiles[i]) : null),
+        lock,
+        reveal() {
+          const used = new Set();
+          placed = t.solution.map((text) => {
+            const i = t.tiles.findIndex((x, j) => x === text && !used.has(j));
+            used.add(i);
+            return i;
+          });
+          render();
+          lock(true);
+          answerLine(el, t.reveal || `Верно: ${t.solution.join(" ")}`);
+        },
+        reset() {
+          placed = [];
+          render();
+          lock(false);
+        },
+      };
+    },
+  };
+
   const TASK_TYPES = {
     scales, angle, numberline, plane, pick, level, "triangle-sum": triangleSum, line,
     strips, rect: rectangle, enter, roll, order, signs, move, sticks, match, table, parabola, ray,
-    words: wordsTask, punct, choice, sort,
+    words: wordsTask, punct, choice, sort, slices, place, gaps, build,
   };
 
   const IntTasks = {

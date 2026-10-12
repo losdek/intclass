@@ -8,6 +8,10 @@ const IntStore = require("../js/store.js");
 
 const ROOT = path.join(__dirname, "..");
 
+// a quiz slot is one task or { variants: [task, …] } (each attempt draws one)
+const variantsOf = (q) => q.variants || [q];
+const allTasks = (lesson) => lesson.quiz.flatMap(variantsOf);
+
 describe("Lessons Dataset Validation", () => {
   test("LESSONS array contains 58 curriculum lessons", () => {
     assert.ok(Array.isArray(LESSONS));
@@ -68,7 +72,10 @@ describe("Lessons Dataset Validation", () => {
   test("Every lesson has a valid quiz with questions, options, answer index, and explanation", () => {
     LESSONS.forEach((lesson) => {
       assert.ok(Array.isArray(lesson.quiz) && lesson.quiz.length > 0, `Lesson ${lesson.id} has no quiz`);
-      lesson.quiz.forEach((q, qIndex) => {
+      lesson.quiz.forEach((slot) => {
+        if (slot.variants) assert.ok(slot.variants.length >= 2, `${lesson.id}: a variants slot needs at least two tasks`);
+      });
+      allTasks(lesson).forEach((q, qIndex) => {
         assert.ok(q.question && q.question.length > 5, `Invalid quiz question in ${lesson.id}[${qIndex}]`);
         assert.ok(q.explanation && q.explanation.length > 5, `Missing explanation in ${lesson.id}[${qIndex}]`);
         if (q.type) return; // interactive tasks are checked below
@@ -86,14 +93,34 @@ describe("Lessons Dataset Validation", () => {
   test("Every lesson with a video has four interactive questions, and every task accepts its own solution", () => {
     LESSONS.filter((l) => l.video).forEach((lesson) => {
       assert.strictEqual(lesson.quiz.length, 4, `${lesson.id} should have 4 questions`);
-      assert.ok(lesson.quiz.every((q) => q.type), `${lesson.id} has a question that is not interactive`);
+      assert.ok(allTasks(lesson).every((q) => q.type), `${lesson.id} has a question that is not interactive`);
     });
-    LESSONS.flatMap((l) => l.quiz.map((q) => [l.id, q])).filter(([, q]) => q.type).forEach(([id, q]) => {
+    LESSONS.flatMap((l) => allTasks(l).map((q) => [l.id, q])).filter(([, q]) => q.type).forEach(([id, q]) => {
       assert.ok(IntTasks.TASK_TYPES[q.type], `Unknown task type ${q.type} in ${id}`);
       const solution = IntTasks.solutionOf(q);
       assert.ok(solution !== undefined, `Task without solution in ${id}`);
       assert.ok(IntTasks.check(q, solution), `The solution of ${id} (${q.type}) does not pass its own check`);
       assert.strictEqual(IntTasks.check(q, null), false, `Unanswered task counts as correct in ${id}`);
+      // the answer has to be reachable with the widget as drawn
+      if (q.type === "slices") assert.ok(q.solution >= 1 && q.solution <= q.parts - (q.given || 0), `${id}: slices answer does not fit`);
+      if (q.type === "place") {
+        const k = (q.solution - q.min) / q.step;
+        assert.ok(q.solution >= q.min && q.solution <= q.max && Math.abs(k - Math.round(k)) < 1e-9, `${id}: place answer is off the grid`);
+      }
+      if (q.type === "gaps") {
+        assert.strictEqual(q.words.join("").split("_").length - 1, q.solution.length, `${id}: gaps and answers differ in number`);
+        assert.ok(q.solution.every((l) => q.letters.includes(l)), `${id}: an answer letter is missing from the buttons`);
+      }
+      if (q.type === "build") {
+        [q.solution, ...(q.alt || [])].forEach((sol) => {
+          const pool = [...q.tiles];
+          sol.forEach((t) => {
+            const i = pool.indexOf(t);
+            assert.ok(i >= 0, `${id}: tile «${t}» is not in the pool`);
+            pool.splice(i, 1);
+          });
+        });
+      }
     });
   });
 
@@ -119,6 +146,22 @@ describe("Lessons Dataset Validation", () => {
     const pick = { type: "pick", solution: ["ab1", "ab2"] };
     assert.ok(check(pick, ["ab2", "ab1"]));
     assert.ok(!check(pick, ["ab1"]) && !check(pick, ["ab1", "ab2", "a2"]));
+
+    const slices = { type: "slices", parts: 8, solution: 3 };
+    assert.ok(check(slices, 3));
+    assert.ok(!check(slices, 2) && !check(slices, 4));
+
+    const place = { type: "place", min: 0, max: 1, step: 0.125, solution: 0.75 };
+    assert.ok(check(place, 0.75) && check(place, 0.5 + 0.25));
+    assert.ok(!check(place, 0.625) && !check(place, 0.875));
+
+    const gaps = { type: "gaps", words: ["ж_раф", "ш_на"], letters: ["и", "ы"], solution: ["и", "и"] };
+    assert.ok(check(gaps, ["и", "и"]));
+    assert.ok(!check(gaps, ["ы", "и"]) && !check(gaps, ["и"]));
+
+    const build = { type: "build", tiles: ["3", "(", "2x", "+", "3", ")", "6"], solution: ["3", "(", "2x", "+", "3", ")"], alt: [["(", "2x", "+", "3", ")", "3"]] };
+    assert.ok(check(build, ["3", "(", "2x", "+", "3", ")"]) && check(build, ["(", "2x", "+", "3", ")", "3"]));
+    assert.ok(!check(build, ["6", "(", "2x", "+", "3", ")"]) && !check(build, ["3", "(", "2x", "+", "3"]));
 
     const level = { type: "level", solution: 4 };
     assert.ok(check(level, 4));

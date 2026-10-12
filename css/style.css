@@ -4013,3 +4013,84 @@ html:has(> body.home-page) {
     break-inside: avoid;
   }
 }
+
+/* ==========================================================================
+   Tasks: shade a fraction, place a point, fill letter gaps, build from tiles
+   ========================================================================== */
+.task-fig.fig-slices-pie { max-width: 230px; }
+.task-fig.fig-slices-bar { max-width: 420px; }
+.f-slice { fill: var(--surface); stroke: var(--ink); stroke-width: 2.5; stroke-linejoin: round; cursor: pointer; transition: fill var(--fast) var(--ease); }
+.f-slice.is-on { fill: var(--fig-teal); }
+.f-slice.is-given { fill: var(--fig-mustard); cursor: default; }
+.f-slice:focus-visible { outline: none; stroke: var(--accent); stroke-width: 4; }
+@media (hover: hover) and (pointer: fine) {
+  .f-slice:not(.is-given):not(.is-on):hover { fill: var(--fig-teal-soft); }
+}
+
+.f-place-stem { stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; }
+.f-place-dot { fill: var(--accent); stroke: var(--surface); stroke-width: 3; }
+.f-place-hit { fill: transparent; cursor: grab; }
+.f-place.is-answer .f-place-dot { fill: var(--success); }
+.f-place.is-answer .f-place-stem { stroke: var(--success); }
+
+.gap-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.55rem 1.1rem;
+  padding: 0.3rem 0;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+.gap-word { display: inline-flex; align-items: center; gap: 2px; white-space: nowrap; }
+.gap-hole {
+  display: inline-grid;
+  place-items: center;
+  min-width: 34px;
+  height: 46px;
+  padding: 0 4px;
+  border: 1.5px dashed var(--border-strong);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--accent-text);
+  font: inherit;
+  transition: background var(--fast) var(--ease), border-color var(--fast) var(--ease);
+}
+.gap-hole.is-on { border-style: solid; border-color: var(--accent); background: var(--accent-soft); }
+.gap-hole.is-answer { border-style: solid; border-color: var(--success); background: var(--success-soft); color: var(--success); }
+.gap-hole.is-miss { border-style: solid; border-color: var(--danger); background: var(--danger-soft); color: var(--danger); }
+
+.build-board { display: grid; gap: 0.8rem; }
+.build-line,
+.build-pool {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+}
+.build-line {
+  min-height: 62px;
+  padding: 0.35rem;
+  border: 2px dashed var(--border-strong);
+  border-radius: var(--radius);
+}
+.build-empty { font-size: 0.82rem; color: var(--faint); }
+.build-tile {
+  display: grid;
+  place-items: center;
+  min-width: 46px;
+  height: 48px;
+  padding: 0 0.6rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 1.12rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.build-tile.is-placed { border-color: transparent; background: var(--fig-teal); color: #ffffff; }
+.build-tile.is-gone { display: none; }
