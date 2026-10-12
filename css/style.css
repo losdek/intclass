@@ -27,7 +27,9 @@
   --accent-glow: rgba(37, 99, 235, 0.32);
   --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #2563eb 52%, #1d4ed8 100%);
   --hero-glow: radial-gradient(closest-side, rgba(37, 99, 235, 0.16), rgba(37, 99, 235, 0));
+  --head-glow: radial-gradient(closest-side, rgba(96, 165, 250, 0.38), rgba(96, 165, 250, 0));
   --blue-band: #eff6ff;
+  --blue-band-border: #bfdbfe;
   --band-end: #12306e;
 
   --math: #2563eb;
@@ -88,45 +90,47 @@
 }
 
 :root[data-theme="dark"] {
-  /* 60% dark navy · 25% light · 15% blue */
-  --bg: #070b14;
-  --surface: #0d1424;
-  --surface-subtle: #111a2d;
-  --surface-hover: #16213a;
-  --border: #1c2740;
-  --border-strong: #2a3a5c;
+  /* charcoal greys with a faint cool cast, one flat blue: no navy, no gradients, no glow */
+  --bg: #0f1013;
+  --surface: #16171b;
+  --surface-subtle: #1b1d21;
+  --surface-hover: #222429;
+  --border: #26282d;
+  --border-strong: #383b42;
 
-  --ink: #eef2f9;
-  --soft: #a3b1c6;
-  --faint: #8090a8;
+  --ink: #ededef;
+  --soft: #a9acb4;
+  --faint: #8b8e97;
 
   --accent: #2563eb;
   --accent-strong: #3b82f6;
-  --accent-text: #6ea8ff;
+  --accent-text: #7aa7f7;
   --on-accent: #ffffff;
-  --accent-soft: #0f1d3a;
-  --accent-tint: #15295a;
-  --accent-border: #1e3a8a;
-  --accent-glow: rgba(59, 130, 246, 0.4);
-  --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #2563eb 55%, #1e40af 100%);
-  --hero-glow: radial-gradient(closest-side, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0));
-  --blue-band: #0e1c3f;
-  --band-end: #13306f;
+  --accent-soft: #1a2131;
+  --accent-tint: #1f2a44;
+  --accent-border: #2e4372;
+  --accent-glow: rgba(0, 0, 0, 0.55);
+  --accent-gradient: #2563eb;
+  --hero-glow: transparent;
+  --head-glow: transparent;
+  --blue-band: #141518;
+  --blue-band-border: #2c2e34;
+  --band-end: #0b0c0e;
 
-  --math: #6ea8ff;
-  --rus: #38bdf8;
+  --math: #7aa7f7;
+  --rus: #5cc0ee;
 
-  --band-bg: #0c1630;
-  --band-surface: #111e3d;
-  --band-surface-2: #15244a;
-  --band-border: #1d2f5a;
-  --band-border-strong: #2b4277;
-  --band-ink: #eef2f9;
-  --band-soft: #a9b8d3;
-  --band-faint: #8798b8;
-  --band-accent-text: #7cb4ff;
-  --band-accent-soft: #17306a;
-  --band-accent-border: #24448e;
+  --band-bg: #0b0c0e;
+  --band-surface: #141518;
+  --band-surface-2: #1a1b1f;
+  --band-border: #222428;
+  --band-border-strong: #33363c;
+  --band-ink: #ededef;
+  --band-soft: #a9acb4;
+  --band-faint: #8b8e97;
+  --band-accent-text: #7aa7f7;
+  --band-accent-soft: #1a2131;
+  --band-accent-border: #2e4372;
 
   --success: #4ade80;
   --success-soft: #0d1f14;
@@ -138,8 +142,8 @@
   --overlay: rgba(0, 0, 0, 0.6);
   --media-ui: rgba(0, 0, 0, 0.62);
 
-  --fig-paper: #0a1120;
-  --fig-grid: #1a2640;
+  --fig-paper: #121316;
+  --fig-grid: #25272c;
   --fig-teal: #34b89c;
   --fig-teal-soft: rgba(52, 184, 156, 0.24);
   --fig-mustard: #f2be52;
@@ -175,7 +179,7 @@
 
 /* Light-blue band: same components on a blue-tinted ground */
 .section-blue {
-  --border: var(--accent-border);
+  --border: var(--blue-band-border);
   background: var(--blue-band);
 }
 
@@ -544,12 +548,23 @@ h2,
   display: inline-block;
   margin-top: 0.08em;
   /* the words have no tall letters, only the tail of «у»: a tight line and more padding
-     below keep the letters optically centred and the tail inside the box */
-  padding: 0.06em 0.18em 0.4em;
+     below keep the letters optically centred and the tail inside the box; the right side
+     is wider because «у» overhangs its own advance, so both sides look the same */
+  padding: 0.15em 0.21em 0.31em 0.15em;
   line-height: 0.66;
   border-radius: 10px;
   background: var(--accent-gradient);
   color: var(--on-accent);
+}
+
+/* Where supported, the box is trimmed to the lowercase letters themselves (x-height to
+   baseline), so equal padding centres them exactly at every size and in any font */
+@supports (text-box: trim-both ex alphabetic) {
+  .hero-invert {
+    padding-block: 0.29em;
+    line-height: 1;
+    text-box: trim-both ex alphabetic;
+  }
 }
 
 .hero-sub {
@@ -1022,7 +1037,7 @@ html:has(> body.home-page) {
   top: -70%;
   width: min(90vw, 640px);
   aspect-ratio: 1;
-  background: radial-gradient(closest-side, rgba(96, 165, 250, 0.38), rgba(96, 165, 250, 0));
+  background: var(--head-glow);
   pointer-events: none;
 }
 
@@ -2396,8 +2411,10 @@ html:has(> body.home-page) {
 .punct-gap {
   display: inline-grid;
   place-items: center;
-  width: 30px;
+  min-width: 30px;
+  padding: 0 4px;
   min-height: 46px;
+  white-space: nowrap;
   border: 1.5px dashed var(--border-strong);
   border-radius: 8px;
   background: transparent;
@@ -2432,15 +2449,17 @@ html:has(> body.home-page) {
 .choice-opt.is-answer { border-color: var(--success); background: var(--success-soft); color: var(--success); }
 .choice-opt.is-miss { border-color: var(--danger); background: var(--danger-soft); color: var(--danger); }
 
-.sort-legend {
-  display: flex;
+/* pick a mark or a group first, then tap where it goes */
+.task-palette {
+  justify-self: center;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.4rem 1.1rem;
-  font-size: 0.86rem;
-  font-weight: 600;
-  color: var(--soft);
+  max-width: 100%;
 }
+
+.task-palette button { min-width: 52px; }
+.pal-mark { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; line-height: 1; }
+.task-palette .sort-key { display: inline-flex; align-items: center; gap: 0.4rem; }
+.task-palette button.is-on .sort-key i { box-shadow: 0 0 0 2px var(--on-accent); }
 
 .sort-key i,
 .sort-tag {
@@ -3360,6 +3379,35 @@ html:has(> body.home-page) {
   animation: wheel-roll 1.6s var(--ease) 2s infinite;
 }
 
+/* The entrance stays on its first frame until main.js has the fonts (adds .anim-go);
+   !important because every `animation:` shorthand above resets the play state */
+.anim:not(.anim-go) .hero *,
+.anim:not(.anim-go) .hero *::before,
+.anim:not(.anim-go) .page-head *,
+.anim:not(.anim-go) .page-head *::before {
+  animation-play-state: paused !important;
+}
+
+/* The cookie bar on a first visit covers the finger: it waits hidden, then starts from the top */
+.anim.has-cookie-bar .scroll-hint,
+.anim.has-cookie-bar .scroll-hint-finger svg,
+.anim.has-cookie-bar .scroll-hint-finger::before,
+.anim.has-cookie-bar .scroll-hint-mouse .wheel {
+  animation: none;
+}
+
+.has-cookie-bar .scroll-hint {
+  visibility: hidden;
+}
+
+.anim.cookie-closed .scroll-hint { animation-delay: 0.1s; }
+
+.anim.cookie-closed .scroll-hint-finger svg,
+.anim.cookie-closed .scroll-hint-finger::before,
+.anim.cookie-closed .scroll-hint-mouse .wheel {
+  animation-delay: 0.7s;
+}
+
 /* «за минуту»: the blue box sweeps in like a highlighter */
 .anim .hero-invert {
   background: transparent;
@@ -3967,3 +4015,84 @@ html:has(> body.home-page) {
     break-inside: avoid;
   }
 }
+
+/* ==========================================================================
+   Tasks: shade a fraction, place a point, fill letter gaps, build from tiles
+   ========================================================================== */
+.task-fig.fig-slices-pie { max-width: 230px; }
+.task-fig.fig-slices-bar { max-width: 420px; }
+.f-slice { fill: var(--surface); stroke: var(--ink); stroke-width: 2.5; stroke-linejoin: round; cursor: pointer; transition: fill var(--fast) var(--ease); }
+.f-slice.is-on { fill: var(--fig-teal); }
+.f-slice.is-given { fill: var(--fig-mustard); cursor: default; }
+.f-slice:focus-visible { outline: none; stroke: var(--accent); stroke-width: 4; }
+@media (hover: hover) and (pointer: fine) {
+  .f-slice:not(.is-given):not(.is-on):hover { fill: var(--fig-teal-soft); }
+}
+
+.f-place-stem { stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; }
+.f-place-dot { fill: var(--accent); stroke: var(--surface); stroke-width: 3; }
+.f-place-hit { fill: transparent; cursor: grab; }
+.f-place.is-answer .f-place-dot { fill: var(--success); }
+.f-place.is-answer .f-place-stem { stroke: var(--success); }
+
+.gap-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.55rem 1.1rem;
+  padding: 0.3rem 0;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+.gap-word { display: inline-flex; align-items: center; gap: 2px; white-space: nowrap; }
+.gap-hole {
+  display: inline-grid;
+  place-items: center;
+  min-width: 34px;
+  height: 46px;
+  padding: 0 4px;
+  border: 1.5px dashed var(--border-strong);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--accent-text);
+  font: inherit;
+  transition: background var(--fast) var(--ease), border-color var(--fast) var(--ease);
+}
+.gap-hole.is-on { border-style: solid; border-color: var(--accent); background: var(--accent-soft); }
+.gap-hole.is-answer { border-style: solid; border-color: var(--success); background: var(--success-soft); color: var(--success); }
+.gap-hole.is-miss { border-style: solid; border-color: var(--danger); background: var(--danger-soft); color: var(--danger); }
+
+.build-board { display: grid; gap: 0.8rem; }
+.build-line,
+.build-pool {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+}
+.build-line {
+  min-height: 62px;
+  padding: 0.35rem;
+  border: 2px dashed var(--border-strong);
+  border-radius: var(--radius);
+}
+.build-empty { font-size: 0.82rem; color: var(--faint); }
+.build-tile {
+  display: grid;
+  place-items: center;
+  min-width: 46px;
+  height: 48px;
+  padding: 0 0.6rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 1.12rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.build-tile.is-placed { border-color: transparent; background: var(--fig-teal); color: #ffffff; }
+.build-tile.is-gone { display: none; }
