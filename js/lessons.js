@@ -1055,7 +1055,17 @@ const LESSONS = [
     "video": {
       "src": "videos/okruglenie-5.mp4",
       "poster": "videos/posters/okruglenie-5.jpg",
-      "duration": "1:46"
+      "duration": "1:36",
+      "pause": {
+        "at": 15.52,
+        "question": "Почему в новостях написали 48 000?",
+        "options": [
+          "47 862 округлили до тысяч",
+          "журналист ошибся",
+          "пришли ещё зрители"
+        ],
+        "answer": 0
+      }
     }
   },
   {
@@ -1244,7 +1254,17 @@ const LESSONS = [
     "video": {
       "src": "videos/smeshannye-chisla-5.mp4",
       "poster": "videos/posters/smeshannye-chisla-5.jpg",
-      "duration": "1:40"
+      "duration": "1:31",
+      "pause": {
+        "at": 11.66,
+        "question": "11 кусочков по 1/4 пиццы — это сколько пицц?",
+        "options": [
+          "2 3/4",
+          "3 1/4",
+          "2 1/2"
+        ],
+        "answer": 0
+      }
     }
   },
   {
@@ -1430,7 +1450,17 @@ const LESSONS = [
     "video": {
       "src": "videos/priznaki-delimosti-5.mp4",
       "poster": "videos/posters/priznaki-delimosti-5.jpg",
-      "duration": "1:45"
+      "duration": "1:33",
+      "pause": {
+        "at": 10.8,
+        "question": "Можно ли разделить 1 254 конфеты поровну на троих?",
+        "options": [
+          "да",
+          "нет",
+          "без деления не узнать"
+        ],
+        "answer": 0
+      }
     }
   },
   {
@@ -2396,7 +2426,17 @@ const LESSONS = [
     "video": {
       "src": "videos/slozhenie-drobey-6.mp4",
       "poster": "videos/posters/slozhenie-drobey-6.jpg",
-      "duration": "1:39"
+      "duration": "1:31",
+      "pause": {
+        "at": 11.74,
+        "question": "Сколько пиццы съели вместе: 1/4 и 3/8?",
+        "options": [
+          "5/8",
+          "4/12",
+          "4/8"
+        ],
+        "answer": 0
+      }
     }
   },
   {
@@ -2542,7 +2582,17 @@ const LESSONS = [
     "video": {
       "src": "videos/vychitanie-drobey-6.mp4",
       "poster": "videos/posters/vychitanie-drobey-6.jpg",
-      "duration": "1:32"
+      "duration": "1:27",
+      "pause": {
+        "at": 10.84,
+        "question": "Было 3/4 л, выпили 1/3 л. Сколько сока осталось?",
+        "options": [
+          "5/12 л",
+          "2/1 л",
+          "1/2 л"
+        ],
+        "answer": 0
+      }
     }
   },
   {
@@ -2686,7 +2736,17 @@ const LESSONS = [
     "video": {
       "src": "videos/umnozhenie-drobey-6.mp4",
       "poster": "videos/posters/umnozhenie-drobey-6.jpg",
-      "duration": "1:32"
+      "duration": "1:25",
+      "pause": {
+        "at": 10.16,
+        "question": "Половина от 3/4 стакана сахара — это сколько?",
+        "options": [
+          "3/8 стакана",
+          "3/2 стакана",
+          "1/4 стакана"
+        ],
+        "answer": 0
+      }
     }
   },
   {
@@ -2849,7 +2909,17 @@ const LESSONS = [
     "video": {
       "src": "videos/delenie-drobey-6.mp4",
       "poster": "videos/posters/delenie-drobey-6.jpg",
-      "duration": "1:22"
+      "duration": "1:15",
+      "pause": {
+        "at": 9.2,
+        "question": "Сколько стаканов по 1/4 л нальём из 3 литров?",
+        "options": [
+          "12",
+          "7",
+          "3/4"
+        ],
+        "answer": 0
+      }
     }
   },
   {
@@ -3000,7 +3070,17 @@ const LESSONS = [
     "video": {
       "src": "videos/zadachi-na-dvizhenie-6.mp4",
       "poster": "videos/posters/zadachi-na-dvizhenie-6.jpg",
-      "duration": "1:41"
+      "duration": "1:29",
+      "pause": {
+        "at": 17.58,
+        "question": "Сколько километров пробежит собака?",
+        "options": [
+          "20 км",
+          "18 км",
+          "10 км"
+        ],
+        "answer": 0
+      }
     }
   },
   {
@@ -3872,7 +3952,17 @@ const LESSONS = [
     "video": {
       "src": "videos/obshchiy-mnozhitel-7.mp4",
       "poster": "videos/posters/obshchiy-mnozhitel-7.jpg",
-      "duration": "1:46"
+      "duration": "1:42",
+      "pause": {
+        "at": 11.56,
+        "question": "37 · 18 + 37 · 82 = ?",
+        "options": [
+          "3 700",
+          "3 600",
+          "3 800"
+        ],
+        "answer": 0
+      }
     }
   },
   {
@@ -4022,7 +4112,17 @@ const LESSONS = [
     "video": {
       "src": "videos/parallelnye-pryamye-7.mp4",
       "poster": "videos/posters/parallelnye-pryamye-7.jpg",
-      "duration": "1:41"
+      "duration": "1:33",
+      "pause": {
+        "at": 14.42,
+        "question": "Углы 65° и 115° с одной стороны дороги. Рельсы параллельны?",
+        "options": [
+          "да, 65° + 115° = 180°",
+          "нет, углы разные",
+          "по углам не узнать"
+        ],
+        "answer": 0
+      }
     }
   },
   {
@@ -4196,7 +4296,17 @@ const LESSONS = [
     "video": {
       "src": "videos/sistemy-lineynyh-7.mp4",
       "poster": "videos/posters/sistemy-lineynyh-7.jpg",
-      "duration": "1:47"
+      "duration": "1:43",
+      "pause": {
+        "at": 10.84,
+        "question": "10 голов и 28 ног. Сколько кроликов?",
+        "options": [
+          "4",
+          "6",
+          "5"
+        ],
+        "answer": 0
+      }
     }
   },
   {
@@ -5070,7 +5180,17 @@ const LESSONS = [
     "video": {
       "src": "videos/ploshchadi-8.mp4",
       "poster": "videos/posters/ploshchadi-8.jpg",
-      "duration": "1:41"
+      "duration": "1:32",
+      "pause": {
+        "at": 13.78,
+        "question": "Прямоугольник 6 × 4 и параллелограмм с основанием 6 и высотой 4. Где земли больше?",
+        "options": [
+          "поровну",
+          "у прямоугольника",
+          "у параллелограмма"
+        ],
+        "answer": 0
+      }
     }
   },
   {
@@ -5214,7 +5334,17 @@ const LESSONS = [
     "video": {
       "src": "videos/chetyrehugolniki-8.mp4",
       "poster": "videos/posters/chetyrehugolniki-8.jpg",
-      "duration": "1:35"
+      "duration": "1:28",
+      "pause": {
+        "at": 14.05,
+        "question": "Как рулеткой проверить, что углы рамы прямые?",
+        "options": [
+          "сравнить диагонали",
+          "ещё раз измерить стороны",
+          "никак, нужен угольник"
+        ],
+        "answer": 0
+      }
     }
   },
   {
@@ -5382,7 +5512,17 @@ const LESSONS = [
     "video": {
       "src": "videos/sinus-kosinus-8.mp4",
       "poster": "videos/posters/sinus-kosinus-8.jpg",
-      "duration": "1:38"
+      "duration": "1:27",
+      "pause": {
+        "at": 9.34,
+        "question": "Как узнать высоту дерева, не залезая на него?",
+        "options": [
+          "измерить расстояние и угол",
+          "только залезть",
+          "сосчитать ветки"
+        ],
+        "answer": 0
+      }
     }
   },
   {
@@ -5526,7 +5666,17 @@ const LESSONS = [
     "video": {
       "src": "videos/vpisannye-ugly-8.mp4",
       "poster": "videos/posters/vpisannye-ugly-8.jpg",
-      "duration": "1:26"
+      "duration": "1:20",
+      "pause": {
+        "at": 13.21,
+        "question": "Из центра ворота видны под углом 100°. А с края площадки?",
+        "options": [
+          "50°",
+          "100°",
+          "200°"
+        ],
+        "answer": 0
+      }
     }
   },
   {
