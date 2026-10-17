@@ -6,6 +6,8 @@ const { LESSONS, SUBJECT_LABELS } = require("../js/lessons.js");
 const IntTasks = require("../js/tasks.js");
 const IntStore = require("../js/store.js");
 const IntGen = require("../js/generators.js");
+const IntScenes = require("../js/scenes.js");
+["math5", "math6", "math7", "math9"].forEach((f) => require(`../js/scenes-${f}.js`));
 
 const ROOT = path.join(__dirname, "..");
 
@@ -139,6 +141,12 @@ describe("Lessons Dataset Validation", () => {
   function assertSound(id, q) {
     {
       assert.ok(IntTasks.TASK_TYPES[q.type], `Unknown task type ${q.type} in ${id}`);
+      if (q.type === "scene") {
+        const kind = IntScenes.kinds[q.kind];
+        assert.ok(kind, `Unknown scene kind ${q.kind} in ${id}`);
+        // a kind may list answers that look plausible but are wrong; each must fail
+        (kind.wrong ? kind.wrong(q) : []).forEach((w) => assert.ok(!IntTasks.check(q, w), `${id}: wrong answer ${JSON.stringify(w)} passes`));
+      }
       const solution = IntTasks.solutionOf(q);
       assert.ok(solution !== undefined, `Task without solution in ${id}`);
       assert.ok(IntTasks.check(q, solution), `The solution of ${id} (${q.type}) does not pass its own check`);

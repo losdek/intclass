@@ -4426,3 +4426,45 @@ span.sc-blue { background: var(--sc-blue); } span.sc-violet { background: var(--
 .qm-giveup { display: inline; margin-left: 0.35rem; padding: 0; border: 0; background: none; color: inherit; font: inherit; font-weight: 700; text-decoration: underline; cursor: pointer; }
 .qm-dots i.is-second { background: var(--sc-gold, #efb038); }
 @media (prefers-reduced-motion: reduce) { .quiz-question-item.is-shake { animation: none; } }
+
+/* scenes: grade 6 */
+/* math6 scenes */
+.scene-fig .sc-tx { font-size: 14px; }
+.scene-fig .sc-tx-m { font-size: 16px; }
+.scene-fig .sc-tx-b { font-size: 22px; }
+.scene-fig .sc-tx-soft { fill: var(--sc-soft); }
+.scene-fig .sc-tx-teal { fill: var(--sc-teal); }
+.scene-fig .sc-tx-red { fill: var(--sc-red); }
+.scene-fig .sc-tx-gold { fill: var(--sc-gold); }
+.scene-fig .sc-tx-cream { fill: var(--sc-cream); }
+.sc-thin { fill: none; stroke: var(--sc-ink); stroke-width: 2; stroke-linecap: round; }
+.sc-hair { fill: none; stroke: var(--sc-line); stroke-width: 1.5; }
+.sc-glass { fill: var(--sc-blue); fill-opacity: 0.14; }
+.sc-sugar { fill: #ffffff; }
+.sc-hit { fill: transparent; }
+.sc-ghost { fill: var(--sc-soft); fill-opacity: 0.35; }
+.sc-picked-bar { fill: var(--sc-gold); }
+.scene-pizza-roll .sc-pizza-g, .scene-thermometer .sc-handle, .scene-juice-pour .sc-drag, .scene-sugar-cup .sc-drag { cursor: grab; touch-action: none; }
+.scene-fig .sc-tx-l { font-size: 19px; }
+
+/* scenes: grade 7 */
+/* math7 scenes (js/scenes-math7.js) */
+.sc-m7-s { font-size: 14px; }
+.sc-m7-t { font-size: 16px; }
+.sc-m7-b { font-size: 22px; }
+.sc-m7-xl { font-size: 32px; }
+.sc-m7-on { fill: var(--sc-cream) !important; }
+.sc-m7-ok { fill: var(--success) !important; }
+.sc-m7-dash { fill: none; stroke: var(--sc-line); stroke-width: 2.5; stroke-dasharray: 6 5; }
+.sc-m7-line { fill: none; stroke: var(--sc-ink); stroke-width: 3; stroke-linecap: round; }
+.sc-m7-rail { stroke: var(--sc-ink); stroke-width: 4; stroke-linecap: round; }
+.sc-m7-sleeper { stroke: var(--sc-crust); stroke-width: 5; }
+.sc-m7-road { stroke: var(--sc-soft); stroke-opacity: 0.3; stroke-width: 36; }
+.sc-m7-lane { stroke: var(--sc-cream); stroke-width: 3; stroke-dasharray: 12 10; }
+.sc-m7-grab { cursor: grab; touch-action: none; }
+.sc-m7-grab:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.task.is-locked .sc-m7-grab { pointer-events: none; cursor: default; }
+.sc-m7-dim { opacity: 0.25; }
+.sc-m7-m { font-size: 19px; }
+.sc-m7-dark { fill: #1c1a2e !important; }
+.sc-m7-layer { stroke: var(--sc-line); stroke-width: 1.5; }
