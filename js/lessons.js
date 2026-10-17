@@ -11956,6 +11956,10 @@ function videoStop(media, video, stop) {
   }
 }
 
+const escapeHtml = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+// the first sentence of the lesson's rule, as the nudge before a second try
+const firstSentence = (t) => (t ? String(t).split(/(?<=[.!?])\s+/)[0] : "");
+
 // the how-to line for task types whose widget has none of its own
 const HOW_TO = {
   scales: "Подбирайте x кнопками − и +, пока весы не уравновесятся",
@@ -12041,6 +12045,7 @@ const quizDialog = (() => {
   try { lastDraw = JSON.parse(localStorage.getItem(DRAW_KEY)) || {}; } catch (e) { lastDraw = {}; }
   let index = 0;
   let results = [];
+  let retried = []; // question index → true after a first miss on an interactive task
   let phase = "answer"; // answer → checked → (next question) … → done
   let task = null; // controller of an interactive task
   let opener = null;
@@ -12144,9 +12149,24 @@ const quizDialog = (() => {
       return;
     }
     const ok = q.type ? window.IntTasks.check(q, answer) : answer === q.answer;
-    results[index] = ok;
     const item = body.querySelector(".quiz-question-item");
+    // an interactive task gets a second try: a nudge first, the answer only after the second miss
+    if (!ok && task && !retried[index]) {
+      retried[index] = true;
+      item.classList.remove("is-shake");
+      void item.offsetWidth;
+      item.classList.add("is-shake");
+      const nudge = q.tryHint || firstSentence(lesson.takeaway);
+      showFeedback("info", `<strong>Почти!</strong> Подумайте ещё раз${nudge ? `: ${escapeHtml(nudge)}` : "."}
+        <button class="qm-giveup" type="button">Показать ответ</button>`);
+      feedback.querySelector(".qm-giveup").addEventListener("click", () => { retried[index] = "gave-up"; check(); });
+      main.textContent = "Проверить ещё раз";
+      feedback.scrollIntoView({ block: "nearest", behavior: motionOn() ? "smooth" : "auto" });
+      return;
+    }
+    results[index] = ok;
     item.classList.add(ok ? "is-correct" : "is-wrong");
+    if (ok && task?.celebrate) task.celebrate();
     if (task) {
       if (!ok) task.reveal();
       task.lock(true);
@@ -12158,7 +12178,8 @@ const quizDialog = (() => {
         label.querySelector("input").disabled = true;
       });
     }
-    showFeedback(ok ? "success" : "error", `<strong>${ok ? "Верно!" : "Неверно."}</strong> ${q.explanation}`);
+    const praise = retried[index] === true ? "Верно со второй попытки!" : "Верно!";
+    showFeedback(ok ? "success" : "error", `<strong>${ok ? praise : "Неверно."}</strong> ${q.explanation}`);
     phase = "checked";
     main.classList.remove("is-waiting");
     main.textContent = index < questions.length - 1 ? "Дальше →" : "Показать результат";
@@ -12181,7 +12202,7 @@ const quizDialog = (() => {
           <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="qm-ring-bg" cx="60" cy="60" r="52"/><circle class="qm-ring-fg" cx="60" cy="60" r="52" pathLength="100"/></svg>
           <p class="qm-score"><span data-count="${right}">${motionOn() ? 0 : right}</span> из ${total}</p>
         </div>
-        <div class="qm-dots" aria-label="Ответы по заданиям">${results.map((r, i) => `<i class="${r ? "is-right" : "is-wrong"}" style="--d: ${i}" title="Задание ${i + 1}: ${r ? "верно" : "неверно"}"></i>`).join("")}</div>
+        <div class="qm-dots" aria-label="Ответы по заданиям">${results.map((r, i) => `<i class="${r ? (retried[i] ? "is-right is-second" : "is-right") : "is-wrong"}" style="--d: ${i}" title="Задание ${i + 1}: ${r ? (retried[i] ? "верно со второй попытки" : "верно") : "неверно"}"></i>`).join("")}</div>
         <p class="qm-result-text">${all
           ? "Отлично! Все ответы верны — урок отмечен как изученный."
           : right >= total / 2
@@ -12246,6 +12267,7 @@ const quizDialog = (() => {
     rememberDraw();
     index = 0;
     results = [];
+    retried = [];
     renderQuestion();
   }
 

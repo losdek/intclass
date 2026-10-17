@@ -2710,6 +2710,12 @@
     },
   };
 
+  // the drawing and control helpers, for task types defined in other files (js/scenes*.js)
+  IntTasks.kit = {
+    NS, num, clamp, sameSet, sameList, shuffled, listJoin, motion, svg, label, pointer, tween, figure, stepper, slider,
+    numberField, controls, palette, answerLine, lockable, drag, toggleable, pop,
+  };
+
   if (typeof window !== "undefined") window.IntTasks = IntTasks;
   if (typeof module !== "undefined" && module.exports) module.exports = IntTasks;
 })();
