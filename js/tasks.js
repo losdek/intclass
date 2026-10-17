@@ -573,9 +573,23 @@
           x: sx > 0 ? O : O - R * C, y: sy > 0 ? O - R * C : O, width: R * C, height: R * C, class: "f-quadrant",
         }, fig);
       }
-      [...(t.graph ? [t.graph] : []), ...(t.graphs || [])].forEach((g, i) => {
+      const lines = [...(t.graph ? [t.graph] : []), ...(t.graphs || [])];
+      lines.forEach((g, i) => {
         graphLine(fig, R, C, O, `f-graph f-graph-given f-graph-${i}`)(g.k, g.b);
       });
+      // which line is which: a colour key under the grid when the lines carry labels
+      if (lines.some((g) => g.label)) {
+        const key = document.createElement("div");
+        key.className = "f-legend";
+        lines.forEach((g, i) => {
+          if (!g.label) return;
+          const item = document.createElement("span");
+          item.innerHTML = `<svg width="26" height="10" aria-hidden="true"><line x1="2" y1="5" x2="24" y2="5" class="f-graph f-graph-given f-graph-${i}"/></svg>`;
+          item.append(g.label);
+          key.appendChild(item);
+        });
+        fig.after(key);
+      }
       (t.curves || []).forEach((q, i) => parabolaPath(fig, R, C, O, q, `f-graph f-graph-given f-curve f-graph-${i + 2}`));
       const shape = t.shape ? svg("path", { class: "f-shape" }, fig) : null;
       const points = {};

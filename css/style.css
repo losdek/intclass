@@ -4211,3 +4211,149 @@ html:has(> body.home-page) {
 .anim .qm-result { animation: rise 0.45s var(--ease-out) backwards; }
 .anim .qm-dots i { animation: dot-in 0.35s var(--spring) backwards; animation-delay: calc(0.5s + var(--d) * 0.08s); }
 .anim .sort-board.is-sorted .sort-zone { animation: answer-pop 0.4s var(--ease-out); }
+
+/* ===================================================================
+   Pause on the puzzle: a guess between the video's question and its solution
+   =================================================================== */
+.vstop {
+  margin: 0;
+  padding: 1rem 1rem 1.1rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--accent-soft);
+  display: grid;
+  gap: 0.7rem;
+  animation: vstop-in 320ms var(--ease-out) both;
+}
+.vstop.is-out { animation: vstop-out 200ms ease-in both; }
+@keyframes vstop-in { from { opacity: 0; transform: translateY(-8px); } }
+@keyframes vstop-out { to { opacity: 0; transform: translateY(-6px); } }
+.vstop-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+.vstop-icon { width: 0.7rem; height: 0.8rem; border-left: 0.22rem solid currentColor; border-right: 0.22rem solid currentColor; }
+.vstop-q { margin: 0; font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; line-height: 1.3; color: var(--ink); }
+.vstop-opts { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.vstop-opt {
+  flex: 1 1 8rem;
+  min-height: 46px;
+  padding: 0.55rem 0.9rem;
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color var(--fast) var(--ease), background var(--fast) var(--ease), transform var(--fast) var(--ease);
+}
+.vstop-opt:hover:not(:disabled) { border-color: var(--accent); }
+.vstop-opt:active:not(:disabled) { transform: scale(0.97); }
+.vstop-opt:disabled { cursor: default; opacity: 0.6; }
+.vstop-opt.is-right { opacity: 1; border-color: var(--success); background: var(--success-soft); color: var(--success); }
+.vstop-opt.is-wrong { opacity: 1; border-color: var(--danger); background: var(--danger-soft); color: var(--danger); }
+.vstop-msg { margin: 0; font-weight: 600; }
+.vstop-msg.is-right { color: var(--success); }
+.vstop-msg.is-wrong { color: var(--danger); }
+.vstop-go { justify-self: start; }
+@media (prefers-reduced-motion: reduce) { .vstop, .vstop.is-out { animation: none; } }
+
+/* ===================================================================
+   Quiz question: story, then the instruction in bold; a how-to chip; the lesson rule on demand
+   =================================================================== */
+.quiz-q-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 0.45rem;
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.quiz-q-tag::before {
+  content: "";
+  width: 0; height: 0;
+  border-left: 0.5rem solid currentColor;
+  border-top: 0.3rem solid transparent;
+  border-bottom: 0.3rem solid transparent;
+}
+.quiz-q-context {
+  margin: 0 0 0.4rem;
+  color: var(--soft);
+  font-size: 0.93rem;
+  line-height: 1.5;
+}
+.qm-body .quiz-q-title {
+  margin-bottom: 0.55rem;
+  color: var(--ink);
+  font-size: 1.02rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+.quiz-rule-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 0.6rem;
+  padding: 0.15rem 0;
+  border: 0;
+  background: none;
+  color: var(--accent-text);
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.quiz-rule-btn::before {
+  content: "?";
+  display: inline-grid;
+  place-items: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+.quiz-rule-btn:hover { text-decoration: underline; }
+.quiz-rule {
+  margin: 0 0 0.75rem;
+  padding: 0.6rem 0.8rem;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background: var(--accent-soft);
+  animation: fb-in 220ms var(--ease-out) both;
+}
+.quiz-rule-text { margin: 0; color: var(--ink); font-size: 0.86rem; line-height: 1.5; }
+/* the how-to line goes first, as a chip, so the student knows what to do before looking at the drawing */
+.qm-body .task-hint {
+  order: -1;
+  justify-self: start;
+  margin: 0;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--accent-border);
+  color: var(--accent-text);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: left;
+  line-height: 1.35;
+}
+.qm-body .quiz-question-item > .task-hint { display: inline-block; margin-bottom: 0.6rem; }
+@media (prefers-reduced-motion: reduce) { .quiz-rule { animation: none; } }
+.f-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.3rem 1rem; font-size: 0.85rem; font-weight: 600; color: var(--ink); }
+.f-legend span { display: inline-flex; align-items: center; gap: 0.35rem; }
+.f-legend line { stroke-width: 3; }

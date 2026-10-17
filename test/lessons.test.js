@@ -5,12 +5,23 @@ const path = require("node:path");
 const { LESSONS, SUBJECT_LABELS } = require("../js/lessons.js");
 const IntTasks = require("../js/tasks.js");
 const IntStore = require("../js/store.js");
+const IntGen = require("../js/generators.js");
 
 const ROOT = path.join(__dirname, "..");
 
-// a quiz slot is one task or { variants: [task, …] } (each attempt draws one)
+// a repeatable random source, so a failing draw can be reproduced
+const seeded = (seed) => () => {
+  seed = (seed + 0x6d2b79f5) | 0;
+  let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+  t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+};
+// a quiz slot is one task or { variants: [task, …] } (each attempt draws one);
+// a { gen } entry builds a new task every attempt, so the tests look at many of its draws
+const DRAWS = 40;
 const variantsOf = (q) => q.variants || [q];
-const allTasks = (lesson) => lesson.quiz.flatMap(variantsOf);
+const expand = (t) => (t.gen ? Array.from({ length: DRAWS }, (_, i) => IntGen.make(t, seeded(i + 1))) : [t]);
+const allTasks = (lesson) => lesson.quiz.flatMap(variantsOf).flatMap(expand);
 
 describe("Lessons Dataset Validation", () => {
   test("LESSONS array contains 72 curriculum lessons", () => {
@@ -63,6 +74,17 @@ describe("Lessons Dataset Validation", () => {
     assert.strictEqual(new Set(srcs).size, srcs.length, "The same video is attached to two lessons");
   });
 
+  test("A pause on the puzzle stops inside the video and has one right option", () => {
+    LESSONS.filter((l) => l.video && l.video.pause).forEach((lesson) => {
+      const { at, question, options, answer } = lesson.video.pause;
+      const [m, sec] = lesson.video.duration.split(":").map(Number);
+      assert.ok(at > 2 && at < m * 60 + sec - 5, `${lesson.id}: pause time ${at} is outside the video`);
+      assert.ok(question && question.length > 5, `${lesson.id}: pause has no question`);
+      assert.ok(options.length >= 2 && new Set(options).size === options.length, `${lesson.id}: pause options repeat`);
+      assert.ok(Number.isInteger(answer) && answer >= 0 && answer < options.length, `${lesson.id}: bad pause answer`);
+    });
+  });
+
   test("Optional YouTube ids are well-formed and not reused across lessons", () => {
     const ids = LESSONS.filter((l) => l.videoId).map((l) => l.videoId);
     ids.forEach((id) => assert.match(id, /^[A-Za-z0-9_-]{11}$/, `Invalid videoId ${id}`));
@@ -73,7 +95,8 @@ describe("Lessons Dataset Validation", () => {
     LESSONS.forEach((lesson) => {
       assert.ok(Array.isArray(lesson.quiz) && lesson.quiz.length > 0, `Lesson ${lesson.id} has no quiz`);
       lesson.quiz.forEach((slot) => {
-        if (slot.variants) assert.ok(slot.variants.length >= 2, `${lesson.id}: a variants slot needs at least two tasks`);
+        if (slot.variants) assert.ok(slot.variants.length >= 2 || slot.variants[0].gen, `${lesson.id}: a variants slot needs at least two tasks`);
+        variantsOf(slot).filter((t) => t.gen).forEach((t) => assert.ok(IntGen.names.includes(t.gen), `${lesson.id}: unknown generator ${t.gen}`));
       });
       allTasks(lesson).forEach((q, qIndex) => {
         assert.ok(q.question && q.question.length > 5, `Invalid quiz question in ${lesson.id}[${qIndex}]`);
@@ -95,7 +118,26 @@ describe("Lessons Dataset Validation", () => {
       assert.strictEqual(lesson.quiz.length, 4, `${lesson.id} should have 4 questions`);
       assert.ok(allTasks(lesson).every((q) => q.type), `${lesson.id} has a question that is not interactive`);
     });
-    LESSONS.flatMap((l) => allTasks(l).map((q) => [l.id, q])).filter(([, q]) => q.type).forEach(([id, q]) => {
+    LESSONS.flatMap((l) => allTasks(l).map((q) => [l.id, q])).filter(([, q]) => q.type).forEach(([id, q]) => assertSound(id, q));
+  });
+
+  test("Every generator gives sound tasks, and its draws really differ", () => {
+    // word pools need their lesson's pool, so they are covered through the lessons above
+    IntGen.names.filter((name) => !name.startsWith("pool-")).forEach((name) => {
+      const seen = new Set();
+      for (let i = 1; i <= 400; i++) {
+        const q = IntGen.make({ gen: name }, seeded(i * 7919));
+        assert.ok(q.question && q.question.length > 10 && q.explanation && q.explanation.length > 10, `${name}: text is missing`);
+        assert.ok(!/undefined|NaN|\[object/.test(q.question + q.explanation + JSON.stringify(q)), `${name}: broken text «${q.question}»`);
+        assertSound(`${name} #${i}`, q);
+        seen.add(q.question + JSON.stringify(q.solution));
+      }
+      assert.ok(seen.size >= 8, `${name} repeats itself: only ${seen.size} different tasks in 400 draws`);
+    });
+  });
+
+  function assertSound(id, q) {
+    {
       assert.ok(IntTasks.TASK_TYPES[q.type], `Unknown task type ${q.type} in ${id}`);
       const solution = IntTasks.solutionOf(q);
       assert.ok(solution !== undefined, `Task without solution in ${id}`);
@@ -121,8 +163,8 @@ describe("Lessons Dataset Validation", () => {
           });
         });
       }
-    });
-  });
+    }
+  }
 
   test("Interactive task checks reject wrong answers", () => {
     const { check } = IntTasks;
