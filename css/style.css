@@ -4515,3 +4515,26 @@ span.sc-blue { background: var(--sc-blue); } span.sc-violet { background: var(--
 .scene-fig .sc-r79-w, .scene-fig .sc-r79-big, .scene-fig .sc-r79-mag, .scene-fig .sc-r79-card, .scene-fig .sc-r79-fruit,
 .scene-fig .sc-r79-small, .scene-fig .sc-r79-tiny, .scene-fig .sc-r79-on, .scene-fig .sc-r79-mark { font-family: "Onest", system-ui, sans-serif; font-weight: 700; }
 .scene-fig .sc-r79-on.sc-r79-sm { font-size: 14px; }
+
+/* scenes: grade 8 */
+/* math8 scenes (js/scenes-math8.js) */
+.sc-t14 { font-size: 14px; } .sc-t16 { font-size: 16px; } .sc-t18 { font-size: 18px; } .sc-t20 { font-size: 20px; } .sc-t22 { font-size: 22px; }
+.sc-tx-teal { fill: var(--sc-teal) !important; } .sc-tx-red { fill: var(--sc-red) !important; } .sc-tx-gold { fill: var(--sc-gold) !important; }
+.sc-tx-soft { fill: var(--sc-soft) !important; } .sc-tx-cream { fill: var(--sc-cream) !important; }
+.sc-ln { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.sc-ln-ink { stroke: var(--sc-ink); } .sc-ln-teal { stroke: var(--sc-teal); } .sc-ln-red { stroke: var(--sc-red); } .sc-ln-gold { stroke: var(--sc-gold); }
+.sc-ln.sc-thin { stroke-width: 2; } .sc-ln.sc-thick { stroke-width: 6; }
+.sc-dash { stroke-dasharray: 7 6; }
+.sc-grid { stroke: var(--sc-line); stroke-width: 1.5; }
+.sc-faint { opacity: 0.4; }
+.sc-walk { fill: none; stroke: var(--sc-cheese); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
+.sc-wood { fill: none; stroke: var(--sc-crust); stroke-width: 10; stroke-linejoin: round; stroke-linecap: round; }
+.sc-goal { stroke: var(--sc-cream); stroke-width: 5; stroke-linecap: round; }
+.sc-hit { fill: transparent; }
+.sc-grip { cursor: grab; touch-action: none; }
+.sc-grip:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.task.is-locked .sc-grip { cursor: default; pointer-events: none; }
+.sc-slot { stroke: var(--sc-line); stroke-width: 2.5; stroke-dasharray: 6 5; }
+.sc-card.is-on .sc-card-bg { fill: var(--sc-gold); }
+.sc-tri { touch-action: none; }
+.sc-card.is-on .sc-card-text { fill: #1c1a2e !important; }
