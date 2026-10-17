@@ -7,7 +7,7 @@ const IntTasks = require("../js/tasks.js");
 const IntStore = require("../js/store.js");
 const IntGen = require("../js/generators.js");
 const IntScenes = require("../js/scenes.js");
-["math5", "math6", "math7", "math9", "rus56"].forEach((f) => require(`../js/scenes-${f}.js`));
+["math5", "math6", "math7", "math9", "rus56", "rus79"].forEach((f) => require(`../js/scenes-${f}.js`));
 
 const ROOT = path.join(__dirname, "..");
 

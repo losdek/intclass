@@ -4468,3 +4468,50 @@ span.sc-blue { background: var(--sc-blue); } span.sc-violet { background: var(--
 .sc-m7-m { font-size: 19px; }
 .sc-m7-dark { fill: #1c1a2e !important; }
 .sc-m7-layer { stroke: var(--sc-line); stroke-width: 1.5; }
+
+/* scenes: Russian grades 7–9 */
+/* Scenes: Russian grades 7–9 (js/scenes-rus79.js) */
+.sc-r79-rule { stroke: var(--sc-line); stroke-width: 1.2; }
+.sc-r79-margin { stroke: var(--sc-red); stroke-width: 1.6; opacity: 0.45; }
+.scene-fig .sc-r79-w { font-size: 18px; }
+.scene-fig .sc-r79-big { font-size: 24px; }
+.scene-fig .sc-r79-small { font-size: 15px; fill: var(--sc-soft); }
+.scene-fig .sc-r79-tiny { font-size: 14px; }
+.scene-fig .sc-r79-card { font-size: 15px; }
+.scene-fig .sc-r79-fruit { font-size: 14px; }
+.scene-fig .sc-r79-mag { font-size: 16px; fill: #fff; }
+.scene-fig .sc-r79-mag.sc-r79-dark { fill: #1c1a2e; }
+.scene-fig .sc-r79-mark { font-size: 24px; }
+.scene-fig .sc-r79-on { font-size: 15px; fill: var(--sc-cream); }
+.scene-fig .sc-r79-onfill { fill: #fff; }
+.scene-fig .sc-r79-redtext { fill: var(--sc-red); }
+.scene-fig .sc-r79-teal { fill: var(--sc-teal); }
+.scene-fig .sc-r79-violet { fill: var(--sc-violet); }
+.sc-r79-tile rect, .sc-r79-tilebg { fill: var(--sc-cream); stroke: var(--sc-ink); stroke-width: 2; }
+.sc-r79-word { fill: var(--sc-cream); stroke: var(--sc-line); stroke-width: 2; }
+.sc-r79-hl { fill: color-mix(in srgb, var(--sc-gold) 45%, transparent); }
+.sc-r79-idiom { fill: color-mix(in srgb, var(--sc-gold) 55%, transparent); }
+.sc-r79-hit { fill: transparent; }
+.sc-zone.sc-r79-clear { fill: transparent; }
+.sc-r79-glass { fill: color-mix(in srgb, var(--sc-blue) 32%, var(--sc-cream)); }
+.sc-r79-seam { stroke: var(--sc-line); stroke-width: 2.5; }
+.sc-r79-ne { transition: transform 220ms cubic-bezier(.2,.8,.2,1); }
+.sc-r79-tool { fill: var(--sc-cream); stroke: var(--sc-line); stroke-width: 2; }
+.sc-r79-tool.is-on { fill: color-mix(in srgb, var(--sc-teal) 22%, var(--sc-cream)); stroke: var(--sc-teal); stroke-width: 3; }
+.sc-r79-under { stroke: var(--sc-red); stroke-width: 2.5; stroke-linecap: round; }
+.sc-r79-ray { stroke: var(--sc-gold); stroke-width: 4; stroke-linecap: round; }
+.sc-r79-bar { stroke: var(--sc-ink); stroke-width: 4; stroke-linecap: round; }
+.sc-r79-arrow { fill: none; stroke: var(--sc-red); stroke-width: 3; stroke-linecap: round; }
+.sc-r79-arrow.sc-r79-teal-stroke { stroke: var(--sc-teal); }
+.sc-r79-leaf { fill: none; stroke: var(--sc-teal); stroke-width: 2.5; stroke-linecap: round; }
+.sc-r79-reed { fill: none; stroke: var(--sc-teal); stroke-width: 3.5; stroke-linecap: round; }
+.sc-r79-log { fill: none; stroke: var(--sc-crust); stroke-width: 9; stroke-linecap: round; }
+.sc-r79-heard { filter: drop-shadow(0 0 5px var(--sc-gold)); }
+.sc-r79-picked { filter: drop-shadow(0 0 4px var(--accent)) drop-shadow(0 0 2px var(--accent)); }
+.sc-r79-choices { display: flex; flex-wrap: wrap; justify-content: center; margin: 0.5rem auto 0; max-width: 100%; }
+.sc-r79-choices button { flex: 1 1 auto; min-height: 44px; }
+@media (prefers-reduced-motion: reduce) { .sc-r79-ne { transition: none; } }
+/* the sentences use the site's reading font: Unbounded is too wide for a sentence with mark slots */
+.scene-fig .sc-r79-w, .scene-fig .sc-r79-big, .scene-fig .sc-r79-mag, .scene-fig .sc-r79-card, .scene-fig .sc-r79-fruit,
+.scene-fig .sc-r79-small, .scene-fig .sc-r79-tiny, .scene-fig .sc-r79-on, .scene-fig .sc-r79-mark { font-family: "Onest", system-ui, sans-serif; font-weight: 700; }
+.scene-fig .sc-r79-on.sc-r79-sm { font-size: 14px; }
