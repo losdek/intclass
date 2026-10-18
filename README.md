@@ -256,3 +256,21 @@ npm run check
 ## 📄 Лицензия
 
 MIT © [losdek](https://github.com/losdek)
+
+## Admin and statistics
+
+`/admin/` (not linked anywhere, `noindex`) moderates the leaderboard and shows anonymous statistics.
+
+Setup, once, in the Supabase project used for the leaderboard:
+
+1. Run `supabase/leaderboard.sql`, then `supabase/admin.sql`.
+2. Set the admin password with the SQL snippet at the top of `admin.sql` (only its hash is stored; the site's files never contain it).
+3. Put the project URL and anon key into `LEADERBOARD` in `js/store.js`.
+
+The password is typed on the admin page and kept only in that tab's `sessionStorage`. Every admin call is a password-checked
+`security definer` function; 8 wrong passwords in 10 minutes lock all admin calls for the window.
+
+- **Players:** search, rename, set XP and level, delete a player, clear the whole board (typed confirmation).
+- **Statistics:** video starts and finishes, quiz starts and finishes, average score per lesson, the questions missed most,
+  and activity per day. `js/stats.js` sends counters only (lesson id, question number, result): no player id, name or IP,
+  nothing when the browser sends Do Not Track or the leaderboard isn't configured.

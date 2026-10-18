@@ -16364,6 +16364,8 @@ const SITE_ROOT =
     ? new URL("../", document.currentScript.src).href
     : "";
 
+const NO_UI = typeof document !== "undefined" && Boolean(document.currentScript?.hasAttribute("data-no-ui"));
+
 const SUBJECT_LABELS = {
   math: "Математика",
   russian: "Русский язык"
@@ -16414,8 +16416,8 @@ function launchConfetti() {
   }, 2400);
 }
 
-// Browser-only UI Initialization
-if (typeof document !== "undefined") {
+// Browser-only UI Initialization (the admin page loads this file with data-no-ui just to read LESSONS)
+if (typeof document !== "undefined" && !NO_UI) {
   initLessonsApp();
 }
 
@@ -16804,7 +16806,12 @@ function playVideo(media) {
     const poster = media.querySelector("img")?.getAttribute("src") || "";
     media.innerHTML = `<video src="${src}" poster="${poster}" controls autoplay playsinline preload="auto"></video>`;
     const video = media.querySelector("video");
+    let counted = false;
     video.addEventListener("play", () => {
+      if (!counted) {
+        counted = true;
+        window.IntStats?.track("video_start", card?.querySelector(".quiz-unlock-btn")?.dataset.unlock);
+      }
       // only one lesson plays at a time
       document.querySelectorAll(".lesson-media video").forEach((other) => {
         if (other !== video) other.pause();
@@ -16812,6 +16819,7 @@ function playVideo(media) {
     });
     video.addEventListener("ended", () => {
       const lessonId = card?.querySelector(".quiz-unlock-btn")?.dataset.unlock;
+      window.IntStats?.track("video_end", lessonId);
       if (lessonId) openQuizAfterVideo(lessonId);
     });
     const lessonId = card?.querySelector(".quiz-unlock-btn")?.dataset.unlock;
@@ -17112,6 +17120,7 @@ const quizDialog = (() => {
       return;
     }
     results[index] = ok;
+    window.IntStats?.track("answer", lesson.id, index, ok ? (retried[index] === true ? 2 : 1) : 0);
     item.classList.add(ok ? "is-correct" : "is-wrong");
     if (ok && task?.celebrate) task.celebrate();
     if (task) {
@@ -17139,6 +17148,7 @@ const quizDialog = (() => {
     const right = results.filter(Boolean).length;
     const total = questions.length;
     const all = right === total;
+    window.IntStats?.track("quiz_end", lesson.id, right);
     const record = window.IntStore?.recordQuiz(lesson.id, right, total);
     const gained = record ? record.after.xp - record.before.xp : 0;
     count.textContent = "Результат";
@@ -17211,6 +17221,7 @@ const quizDialog = (() => {
 
   function start() {
     questions = draw();
+    window.IntStats?.track("quiz_start", lesson.id);
     rememberDraw();
     index = 0;
     results = [];
