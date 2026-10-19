@@ -26,9 +26,9 @@ const expand = (t) => (t.gen ? Array.from({ length: DRAWS }, (_, i) => IntGen.ma
 const allTasks = (lesson) => lesson.quiz.flatMap(variantsOf).flatMap(expand);
 
 describe("Lessons Dataset Validation", () => {
-  test("LESSONS array contains 72 curriculum lessons", () => {
+  test("LESSONS array contains 76 curriculum lessons", () => {
     assert.ok(Array.isArray(LESSONS));
-    assert.strictEqual(LESSONS.length, 72, `Expected 72 lessons, got ${LESSONS.length}`);
+    assert.strictEqual(LESSONS.length, 76, `Expected 76 lessons, got ${LESSONS.length}`);
   });
 
   test("Every lesson has valid unique ID", () => {
