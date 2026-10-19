@@ -4,6 +4,7 @@
   const changed = (el) => el.dispatchEvent(new Event("change", { bubbles: true }));
   // 2–4 distinct wrong numbers from a list of typical mistakes
   const wrongNums = (sol, list, lo = -1e9, hi = 1e9) => [...new Set(list)].filter((x) => x !== sol && Number.isFinite(x) && x >= lo && x <= hi).slice(0, 4);
+  const rad = (d) => (d * Math.PI) / 180;
   const sp = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 
   IntScenes.add({
@@ -575,6 +576,73 @@
             answerLine(el, t.reveal || `${t.solution.c} кур и ${t.solution.r} кроликов: ${t.solution.c} + ${t.solution.r} = ${t.heads} голов, ${t.solution.c} · 2 + ${t.solution.r} · 4 = ${t.legs} ног`);
           },
           reset() { home(); paint(); lockEl(false); d.lock(false); },
+          celebrate: () => celebrate(fig),
+        };
+      },
+    },
+  });
+
+  IntScenes.add({
+    /* ----------------------------------------------------------- cross-angles (math-7-9)
+     * Two crossing lines from the angles video: one angle is known; tap each other angle to pick its size
+     * (tap again to switch). Angles are numbered counter-clockwise from the known one.
+     * task: { given, solution: [given, 180 − given, given, 180 − given] }  value: the four angles */
+    "cross-angles": {
+      wrong: (t) => {
+        const g = t.given, o = 180 - g;
+        return [[g, g, g, g], [g, o, o, o], [g, g, o, o], [g, o, o, g]];
+      },
+      check: (t, v) => Array.isArray(v) && v.length === 4 && v.every((a, i) => a === t.solution[i]),
+      build(el, t, kit) {
+        const { svg, label, stage, hint, celebrate, lockable, answerLine, toggleable, pop } = kit;
+        const g = t.given, R = 40, CX = 180, CY = 120;
+        hint(el, t.hint || "Нажимайте на углы со знаком «?» — значение будет меняться");
+        const fig = stage(el, 360, 240, "Две пересекающиеся прямые");
+        const p = (deg, r) => [CX + r * Math.cos(rad(deg)), CY - r * Math.sin(rad(deg))];
+        const sectors = [[0, g], [g, 180], [180, 180 + g], [180 + g, 360]];
+        const opts = [g, 180 - g];
+        const vals = [g, null, null, null];
+        const nodes = sectors.map(([a0, a1], i) => {
+          const grp = svg("g", { class: i ? "sc-tap" : "" }, fig);
+          const [x0, y0] = p(a0, R), [x1, y1] = p(a1, R);
+          const path = svg("path", { d: `M${CX} ${CY} L${x0} ${y0} A${R} ${R} 0 ${a1 - a0 > 180 ? 1 : 0} 0 ${x1} ${y1} Z`, class: i ? "sc-cream" : "sc-blue", "fill-opacity": i ? 1 : 0.55 }, grp);
+          const [lx, ly] = p((a0 + a1) / 2, R + 32);
+          // a bigger invisible target so the small sector is easy to hit with a finger
+          if (i) svg("path", { d: `M${CX} ${CY} L${p(a0, 110).join(" ")} A110 110 0 ${a1 - a0 > 180 ? 1 : 0} 0 ${p(a1, 110).join(" ")} Z`, fill: "transparent" }, grp);
+          const txt = label(grp, lx, ly + 6, i ? "?" : `${g}°`, "sc-m7-b");
+          if (i) {
+            grp.setAttribute("aria-label", `Угол ${i + 1}`);
+            toggleable(grp, () => {
+              const k = vals[i] === null ? 0 : opts.indexOf(vals[i]) + 1;
+              vals[i] = k < opts.length ? opts[k] : null;
+              txt.textContent = vals[i] === null ? "?" : `${vals[i]}°`;
+              path.setAttribute("class", vals[i] === null ? "sc-cream" : vals[i] === g ? "sc-blue" : "sc-gold");
+              path.setAttribute("fill-opacity", vals[i] === null ? 1 : 0.55);
+              pop(txt);
+              changed(el);
+            });
+          }
+          return { path, txt };
+        });
+        // the tilted line stays inside the 240-high stage even for steep angles
+        const L = 160, L2 = Math.min(160, 108 / Math.sin(rad(g))), d2 = [Math.cos(rad(g)) * L2, Math.sin(rad(g)) * L2];
+        svg("line", { x1: CX - L, y1: CY, x2: CX + L, y2: CY, class: "sc-m7-line" }, fig);
+        svg("line", { x1: CX - d2[0], y1: CY + d2[1], x2: CX + d2[0], y2: CY - d2[1], class: "sc-m7-line" }, fig);
+        const lock = lockable(el);
+        const show = (arr) => arr.forEach((a, i) => {
+          nodes[i].txt.textContent = a === null ? "?" : `${a}°`;
+          nodes[i].path.setAttribute("class", a === null ? "sc-cream" : a === g ? "sc-blue" : "sc-gold");
+          nodes[i].path.setAttribute("fill-opacity", a === null ? 1 : 0.55);
+        });
+        return {
+          value: () => (vals.some((a) => a === null) ? null : [...vals]),
+          lock,
+          reveal() {
+            t.solution.forEach((a, i) => (vals[i] = a));
+            show(vals);
+            answerLine(el, t.reveal || `Вертикальные равны: ${g}° и ${g}°; смежные: 180° − ${g}° = ${180 - g}°`);
+          },
+          reset() { vals.splice(0, 4, g, null, null, null); show(vals); lock(false); },
           celebrate: () => celebrate(fig),
         };
       },
