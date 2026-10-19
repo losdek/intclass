@@ -2,7 +2,8 @@
  * Everything the site remembers lives in cookies on this device, so it works without registration:
  * finished lessons, bookmarks, the best quiz score per lesson and watched videos.
  * Experience points (XP) and the level are always computed from that state, so retrying a quiz
- * cannot farm points. Registration only adds a nickname and puts the XP on the shared leaderboard.
+ * cannot farm points. Registration only adds a nickname and puts the XP on the shared leaderboard;
+ * signing in with Google (js/auth.js) also keeps the progress in the account, on every device.
  */
 (function () {
   // Shared leaderboard (Supabase). Empty values = the leaderboard is not connected yet,
@@ -219,6 +220,33 @@
 
     player,
     leaderboardEnabled: () => Boolean(LEADERBOARD.url && LEADERBOARD.key),
+
+    // a Google account keeps progress on the server (js/auth.js): this device's state, and merging the account's in
+    exportState() {
+      const { best, completed, watched, bookmarks } = snapshot();
+      return { best, completed, watched, bookmarks };
+    },
+    mergeState(remote) {
+      if (!remote || typeof remote !== "object") return summary();
+      const before = summary();
+      const best = readBest();
+      const okId = (id) => /^[\w-]{1,24}$/.test(id);
+      for (const [id, n] of Object.entries(remote.best || {})) if (okId(id) && Number.isFinite(Number(n)) && !(best[id] >= Number(n))) best[id] = Number(n);
+      writeList("intclass_best", Object.entries(best).map(([k, v]) => `${k}:${v}`));
+      for (const [key, cookie] of [["completed", "intclass_progress"], ["watched", "intclass_watched"], ["bookmarks", "intclass_bookmarks"]]) {
+        if (Array.isArray(remote[key])) writeList(cookie, [...readList(cookie), ...remote[key].map(String).filter(okId)]);
+      }
+      return changed(before);
+    },
+    // the account's leaderboard entry follows the pupil to every device
+    adoptPlayer(p) {
+      if (!p || !p.id || !p.secret || !cleanName(p.name)) return false;
+      const before = summary();
+      writeCookie("intclass_player", JSON.stringify({ id: p.id, secret: p.secret, name: cleanName(p.name) }));
+      changed(before);
+      scheduleSync();
+      return true;
+    },
 
     // registration = a nickname plus a random id and secret kept in a cookie on this device
     async register(rawName) {

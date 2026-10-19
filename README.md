@@ -274,3 +274,21 @@ The password is typed on the admin page and kept only in that tab's `sessionStor
 - **Statistics:** video starts and finishes, quiz starts and finishes, average score per lesson, the questions missed most,
   and activity per day. `js/stats.js` sends counters only (lesson id, question number, result): no player id, name or IP,
   nothing when the browser sends Do Not Track or the leaderboard isn't configured.
+
+## Sign in with Google
+
+Optional. A pupil who signs in with Google keeps progress (best scores, finished lessons, watched videos, bookmarks)
+in their account, merged across devices, and the leaderboard nickname follows the account. Without signing in,
+everything works as before from cookies.
+
+`js/auth.js` talks to Supabase Auth directly (PKCE flow, no SDK); `supabase/accounts.sql` holds the `accounts` table
+and `account_sync`, which only the signed-in user can call for their own row. Setup:
+
+1. Google Cloud console → Credentials → OAuth client ID («Web application»), redirect URI
+   `https://<project-ref>.supabase.co/auth/v1/callback`.
+2. Supabase → Authentication → Providers → Google: enable, paste the client ID and secret.
+3. Supabase → Authentication → URL Configuration: Site URL `https://losdek.github.io/intclass/`, redirect URL
+   `https://losdek.github.io/intclass/**`.
+4. Run `supabase/accounts.sql` (after `leaderboard.sql`).
+
+The button appears in the profile window once `LEADERBOARD.url` and `key` are set in `js/store.js`.

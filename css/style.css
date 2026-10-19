@@ -4538,3 +4538,29 @@ span.sc-blue { background: var(--sc-blue); } span.sc-violet { background: var(--
 .sc-card.is-on .sc-card-bg { fill: var(--sc-gold); }
 .sc-tri { touch-action: none; }
 .sc-card.is-on .sc-card-text { fill: #1c1a2e !important; }
+
+/* Sign in with Google (js/auth.js) */
+.auth-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed var(--border);
+}
+.auth-google.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #ffffff;
+  color: #1f1f1f;
+  border: 1px solid #747775;
+  box-shadow: none;
+}
+.auth-google.btn:hover { background: #f4f6fa; }
+.auth-google:disabled { opacity: 0.6; cursor: progress; }
+:root[data-theme="dark"] .auth-google.btn { background: #131314; color: #e3e3e3; border-color: #8e918f; }
+:root[data-theme="dark"] .auth-google.btn:hover { background: #1f1f20; }
+.auth-note, .auth-who { flex: 1 1 14rem; margin: 0; font-size: 0.88rem; color: var(--soft); }
+.auth-who strong { color: var(--ink); overflow-wrap: anywhere; }
