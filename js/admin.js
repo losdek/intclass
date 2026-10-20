@@ -126,7 +126,7 @@
 
     function row(p) {
       const name = h("input", { class: "name", value: p.name, maxlength: 20, "aria-label": "Имя" });
-      const xp = h("input", { class: "sm", type: "number", min: 0, max: 5000, value: p.xp, "aria-label": "XP" });
+      const xp = h("input", { class: "sm", type: "number", min: 0, max: 10000, value: p.xp, "aria-label": "XP" });
       const lvl = h("input", { class: "sm", type: "number", min: 1, max: 50, value: p.level, "aria-label": "Уровень" });
       return h("tr", {},
         h("td", {}, name), h("td", { class: "num" }, xp), h("td", { class: "num" }, lvl),
