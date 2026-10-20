@@ -88,7 +88,7 @@ begin
   if char_length(v_name) not between 2 and 20 or v_name ~ '[<>"''`\\/{}]' then
     return jsonb_build_object('ok', true, 'error', 'bad name');
   end if;
-  update public.players set name = v_name, xp = least(greatest(p_xp, 0), 5000), level = least(greatest(p_level, 1), 50), updated_at = now()
+  update public.players set name = v_name, xp = least(greatest(p_xp, 0), 10000), level = least(greatest(p_level, 1), 50), updated_at = now()
    where id = p_id;
   return jsonb_build_object('ok', true);
 end;

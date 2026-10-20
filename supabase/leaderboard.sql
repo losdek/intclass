@@ -11,7 +11,7 @@ create table if not exists public.players (
   id uuid primary key,
   secret_hash text not null,
   name text not null check (char_length(name) between 2 and 20),
-  xp integer not null default 0 check (xp between 0 and 5000),
+  xp integer not null default 0 check (xp between 0 and 10000),
   level integer not null default 1 check (level between 1 and 50),
   updated_at timestamptz not null default now()
 );
