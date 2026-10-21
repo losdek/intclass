@@ -26,9 +26,9 @@ const expand = (t) => (t.gen ? Array.from({ length: DRAWS }, (_, i) => IntGen.ma
 const allTasks = (lesson) => lesson.quiz.flatMap(variantsOf).flatMap(expand);
 
 describe("Lessons Dataset Validation", () => {
-  test("LESSONS array contains 80 curriculum lessons", () => {
+  test("LESSONS array contains 90 curriculum lessons", () => {
     assert.ok(Array.isArray(LESSONS));
-    assert.strictEqual(LESSONS.length, 80, `Expected 80 lessons, got ${LESSONS.length}`);
+    assert.strictEqual(LESSONS.length, 90, `Expected 90 lessons, got ${LESSONS.length}`);
   });
 
   test("Every lesson has valid unique ID", () => {
@@ -121,6 +121,28 @@ describe("Lessons Dataset Validation", () => {
       assert.ok(allTasks(lesson).every((q) => q.type), `${lesson.id} has a question that is not interactive`);
     });
     LESSONS.flatMap((l) => allTasks(l).map((q) => [l.id, q])).filter(([, q]) => q.type).forEach(([id, q]) => assertSound(id, q));
+  });
+
+  test("Every quiz slot offers a retake something new: two or more different tasks", () => {
+    LESSONS.filter((l) => l.video).forEach((lesson) => {
+      lesson.quiz.forEach((slot, i) => {
+        const vs = variantsOf(slot);
+        if (vs.some((t) => t.gen)) return; // a generator draws a new task every attempt
+        assert.ok(vs.length >= 2, `${lesson.id}[${i}]: only one task — a retake repeats it`);
+        // the task itself, without the texts that only explain it
+        const keys = vs.map(({ explanation, hint, tryHint, reveal, answer, ...task }) => JSON.stringify(task));
+        assert.strictEqual(new Set(keys).size, keys.length, `${lesson.id}[${i}]: two variants are the same task`);
+      });
+    });
+  });
+
+  test("Choice, match and sort tasks never repeat an option inside one task", () => {
+    LESSONS.flatMap((l) => allTasks(l).map((t) => [l.id, t])).forEach(([id, t]) => {
+      ["options", "items", "left", "right", "buckets"].forEach((k) => {
+        if (Array.isArray(t[k]) && t[k].every((v) => typeof v === "string"))
+          assert.strictEqual(new Set(t[k]).size, t[k].length, `${id}: «${t.question}» repeats an entry in ${k}`);
+      });
+    });
   });
 
   test("Every generator gives sound tasks, and its draws really differ", () => {
