@@ -586,4 +586,60 @@
   });
 
   function hintAnd(el, t, text) { IntScenes.kit.hint(el, t.hint || text); }
+
+  IntScenes.add({
+    /* ------------------------------------------------------------ candy-share (math-8-11)
+     * The candies from the inverse-proportion video: k candies split equally. The slider sets the number of
+     * friends x; the candies regroup and each friend's share y = k / x shows. Find x for the asked share.
+     * task: { k, share, solution: k / share }  value: x */
+    "candy-share": {
+      wrong: (t) => [t.share, t.k * t.share, t.solution + 1, t.solution - 1].filter((v, i, a) => v !== t.solution && v >= 1 && a.indexOf(v) === i),
+      check: (t, v) => Number.isInteger(v) && v === t.solution,
+      build(el, t, kit) {
+        const { svg, label, stage, hint, celebrate, controls, slider, lockable, answerLine } = kit;
+        hint(el, t.hint || "Двигайте ползунок — конфеты делятся между друзьями");
+        const fig = stage(el, 360, 230, "Конфеты делим поровну");
+        const cols = ["sc-red", "sc-gold", "sc-teal", "sc-blue", "sc-violet"];
+        const layer = svg("g", {}, fig);
+        const info = label(fig, 180, 214, "", "sc-m7-b");
+        let friends = null;
+        function draw(x) {
+          layer.replaceChildren();
+          const even = t.k % x === 0, y = even ? t.k / x : null;
+          const w = 340 / x;
+          for (let i = 0; i < x; i++) {
+            const cx = 10 + w * i + w / 2;
+            svg("rect", { x: cx - w / 2 + 3, y: 14, width: w - 6, height: 168, rx: 10, class: "sc-cream" }, layer);
+            if (x <= 12) {
+              svg("circle", { cx, cy: 170, r: Math.min(12, w / 3.5), class: cols[i % cols.length] }, layer);
+            }
+          }
+          if (even) {
+            for (let n = 0; n < t.k; n++) {
+              const owner = Math.floor(n / y), slot = n % y;
+              const per = Math.max(1, Math.floor((w - 8) / 14));
+              const cx = 10 + w * owner + 8 + (slot % per) * 14, cy = 26 + Math.floor(slot / per) * 14;
+              svg("circle", { cx: Math.min(cx, 10 + w * (owner + 1) - 8), cy, r: 5.5, class: cols[n % cols.length] }, layer);
+            }
+          }
+          info.textContent = even ? `${x} ${x === 1 ? "друг" : x < 5 ? "друга" : "друзей"} → по ${y}` : `${t.k} не делится на ${x} поровну`;
+          info.setAttribute("class", `sc-m7-b ${even && y === t.share ? "sc-m7-ok" : ""}`);
+        }
+        const input = slider(controls(el), "Друзей", 1, Math.min(t.k, 12), 1, (x) => { friends = x; draw(x); fire(el); });
+        draw(1);
+        const lock = lockable(el);
+        return {
+          value: () => friends,
+          lock,
+          reveal() {
+            input.value = friends = t.solution;
+            draw(t.solution);
+            answerLine(el, t.reveal || `x · y = ${t.k}: x = ${t.k} : ${t.share} = ${t.solution}`);
+          },
+          reset() { input.value = 1; friends = null; draw(1); lock(false); },
+          celebrate: () => celebrate(fig),
+        };
+      },
+    },
+  });
 })();
