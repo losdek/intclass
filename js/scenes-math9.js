@@ -150,7 +150,7 @@
         if (sum) txt(kit, fig, W / 2, BASE + 42, "номер дня", 14, "middle", "sc-zone-label");
         const row = controls(el);
         let val = null;
-        const field = numberField(row, sum ? `Всего за ${t.n} дн.` : `День ${t.n}`, { min: 0, max: 99999 }, (v) => setVal(v, false));
+        const field = numberField(row, sum ? `Всего за ${t.n} дн.` : `День ${t.n}`, { min: 0, max: 99999, answer: t.solution }, (v) => setVal(v, false));
         function setVal(v, fromDrag) {
           val = v;
           if (fromDrag) field.set(v);
@@ -501,7 +501,7 @@
         draw(false);
         const row = controls(el);
         let val = null;
-        const field = numberField(row, `b${subs(t.n)}`, { min: 0, max: 1e9 }, (v) => { val = v; fire(el); });
+        const field = numberField(row, `b${subs(t.n)}`, { min: 0, max: 1e9, answer: t.solution }, (v) => { val = v; fire(el); });
         const lock = lockable(el);
         return {
           value: () => val,
@@ -548,7 +548,7 @@
         let ang = 30, touched = false, c = null;
         const row = controls(el);
         const range = slider(row, "Угол", 15, 165, 15, (v) => set(v));
-        const field = numberField(row, "Третья сторона", { min: 0, max: 999 }, (v) => { c = v; fire(el); });
+        const field = numberField(row, "Третья сторона", { min: 0, max: 999, answer: t.solution.c }, (v) => { c = v; fire(el); });
         function draw() {
           const r = (ang * Math.PI) / 180, ex = HX + Math.cos(r) * t.b * U, ey = HY - Math.sin(r) * t.b * U;
           stick.setAttribute("x2", ex); stick.setAttribute("y2", ey);

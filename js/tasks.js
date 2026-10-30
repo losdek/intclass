@@ -124,9 +124,12 @@
     return input;
   }
 
-  // − [typed number] + : for answers that are too big to reach with a stepper alone
+  // − [typed number] + : for answers that are too big to reach with a stepper alone.
+  // opts.answer: the expected value, which hides − and + when it is 100 or more
   function numberField(parent, name, opts, onChange) {
-    const { min = -1e6, max = 1e6, unit = "", buttons = true } = opts || {};
+    const { min = -1e6, max = 1e6, unit = "", answer = null } = opts || {};
+    // to 100 and beyond nobody taps − and +: a big answer is only typed
+    const buttons = opts?.buttons !== false && !(Math.abs(answer) >= 100);
     const wrap = document.createElement("div");
     wrap.className = "task-step task-number";
     wrap.innerHTML = `
@@ -258,6 +261,66 @@
     void node.getBoundingClientRect();
     node.classList.add("pop");
   }
+
+  // Cards inside `root` can be dragged with a finger or the mouse: the card follows the pointer,
+  // over(x, y, card) names the drop target under it (lit with .is-over), and drop(card, target, x) runs
+  // on release. A press that hardly moves stays an ordinary click, so tapping keeps working.
+  function dragCards(root, selector, over, drop) {
+    let d = null, lit = null, swallow = false;
+    const light = (n) => {
+      if (lit) lit.classList.remove("is-over");
+      lit = n;
+      if (n) n.classList.add("is-over");
+    };
+    root.addEventListener("pointerdown", (e) => {
+      const c = e.target.closest(selector);
+      if (!c || c.disabled || (e.pointerType === "mouse" && e.button !== 0)) return;
+      d = { c, x: e.clientX, y: e.clientY, id: e.pointerId, moved: false };
+    });
+    root.addEventListener("pointermove", (e) => {
+      if (!d || e.pointerId !== d.id) return;
+      const dx = e.clientX - d.x, dy = e.clientY - d.y;
+      if (!d.moved) {
+        if (Math.hypot(dx, dy) < 6) return;
+        d.moved = true;
+        d.c.setPointerCapture?.(e.pointerId);
+        d.c.classList.add("is-dragging");
+        root.classList.add("is-dragging");
+      }
+      d.c.style.transform = `translate(${dx}px, ${dy}px)`;
+      light(over(e.clientX, e.clientY, d.c));
+      e.preventDefault();
+    });
+    const end = (e) => {
+      if (!d || e.pointerId !== d.id) return;
+      const { c, moved } = d;
+      d = null;
+      if (!moved) return;
+      // the click that follows a drag must not count as a tap
+      swallow = true;
+      setTimeout(() => (swallow = false));
+      const target = e.type === "pointercancel" ? null : over(e.clientX, e.clientY, c);
+      light(null);
+      c.classList.remove("is-dragging");
+      c.style.transform = "";
+      root.classList.remove("is-dragging");
+      drop(c, target, e.clientX);
+    };
+    root.addEventListener("pointerup", end);
+    root.addEventListener("pointercancel", end);
+    root.addEventListener("click", (e) => {
+      if (!swallow) return;
+      swallow = false;
+      e.stopPropagation();
+    }, true);
+  }
+
+  // the element under a point among `nodes`, skipping `except` (the card being dragged)
+  const nodeAt = (nodes, x, y, except) => [...nodes].find((n) => {
+    if (n === except) return false;
+    const r = n.getBoundingClientRect();
+    return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+  }) || null;
 
   /* ----------------------------------------------------------------- scales
    * Equation as a balance: x-boxes and weights on two pans, the pupil picks x until it balances.
@@ -1472,9 +1535,15 @@
         fig.setAttribute("viewBox", ENTER_FIGURES[t.figure](fig, t));
       }
       let value = null;
-      const field = numberField(controls(el), t.label || "Ответ", { unit: t.unit, buttons: t.buttons !== false, min: 0 }, (v) => {
+      const field = numberField(controls(el), t.label || "Ответ", { unit: t.unit, buttons: t.buttons, min: 0, answer: t.solution }, (v) => {
         value = v;
       });
+      if (!el.querySelector(".task-step-btn") && !t.hint) {
+        const how = document.createElement("p");
+        how.className = "task-hint";
+        how.textContent = "Введите число с клавиатуры";
+        el.prepend(how);
+      }
       const lock = lockable(el);
       return {
         value: () => value,
@@ -1561,41 +1630,64 @@
   };
 
   /* ------------------------------------------------------------------ order
-   * Tap the cards in order; a tap on a placed card takes it back. task: { items, solution, middle? } */
+   * Tap the cards in order (each goes to the first empty place), or drag a card straight onto a place;
+   * dragging a placed card onto another swaps them. A tap on a placed card takes it back.
+   * task: { items, solution, middle? } */
   const order = {
     check: (t, v) => sameList(v, t.solution),
     build(el, t) {
       const box = document.createElement("div");
-      box.className = `order-board${t.items.some((v) => typeof v !== "number") ? " is-text" : ""}`;
+      // words and long numbers like 0,054 get wide cards; short numbers keep the square ones
+      box.className = `order-board${t.items.some((v) => typeof v !== "number" || num(v).length > 3) ? " is-text" : ""}`;
       box.innerHTML = `<div class="order-slots" aria-label="Ряд"></div><div class="order-pool" aria-label="Карточки"></div>`;
       el.appendChild(box);
       const slots = box.querySelector(".order-slots"), pool = box.querySelector(".order-pool");
-      let placed = [];
+      let placed = []; // place → item index; a hole is an empty place
       const poolOrder = shuffled(t.items.length);
       const render = () => {
         slots.innerHTML = t.items.map((_, i) => {
           const idx = placed[i];
           const mid = t.middle && i === (t.items.length - 1) / 2 ? " is-middle" : "";
           return idx === undefined
-            ? `<span class="order-slot${mid}"></span>`
-            : `<button type="button" class="order-card is-placed${mid}" data-slot="${i}" aria-label="Убрать ${num(t.items[idx])}">${num(t.items[idx])}</button>`;
+            ? `<span class="order-slot${mid}" data-place="${i}"></span>`
+            : `<button type="button" class="order-card is-placed${mid}" data-slot="${i}" data-place="${i}" aria-label="Убрать ${num(t.items[idx])}">${num(t.items[idx])}</button>`;
         }).join("");
         pool.innerHTML = poolOrder.map((i) => (placed.includes(i)
           ? `<span class="order-card is-gone" aria-hidden="true">${num(t.items[i])}</span>`
           : `<button type="button" class="order-card" data-item="${i}">${num(t.items[i])}</button>`)).join("");
       };
+      const firstHole = () => t.items.findIndex((_, i) => placed[i] === undefined);
+      const put = (item, place) => {
+        const from = placed.indexOf(item);
+        const there = placed[place];
+        if (from >= 0) placed[from] = there; // a swap when both were placed
+        else if (there !== undefined) placed[place] = undefined;
+        placed[place] = item;
+        render();
+        pop(slots.children[place]);
+      };
       box.addEventListener("click", (event) => {
         const card = event.target.closest("button.order-card");
         if (!card) return;
-        if (card.dataset.item !== undefined) placed.push(Number(card.dataset.item));
-        else placed.splice(Number(card.dataset.slot), 1);
-        render();
-        if (card.dataset.item !== undefined) pop(slots.children[placed.length - 1]);
+        if (card.dataset.item !== undefined) put(Number(card.dataset.item), firstHole());
+        else {
+          placed[Number(card.dataset.slot)] = undefined;
+          render();
+        }
       });
+      dragCards(box, "button.order-card",
+        (x, y, card) => nodeAt(slots.querySelectorAll("[data-place]"), x, y, card) || nodeAt([pool], x, y),
+        (card, target) => {
+          const item = card.dataset.item !== undefined ? Number(card.dataset.item) : placed[Number(card.dataset.slot)];
+          if (target === pool) {
+            if (card.dataset.slot !== undefined) placed[Number(card.dataset.slot)] = undefined;
+            render();
+          } else if (target) put(item, Number(target.dataset.place));
+        });
       render();
       const lock = lockable(el);
       return {
-        value: () => (placed.length === t.items.length ? placed.map((i) => t.items[i]) : null),
+        value: () => (t.items.every((_, i) => placed[i] !== undefined) ? placed.map((i) => t.items[i]) : null),
         lock,
         reveal() {
           const used = new Set();
@@ -1804,49 +1896,66 @@
   };
 
   /* ------------------------------------------------------------------ match
-   * Tap a formula on the left, then its pair on the right. task: { left, right, solution: [right index per left] } */
+   * Pairs: the first card on the left without a pair is already picked, so one tap on its pair on the
+   * right joins them and the next card is picked. A card can also be dragged onto its pair (either way);
+   * a tap on a left card picks it to change its pair. task: { left, right, solution: [right index per left] } */
   const match = {
     check: (t, v) => sameList(v, t.solution),
     build(el, t) {
       const box = document.createElement("div");
       box.className = "match-board";
-      const col = (list, side) => shuffled(list.length)
+      const leftOrder = shuffled(t.left.length);
+      const col = (order, list, side) => order
         .map((i) => `<button type="button" class="match-btn" data-side="${side}" data-i="${i}">${list[i]}</button>`).join("");
-      box.innerHTML = `<div class="match-col">${col(t.left, "L")}</div><div class="match-col">${col(t.right, "R")}</div>`;
+      box.innerHTML = `<div class="match-col">${col(leftOrder, t.left, "L")}</div><div class="match-col">${col(shuffled(t.right.length), t.right, "R")}</div>`;
       el.appendChild(box);
       const hint = document.createElement("p");
       hint.className = "task-hint";
-      hint.textContent = t.hint || "Нажмите на карточку слева, затем на её пару справа";
+      hint.textContent = t.hint || "Нажмите на пару для выделенной карточки — или перетащите карточку к её паре";
       el.appendChild(hint);
       let pairs = t.left.map(() => null), active = null;
+      const nextFree = () => leftOrder.find((i) => pairs[i] === null) ?? null;
       const render = () => {
+        if (active === null) active = nextFree();
         box.querySelectorAll(".match-btn").forEach((b) => {
           const i = Number(b.dataset.i);
           const pair = b.dataset.side === "L" ? (pairs[i] === null ? null : i) : pairs.indexOf(i);
           b.dataset.pair = pair === null || pair < 0 ? "" : String(pair + 1);
-          b.classList.toggle("is-active", Boolean(active) && active.side === b.dataset.side && active.i === i);
+          b.classList.toggle("is-active", b.dataset.side === "L" && active === i && !box.classList.contains("is-done"));
         });
+      };
+      const join = (L, R, node) => {
+        pairs = pairs.map((p) => (p === R ? null : p));
+        pairs[L] = R;
+        active = nextFree();
+        if (node) pop(node);
+        render();
       };
       box.addEventListener("click", (event) => {
         const b = event.target.closest(".match-btn");
         if (!b) return;
-        const side = b.dataset.side, i = Number(b.dataset.i);
-        if (!active || active.side === side) {
-          active = { side, i };
-        } else {
-          const L = side === "L" ? i : active.i, R = side === "R" ? i : active.i;
-          pairs = pairs.map((p) => (p === R ? null : p));
-          pairs[L] = R;
-          active = null;
-          pop(b);
-        }
-        render();
+        const i = Number(b.dataset.i);
+        if (b.dataset.side === "L") {
+          active = i;
+          render();
+        } else if (active !== null) join(active, i, b);
       });
+      dragCards(box, ".match-btn",
+        (x, y, card) => nodeAt(box.querySelectorAll(`.match-btn[data-side="${card.dataset.side === "L" ? "R" : "L"}"]`), x, y, card),
+        (card, target) => {
+          if (!target) return;
+          const a = Number(card.dataset.i), b = Number(target.dataset.i);
+          card.dataset.side === "L" ? join(a, b, target) : join(b, a, target);
+        });
       render();
       const lock = lockable(el);
       return {
         value: () => (pairs.every((p) => p !== null) ? [...pairs] : null),
-        lock,
+        lock(on) {
+          box.classList.toggle("is-done", on);
+          render();
+          lock(on);
+        },
         reveal() {
           pairs = [...t.solution];
           active = null;
@@ -1856,6 +1965,7 @@
         reset() {
           pairs = t.left.map(() => null);
           active = null;
+          box.classList.remove("is-done");
           render();
           lock(false);
         },
@@ -2634,7 +2744,8 @@
 
   /* ------------------------------------------------------------------ build
    * Put the answer together from tiles (some are spare). A tap on a tile adds it to the line,
-   * a tap on a tile in the line gives it back. task: { tiles, solution: [tile texts in order], alt?: [[…]] } */
+   * a tap on a tile in the line gives it back. Tiles can also be dragged: into the line (in front of
+   * the tile they are dropped on), along it, or back to the pool. task: { tiles, solution: [tile texts in order], alt?: [[…]] } */
   const build = {
     check: (t, v) => Array.isArray(v) && [t.solution, ...(t.alt || [])].some((s) => sameList(v, s)),
     build(el, t) {
@@ -2648,7 +2759,7 @@
       const render = () => {
         line.innerHTML = placed.length
           ? placed.map((i, k) => `<button type="button" class="build-tile is-placed" data-slot="${k}" aria-label="Убрать ${t.tiles[i]}">${t.tiles[i]}</button>`).join("")
-          : `<span class="build-empty">нажимайте на карточки ниже</span>`;
+          : `<span class="build-empty">нажмите на карточки ниже или перетащите их сюда</span>`;
         pool.innerHTML = poolOrder.map((i) => (placed.includes(i)
           ? `<span class="build-tile is-gone" aria-hidden="true">${t.tiles[i]}</span>`
           : `<button type="button" class="build-tile" data-item="${i}">${t.tiles[i]}</button>`)).join("");
@@ -2661,6 +2772,26 @@
         render();
         if (tile.dataset.item !== undefined) pop(line.lastElementChild);
       });
+      dragCards(box, "button.build-tile",
+        (x, y, tile) => nodeAt(line.querySelectorAll("button.build-tile"), x, y, tile) || nodeAt([line, pool], x, y),
+        (tile, target, x) => {
+          if (!target) return;
+          const from = tile.dataset.slot !== undefined ? Number(tile.dataset.slot) : -1;
+          const item = from >= 0 ? placed[from] : Number(tile.dataset.item);
+          if (from >= 0) placed.splice(from, 1);
+          if (target !== pool) {
+            let at = placed.length;
+            if (target !== line) {
+              // dropped on the left half of a tile — in front of it, on the right half — after it
+              const r = target.getBoundingClientRect();
+              at = Number(target.dataset.slot) + (x > r.left + r.width / 2 ? 1 : 0);
+              if (from >= 0 && from < at) at--; // the line closed up behind the moved tile
+            }
+            placed.splice(at, 0, item);
+          }
+          render();
+          if (target !== pool) pop(line.children[target === line ? placed.length - 1 : placed.indexOf(item)]);
+        });
       render();
       const lock = lockable(el);
       return {

@@ -388,7 +388,7 @@
           dl.setAttribute("x", clamp(cx, 50, 310)); dl.setAttribute("y", RY - 2 * r - 10);
         }
         function set(n, user) { p = clamp(Math.round(n), 0, max); touched = true; field.set(p); paint(); if (user) fire(el); }
-        const field = numberField(controls(el), "Прокатили", { min: 0, max, unit: "см" }, (n) => { if (n !== null) set(n, true); });
+        const field = numberField(controls(el), "Прокатили", { min: 0, max, unit: "см", answer: t.solution }, (n) => { if (n !== null) set(n, true); });
         drag(pz, fig, (q) => { if (!el.classList.contains("is-locked")) set((q.x - X0) / s, true); });
         paint();
         const lock = lockable(el);
