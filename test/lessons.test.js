@@ -7,7 +7,7 @@ const IntTasks = require("../js/tasks.js");
 const IntStore = require("../js/store.js");
 const IntGen = require("../js/generators.js");
 const IntScenes = require("../js/scenes.js");
-["math5", "math6", "math7", "math8", "math9", "rus56", "rus79"].forEach((f) => require(`../js/scenes-${f}.js`));
+["math5", "math6", "math7", "math8", "math9", "rus56", "rus79", "hard"].forEach((f) => require(`../js/scenes-${f}.js`));
 
 const ROOT = path.join(__dirname, "..");
 
@@ -26,9 +26,9 @@ const expand = (t) => (t.gen ? Array.from({ length: DRAWS }, (_, i) => IntGen.ma
 const allTasks = (lesson) => lesson.quiz.flatMap(variantsOf).flatMap(expand);
 
 describe("Lessons Dataset Validation", () => {
-  test("LESSONS array contains 90 curriculum lessons", () => {
+  test("LESSONS array contains 98 curriculum lessons", () => {
     assert.ok(Array.isArray(LESSONS));
-    assert.strictEqual(LESSONS.length, 90, `Expected 90 lessons, got ${LESSONS.length}`);
+    assert.strictEqual(LESSONS.length, 98, `Expected 98 lessons, got ${LESSONS.length}`);
   });
 
   test("Every lesson has valid unique ID", () => {

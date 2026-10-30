@@ -4571,3 +4571,70 @@ span.sc-blue { background: var(--sc-blue); } span.sc-violet { background: var(--
 :root[data-theme="dark"] .auth-google.btn:hover { background: #1f1f20; }
 .auth-note, .auth-who { flex: 1 1 14rem; margin: 0; font-size: 0.88rem; color: var(--soft); }
 .auth-who strong { color: var(--ink); overflow-wrap: anywhere; }
+
+/* Scenes of the harder grade 7–8 lessons */
+/* harder grade 7 scenes (corner-cut, forecast-flags) */
+.sc-m7h-cell { stroke: var(--sc-paper); stroke-width: 1.5; }
+.scene-fig .sc-m7h-t { font-size: 17px; }
+.scene-fig .sc-m7h-s { font-size: 14px; }
+.scene-fig .sc-m7h-eq { font-size: 24px; }
+.sc-m7h-hop { fill: none; stroke: var(--sc-teal); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 5 5; pointer-events: none; }
+.sc-m7h-hop.sc-m7h-hop-red { stroke: var(--sc-red); }
+.sc-m7h-col .sc-hit { fill: transparent; }
+.sc-m7h-col:hover .sc-thin { stroke: var(--sc-teal); }
+.scene-corner-cut .task-controls, .scene-forecast-flags .task-controls { flex-wrap: wrap; justify-content: center; }
+/* scenes: harder grade 8 math (odz-sieve, river-boat) */
+.scene-odz-sieve .sc-m8h-eq { font-size: 18px; font-weight: 800; }
+.sc-m8h-axis { stroke: var(--sc-ink); stroke-width: 3; stroke-linecap: round; }
+.sc-m8h-head { fill: var(--sc-ink); }
+.sc-m8h-tick { stroke: var(--sc-ink); stroke-width: 2.5; stroke-linecap: round; }
+.sc-m8h-hole { fill: transparent; stroke: transparent; stroke-width: 3; }
+.sc-m8h-hole.is-on { fill: var(--sc-paper); stroke: var(--sc-red); }
+.sc-m8h-x { stroke: var(--sc-red); stroke-width: 3; stroke-linecap: round; fill: none; pointer-events: none; }
+.sc-m8h-keep { stroke: var(--sc-teal); }
+.sc-m8h-drop { stroke: var(--sc-red); }
+.sc-m8h-nohit { pointer-events: none; }
+.sc-m8h-river { fill: var(--sc-blue); fill-opacity: 0.22; }
+.sc-m8h-wave { stroke: var(--sc-blue); stroke-opacity: 0.45; stroke-width: 2.5; stroke-dasharray: 18 14; stroke-linecap: round; }
+.sc-m8h-arrow { stroke: var(--sc-ink); stroke-width: 3; stroke-linecap: round; }
+.sc-m8h-arrow.is-current { stroke: var(--sc-blue); }
+/* Scenes: harder grade 7 Russian (rus7h.js) */
+.scene-fig .sc-r7h-w { font-size: 17px; }
+.scene-fig .sc-r7h-inf { font-size: 14px; font-weight: 500; }
+.scene-fig .sc-r7h-title { font-size: 21px; fill: var(--sc-teal); }
+.scene-fig .sc-r7h-cap { font-size: 14px; fill: var(--sc-soft); }
+.scene-fig .sc-r7h-tile { font-size: 19px; fill: #fff; }
+.sc-r7h-olive { fill: #6b8a5e; }
+.sc-r7h-olive2 { fill: #4f6a46; }
+.sc-r7h-skin { fill: #e8bd7a; }
+.sc-r7h-bandage { fill: #fbf6ee; }
+.sc-r7h-iron { fill: var(--sc-soft); }
+.sc-r7h-hay { fill: none; stroke: var(--sc-crust); stroke-width: 2.5; stroke-linecap: round; }
+.sc-r7h-grass { fill: none; stroke: var(--sc-teal); stroke-width: 2.5; stroke-linecap: round; }
+.sc-r7h-brick { fill: color-mix(in srgb, var(--sc-crust) 30%, var(--sc-cream)); }
+.sc-r7h-brick2 { fill: color-mix(in srgb, var(--sc-crust) 45%, var(--sc-cream)); }
+.sc-r7h-tilebrick { fill: var(--sc-red); }
+.sc-zone.sc-r7h-tray { fill: color-mix(in srgb, var(--sc-soft) 12%, var(--sc-cream)); }
+/* Scenes: harder grade 8 Russian (sofa-commas, lens-pairs) */
+.scene-fig .sc-r8h-comma { font-size: 26px; font-weight: 800; fill: var(--sc-red); }
+.sc-r8h-hit { fill: transparent; }
+.sc-r8h-gap:hover .sc-r8h-hit { fill: color-mix(in srgb, var(--sc-gold) 25%, transparent); }
+.sc-r8h-dot { fill: var(--sc-soft); opacity: 0.6; }
+.sc-r8h-seat { fill: color-mix(in srgb, var(--sc-teal) 70%, #ffffff); }
+.sc-r8h-skin { fill: #f0c49a; }
+.scene-fig .sc-r8h-z { font-size: 16px; fill: var(--sc-gold); }
+.scene-fig .sc-r8h-zs { font-size: 12px; }
+.sc-r8h-zz { animation: sc-r8h-float 2.4s ease-in-out infinite; }
+@keyframes sc-r8h-float { 50% { transform: translateY(-4px); } }
+@media (prefers-reduced-motion: reduce) { .sc-r8h-zz { animation: none; } }
+.sc-zone.sc-r8h-tray { fill: transparent; stroke: none; }
+.sc-r8h-river { fill: none; stroke: var(--sc-blue); stroke-width: 4; stroke-linecap: round; }
+.sc-r8h-head { pointer-events: none; }
+.scene-fig .sc-r8h-zt, .scene-fig .sc-r8h-zs2 { font-family: "Onest", system-ui, sans-serif; font-weight: 700; }
+.scene-fig .sc-r8h-zt { font-size: 15px; }
+.scene-fig .sc-r8h-zs2 { font-size: 14px; fill: var(--sc-soft); }
+.scene-fig .sc-r8h-red, .scene-fig .sc-r8h-zs2.sc-r8h-red { fill: var(--sc-red); }
+.sc-r8h-cardbg { fill: var(--sc-cream); stroke: var(--sc-ink); stroke-width: 2; }
+.is-on > .sc-r8h-cardbg { fill: color-mix(in srgb, var(--sc-gold) 30%, var(--sc-cream)); }
+.scene-fig .sc-r8h-card { font-size: 14px; font-family: "Onest", system-ui, sans-serif; font-weight: 700; }
+.scene-fig .sc-r8h-num { font-size: 14px; fill: var(--sc-soft); font-family: "Onest", system-ui, sans-serif; }
