@@ -2786,50 +2786,15 @@ html:has(> body.home-page) {
   color: var(--soft);
 }
 
-/* pairs to match */
-.match-board {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.6rem;
-}
-
-.match-col {
-  display: grid;
-  align-content: start;
-  gap: 0.45rem;
-}
-
-.match-btn {
-  min-height: 50px;
-  padding: 0.5rem 0.6rem;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius);
-  background: var(--surface);
-  color: var(--ink);
-  font-family: var(--font-display);
-  font-size: 0.9rem;
-  font-weight: 600;
-  /* a long word on a phone wraps inside the card instead of being cut off */
-  overflow-wrap: anywhere;
-  hyphens: auto;
-}
-
-/* the card waiting for its pair: a dashed ring, so it never looks like pair 3 */
-.match-btn.is-active { outline: 2px dashed var(--ink); outline-offset: 3px; }
-.match-btn[data-pair="1"] { border-color: var(--fig-teal); background: var(--fig-teal-soft); }
-.match-btn[data-pair="2"] { border-color: var(--fig-mustard); background: var(--fig-mustard-soft); }
-.match-btn[data-pair="3"] { border-color: var(--accent); background: var(--accent-tint); }
-.match-btn[data-pair="4"] { border-color: var(--ink); background: var(--accent-soft); }
-
-/* cards that can be dragged (match, order, build): a finger on a card drags it instead of scrolling */
-.match-btn, .order-card, .build-tile { touch-action: none; }
-.match-btn.is-dragging, .order-card.is-dragging, .build-tile.is-dragging {
+/* cards that can be dragged (order, build): a finger on a card drags it instead of scrolling */
+.order-card, .build-tile { touch-action: none; }
+.order-card.is-dragging, .build-tile.is-dragging {
   z-index: 20;
   cursor: grabbing;
   box-shadow: 0 14px 28px -10px rgba(0, 0, 0, 0.35);
   transition: none;
 }
-.match-btn.is-over, .order-slot.is-over, .order-card.is-over, .build-tile.is-over {
+.order-slot.is-over, .order-card.is-over, .build-tile.is-over {
   outline: 3px solid var(--accent);
   outline-offset: 2px;
 }
@@ -2912,10 +2877,6 @@ html:has(> body.home-page) {
 @media (max-width: 480px) {
   .flow-box {
     padding: 1rem;
-  }
-
-  .match-btn {
-    font-size: 0.8rem;
   }
 }
 
@@ -3661,7 +3622,6 @@ html:has(> body.home-page) {
 .quiz-unlock-btn,
 .card-icon-action,
 .order-card,
-.match-btn,
 .term-btn,
 .sign-btn,
 .scroll-hint {
@@ -3769,7 +3729,6 @@ html:has(> body.home-page) {
   .lesson-media:not(.is-pending):hover img { transform: scale(1.035); }
   .quiz-unlock-btn:hover { background: var(--accent-tint); border-color: var(--accent); }
   .order-card:not(.is-gone):hover,
-  .match-btn:hover,
   .term-btn:hover { border-color: var(--accent); }
 }
 
@@ -3788,7 +3747,6 @@ html:has(> body.home-page) {
 .card-icon-action:active,
 .flow-back:active,
 .order-card:active,
-.match-btn:active,
 .term-btn:active,
 .sign-btn:active {
   transform: scale(0.95);
@@ -4222,17 +4180,17 @@ html:has(> body.home-page) {
 .qm-dots i.is-wrong { background: var(--danger); }
 
 /* answer buttons in tasks feel pressable */
-.choice-opt, .match-btn, .tok, .build-tile, .order-card, .gap-hole, .punct-gap, .sort-chip {
+.choice-opt, .tok, .build-tile, .order-card, .gap-hole, .punct-gap, .sort-chip {
   transition-property: transform, background-color, border-color, color, box-shadow;
   transition-duration: 160ms;
 }
-.choice-opt:active:not(:disabled), .match-btn:active:not(:disabled), .tok:active:not(:disabled),
+.choice-opt:active:not(:disabled), .tok:active:not(:disabled),
 .build-tile:active:not(:disabled), .order-card:active:not(:disabled), .gap-hole:active:not(:disabled),
 .punct-gap:active:not(:disabled) {
   transform: scale(0.96);
 }
 @media (hover: hover) and (pointer: fine) {
-  .choice-opt:hover:not(:disabled), .match-btn:hover:not(:disabled), .build-tile:hover:not(:disabled):not(.is-placed),
+  .choice-opt:hover:not(:disabled), .build-tile:hover:not(:disabled):not(.is-placed),
   .sort-chip:hover:not(:disabled):not(.is-dragging) {
     transform: translateY(-2px);
   }

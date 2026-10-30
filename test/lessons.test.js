@@ -136,9 +136,9 @@ describe("Lessons Dataset Validation", () => {
     });
   });
 
-  test("Choice, match and sort tasks never repeat an option inside one task", () => {
+  test("Choice and sort tasks never repeat an option inside one task", () => {
     LESSONS.flatMap((l) => allTasks(l).map((t) => [l.id, t])).forEach(([id, t]) => {
-      ["options", "items", "left", "right", "buckets"].forEach((k) => {
+      ["options", "items", "buckets"].forEach((k) => {
         if (Array.isArray(t[k]) && t[k].every((v) => typeof v === "string"))
           assert.strictEqual(new Set(t[k]).size, t[k].length, `${id}: «${t.question}» repeats an entry in ${k}`);
       });
@@ -148,22 +148,24 @@ describe("Lessons Dataset Validation", () => {
   test("A choice task is not a lucky guess: four or more options and several right ones", () => {
     LESSONS.flatMap((l) => allTasks(l).map((t) => [l.id, t])).filter(([, t]) => t.type === "choice").forEach(([id, t]) => {
       assert.ok(t.options.length >= 4, `${id}: «${t.question}» has only ${t.options.length} options`);
-      assert.ok(t.solution.length >= 2, `${id}: «${t.question}» has one right option — use enter, build, sort or match instead`);
+      assert.ok(t.solution.length >= 2, `${id}: «${t.question}» has one right option — use enter, build or sort instead`);
       assert.ok(t.solution.length < t.options.length, `${id}: «${t.question}» — every option is right`);
     });
   });
 
-  test("Sort, match and punctuation tasks are well-formed", () => {
+  test("No pairs (match) tasks: they were replaced by sorting, building and typed answers", () => {
+    assert.strictEqual(IntTasks.TASK_TYPES.match, undefined, "the match task type is back in tasks.js");
+    LESSONS.flatMap((l) => allTasks(l).map((t) => [l.id, t])).forEach(([id, t]) =>
+      assert.notStrictEqual(t.type, "match", `${id}: «${t.question}» is a pairs task — make it a sort, build or enter task`));
+  });
+
+  test("Sort and punctuation tasks are well-formed", () => {
     LESSONS.flatMap((l) => allTasks(l).map((t) => [l.id, t])).forEach(([id, t]) => {
       if (t.type === "sort") {
         assert.strictEqual(t.solution.length, t.items.length, `${id}: every word needs a group`);
         assert.ok(t.solution.every((b) => Number.isInteger(b) && b >= 0 && b < t.buckets.length), `${id}: a word goes to a missing group`);
         assert.ok(new Set(t.solution).size >= 2, `${id}: everything goes into one group`);
         if (t.tags) assert.strictEqual(t.tags.length, t.buckets.length, `${id}: tags and groups differ in number`);
-      }
-      if (t.type === "match") {
-        assert.strictEqual(t.left.length, t.right.length, `${id}: the columns differ in length`);
-        assert.deepStrictEqual([...t.solution].sort(), t.right.map((_, i) => i), `${id}: pairs are not one-to-one`);
       }
       if (t.type === "punct") {
         Object.keys(t.solution).forEach((k) => assert.ok(Number(k) >= 0 && Number(k) < t.tokens.length - 1, `${id}: a mark after the last word`));
@@ -308,9 +310,6 @@ describe("Lessons Dataset Validation", () => {
 
     const sticks = { type: "sticks", a: 3, b: 4, max: 10, solution: 6 };
     assert.ok(check(sticks, 6) && !check(sticks, 7));
-
-    const match = { type: "match", solution: [1, 2, 0] };
-    assert.ok(check(match, [1, 2, 0]) && !check(match, [2, 1, 0]));
 
     const table = { type: "table", k: 2, b: -1, xs: [-1, 0, 1, 2], solution: [-3, -1, 1, 3] };
     assert.ok(check(table, [-3, -1, 1, 3]));

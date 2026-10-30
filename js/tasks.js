@@ -1895,84 +1895,6 @@
     },
   };
 
-  /* ------------------------------------------------------------------ match
-   * Pairs: the first card on the left without a pair is already picked, so one tap on its pair on the
-   * right joins them and the next card is picked. A card can also be dragged onto its pair (either way);
-   * a tap on a left card picks it to change its pair. task: { left, right, solution: [right index per left] } */
-  const match = {
-    check: (t, v) => sameList(v, t.solution),
-    build(el, t) {
-      const box = document.createElement("div");
-      box.className = "match-board";
-      const leftOrder = shuffled(t.left.length);
-      const col = (order, list, side) => order
-        .map((i) => `<button type="button" class="match-btn" data-side="${side}" data-i="${i}">${list[i]}</button>`).join("");
-      box.innerHTML = `<div class="match-col">${col(leftOrder, t.left, "L")}</div><div class="match-col">${col(shuffled(t.right.length), t.right, "R")}</div>`;
-      el.appendChild(box);
-      const hint = document.createElement("p");
-      hint.className = "task-hint";
-      hint.textContent = t.hint || "Нажмите на пару для выделенной карточки — или перетащите карточку к её паре";
-      el.appendChild(hint);
-      let pairs = t.left.map(() => null), active = null;
-      const nextFree = () => leftOrder.find((i) => pairs[i] === null) ?? null;
-      const render = () => {
-        if (active === null) active = nextFree();
-        box.querySelectorAll(".match-btn").forEach((b) => {
-          const i = Number(b.dataset.i);
-          const pair = b.dataset.side === "L" ? (pairs[i] === null ? null : i) : pairs.indexOf(i);
-          b.dataset.pair = pair === null || pair < 0 ? "" : String(pair + 1);
-          b.classList.toggle("is-active", b.dataset.side === "L" && active === i && !box.classList.contains("is-done"));
-        });
-      };
-      const join = (L, R, node) => {
-        pairs = pairs.map((p) => (p === R ? null : p));
-        pairs[L] = R;
-        active = nextFree();
-        if (node) pop(node);
-        render();
-      };
-      box.addEventListener("click", (event) => {
-        const b = event.target.closest(".match-btn");
-        if (!b) return;
-        const i = Number(b.dataset.i);
-        if (b.dataset.side === "L") {
-          active = i;
-          render();
-        } else if (active !== null) join(active, i, b);
-      });
-      dragCards(box, ".match-btn",
-        (x, y, card) => nodeAt(box.querySelectorAll(`.match-btn[data-side="${card.dataset.side === "L" ? "R" : "L"}"]`), x, y, card),
-        (card, target) => {
-          if (!target) return;
-          const a = Number(card.dataset.i), b = Number(target.dataset.i);
-          card.dataset.side === "L" ? join(a, b, target) : join(b, a, target);
-        });
-      render();
-      const lock = lockable(el);
-      return {
-        value: () => (pairs.every((p) => p !== null) ? [...pairs] : null),
-        lock(on) {
-          box.classList.toggle("is-done", on);
-          render();
-          lock(on);
-        },
-        reveal() {
-          pairs = [...t.solution];
-          active = null;
-          render();
-          answerLine(el, t.reveal || "Верные пары отмечены одинаковыми цветами");
-        },
-        reset() {
-          pairs = t.left.map(() => null);
-          active = null;
-          box.classList.remove("is-done");
-          render();
-          lock(false);
-        },
-      };
-    },
-  };
-
   /* ------------------------------------------------------------------ table
    * Table of values for y = kx + b: tap the grid above each x to put its point; the table fills in.
    * task: { k, b, xs, solution: [y for each x] } */
@@ -2819,7 +2741,7 @@
 
   const TASK_TYPES = {
     scales, angle, numberline, plane, pick, level, "triangle-sum": triangleSum, line,
-    strips, rect: rectangle, enter, roll, order, signs, move, sticks, match, table, parabola, ray,
+    strips, rect: rectangle, enter, roll, order, signs, move, sticks, table, parabola, ray,
     words: wordsTask, punct, choice, sort, slices, place, gaps, build,
   };
 
