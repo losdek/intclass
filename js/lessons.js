@@ -16650,6 +16650,7 @@ function createCard(lesson) {
         <span class="lesson-subject">${SUBJECT_LABELS[lesson.subject] || lesson.subject}</span>
         <span class="lesson-grade-badge">${lesson.grade} класс</span>
         ${lesson.topic ? `<span class="lesson-topic-badge">${lesson.topic}</span>` : ""}
+        ${lesson.hard ? `<span class="lesson-hard" title="Тема сложнее школьного минимума: задачи в несколько шагов и ловушки">★ повышенный уровень</span>` : ""}
       </div>
       <h3>${lesson.title}</h3>
       <p class="lesson-desc-text">${lesson.description}</p>

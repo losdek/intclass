@@ -1626,6 +1626,13 @@ html:has(> body.home-page) {
   color: var(--accent-text);
 }
 
+.lesson-hard {
+  color: #c2410c;
+}
+:root[data-theme="dark"] .lesson-hard {
+  color: #fb923c;
+}
+
 /* the topic repeats the card title, so it is left out of the label row */
 .lesson-topic-badge {
   display: none;
