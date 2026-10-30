@@ -2317,6 +2317,8 @@
       const zones = document.createElement("div");
       zones.className = "sort-zones";
       zones.style.setProperty("--n", t.buckets.length);
+      // three or four groups do not fit in one row on a phone: they wrap two per row there
+      zones.classList.toggle("is-many", t.buckets.length > 2);
       const bodies = t.buckets.map((name, b) => {
         const z = document.createElement("div");
         z.className = `sort-zone b${b}`;
@@ -2425,7 +2427,7 @@
 
       const hint = document.createElement("p");
       hint.className = "task-hint";
-      hint.textContent = t.hint || "Перетащите каждое слово в нужную группу";
+      hint.textContent = t.hint || "Перетащите каждую карточку в нужную группу";
       el.appendChild(hint);
       const lock = lockable(el);
       return {

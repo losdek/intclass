@@ -2521,6 +2521,17 @@ html:has(> body.home-page) {
 .sort-zone.is-over, .sort-pool.is-over { border-style: solid; transform: scale(1.02); }
 .sort-zone.b0.is-over { background: var(--fig-teal-soft); }
 .sort-zone.b1.is-over { background: var(--fig-mustard-soft); }
+/* third and fourth groups: blue and ink, so red stays reserved for wrong answers */
+.sort-zone.b2 { border-color: var(--accent); }
+.sort-zone.b3 { border-color: var(--ink); }
+.sort-zone.b2 .sort-zone-head i { background: var(--accent); }
+.sort-zone.b3 .sort-zone-head i { background: var(--ink); color: var(--surface); }
+.sort-zone.b2.is-over { background: var(--accent-soft); }
+.sort-zone.b3.is-over { background: var(--surface-2, var(--accent-soft)); }
+@media (max-width: 560px) {
+  .sort-zones.is-many { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sort-zones.is-many .sort-zone { min-height: 104px; }
+}
 .sort-pool.is-over { border-color: var(--accent); background: var(--accent-soft); }
 
 .sort-chip {
@@ -2547,6 +2558,8 @@ html:has(> body.home-page) {
 .sort-zone-body .sort-chip { max-width: 100%; padding-inline: 0.55rem; font-size: 0.88rem; overflow-wrap: anywhere; }
 .sort-chip[data-b="0"] { border-color: var(--fig-teal); background: var(--fig-teal-soft); box-shadow: 0 2px 0 var(--fig-teal); }
 .sort-chip[data-b="1"] { border-color: var(--fig-mustard); background: var(--fig-mustard-soft); box-shadow: 0 2px 0 var(--fig-mustard); }
+.sort-chip[data-b="2"] { border-color: var(--accent); background: var(--accent-soft); box-shadow: 0 2px 0 var(--accent); }
+.sort-chip[data-b="3"] { border-color: var(--ink); box-shadow: 0 2px 0 var(--ink); }
 .sort-chip.is-dragging {
   z-index: 20;
   cursor: grabbing;
