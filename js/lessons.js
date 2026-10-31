@@ -1432,13 +1432,7 @@ const LESSONS = [
       "duration": "1:36",
       "pause": {
         "at": 15.52,
-        "question": "Почему в новостях написали 48 000?",
-        "options": [
-          "47 862 округлили до тысяч",
-          "журналист ошибся",
-          "пришли ещё зрители"
-        ],
-        "answer": 0
+        "question": "Почему в новостях написали 48 000?"
       }
     }
   },
@@ -1663,13 +1657,7 @@ const LESSONS = [
       "duration": "1:31",
       "pause": {
         "at": 11.66,
-        "question": "11 кусочков по 1/4 пиццы — это сколько пицц?",
-        "options": [
-          "2 3/4",
-          "3 1/4",
-          "2 1/2"
-        ],
-        "answer": 0
+        "question": "11 кусочков по 1/4 пиццы — это сколько пицц?"
       }
     }
   },
@@ -1906,13 +1894,7 @@ const LESSONS = [
       "duration": "1:33",
       "pause": {
         "at": 10.8,
-        "question": "Можно ли разделить 1 254 конфеты поровну на троих?",
-        "options": [
-          "да",
-          "нет",
-          "без деления не узнать"
-        ],
-        "answer": 0
+        "question": "Можно ли разделить 1 254 конфеты поровну на троих?"
       }
     }
   },
@@ -3970,13 +3952,7 @@ const LESSONS = [
       "duration": "1:31",
       "pause": {
         "at": 11.74,
-        "question": "Сколько пиццы съели вместе: 1/4 и 3/8?",
-        "options": [
-          "5/8",
-          "4/12",
-          "4/8"
-        ],
-        "answer": 0
+        "question": "Сколько пиццы съели вместе: 1/4 и 3/8?"
       }
     }
   },
@@ -4187,13 +4163,7 @@ const LESSONS = [
       "duration": "1:27",
       "pause": {
         "at": 10.84,
-        "question": "Было 3/4 л, выпили 1/3 л. Сколько сока осталось?",
-        "options": [
-          "5/12 л",
-          "2/1 л",
-          "1/2 л"
-        ],
-        "answer": 0
+        "question": "Было 3/4 л, выпили 1/3 л. Сколько сока осталось?"
       }
     }
   },
@@ -4415,13 +4385,7 @@ const LESSONS = [
       "duration": "1:25",
       "pause": {
         "at": 10.16,
-        "question": "Половина от 3/4 стакана сахара — это сколько?",
-        "options": [
-          "3/8 стакана",
-          "3/2 стакана",
-          "1/4 стакана"
-        ],
-        "answer": 0
+        "question": "Половина от 3/4 стакана сахара — это сколько?"
       }
     }
   },
@@ -4628,13 +4592,7 @@ const LESSONS = [
       "duration": "1:15",
       "pause": {
         "at": 9.2,
-        "question": "Сколько стаканов по 1/4 л нальём из 3 литров?",
-        "options": [
-          "12",
-          "7",
-          "3/4"
-        ],
-        "answer": 0
+        "question": "Сколько стаканов по 1/4 л нальём из 3 литров?"
       }
     }
   },
@@ -4821,13 +4779,7 @@ const LESSONS = [
       "duration": "1:29",
       "pause": {
         "at": 17.58,
-        "question": "Сколько километров пробежит собака?",
-        "options": [
-          "20 км",
-          "18 км",
-          "10 км"
-        ],
-        "answer": 0
+        "question": "Сколько километров пробежит собака?"
       }
     }
   },
@@ -6349,13 +6301,7 @@ const LESSONS = [
       "duration": "1:42",
       "pause": {
         "at": 11.56,
-        "question": "37 · 18 + 37 · 82 = ?",
-        "options": [
-          "3 700",
-          "3 600",
-          "3 800"
-        ],
-        "answer": 0
+        "question": "37 · 18 + 37 · 82 = ?"
       }
     }
   },
@@ -6537,13 +6483,7 @@ const LESSONS = [
       "duration": "1:33",
       "pause": {
         "at": 14.42,
-        "question": "Углы 65° и 115° с одной стороны дороги. Рельсы параллельны?",
-        "options": [
-          "да, 65° + 115° = 180°",
-          "нет, углы разные",
-          "по углам не узнать"
-        ],
-        "answer": 0
+        "question": "Углы 65° и 115° с одной стороны дороги. Рельсы параллельны?"
       }
     }
   },
@@ -6772,13 +6712,7 @@ const LESSONS = [
       "duration": "1:43",
       "pause": {
         "at": 10.84,
-        "question": "10 голов и 28 ног. Сколько кроликов?",
-        "options": [
-          "4",
-          "6",
-          "5"
-        ],
-        "answer": 0
+        "question": "10 голов и 28 ног. Сколько кроликов?"
       }
     }
   },
@@ -7385,13 +7319,7 @@ const LESSONS = [
       "duration": "1:57",
       "pause": {
         "at": 9.28,
-        "question": "Сколько будет 51 · 49? Посчитайте в уме.",
-        "options": [
-          "2 499",
-          "2 501",
-          "2 599"
-        ],
-        "answer": 0
+        "question": "Сколько будет 51 · 49? Посчитайте в уме."
       }
     }
   },
@@ -7609,13 +7537,7 @@ const LESSONS = [
       "duration": "1:38",
       "pause": {
         "at": 10.5,
-        "question": "Завтра температура будет отличаться от 3° на 5°. Какой она будет?",
-        "options": [
-          "8° или −2°",
-          "только 8°",
-          "8° или −8°"
-        ],
-        "answer": 0
+        "question": "Завтра температура будет отличаться от 3° на 5°. Какой она будет?"
       }
     }
   },
@@ -8866,13 +8788,7 @@ const LESSONS = [
       "duration": "1:32",
       "pause": {
         "at": 13.78,
-        "question": "Прямоугольник 6 × 4 и параллелограмм с основанием 6 и высотой 4. Где земли больше?",
-        "options": [
-          "поровну",
-          "у прямоугольника",
-          "у параллелограмма"
-        ],
-        "answer": 0
+        "question": "Прямоугольник 6 × 4 и параллелограмм с основанием 6 и высотой 4. Где земли больше?"
       }
     }
   },
@@ -9123,13 +9039,7 @@ const LESSONS = [
       "duration": "1:28",
       "pause": {
         "at": 14.05,
-        "question": "Как рулеткой проверить, что углы рамы прямые?",
-        "options": [
-          "сравнить диагонали",
-          "ещё раз измерить стороны",
-          "никак, нужен угольник"
-        ],
-        "answer": 0
+        "question": "Как рулеткой проверить, что углы рамы прямые?"
       }
     }
   },
@@ -9366,13 +9276,7 @@ const LESSONS = [
       "duration": "1:27",
       "pause": {
         "at": 9.34,
-        "question": "Как узнать высоту дерева, не залезая на него?",
-        "options": [
-          "измерить расстояние и угол",
-          "только залезть",
-          "сосчитать ветки"
-        ],
-        "answer": 0
+        "question": "Как узнать высоту дерева, не залезая на него?"
       }
     }
   },
@@ -9526,13 +9430,7 @@ const LESSONS = [
       "duration": "1:20",
       "pause": {
         "at": 13.21,
-        "question": "Из центра ворота видны под углом 100°. А с края площадки?",
-        "options": [
-          "50°",
-          "100°",
-          "200°"
-        ],
-        "answer": 0
+        "question": "Из центра ворота видны под углом 100°. А с края площадки?"
       }
     }
   },
@@ -10085,13 +9983,7 @@ const LESSONS = [
       "duration": "2:01",
       "pause": {
         "at": 19.29,
-        "question": "Ученик получил корни 2 и −2. Сколько корней у уравнения x²/(x − 2) = 4/(x − 2)?",
-        "options": [
-          "один: −2",
-          "два: 2 и −2",
-          "ни одного"
-        ],
-        "answer": 0
+        "question": "Ученик получил корни 2 и −2. Сколько корней у уравнения x²/(x − 2) = 4/(x − 2)?"
       }
     }
   },
@@ -10286,13 +10178,7 @@ const LESSONS = [
       "duration": "1:53",
       "pause": {
         "at": 13.79,
-        "question": "24 км по течению и обратно за 5 ч, течение 2 км/ч. Какова собственная скорость катера?",
-        "options": [
-          "10 км/ч",
-          "9,6 км/ч",
-          "12 км/ч"
-        ],
-        "answer": 0
+        "question": "24 км по течению и обратно за 5 ч, течение 2 км/ч. Какова собственная скорость катера?"
       }
     }
   },
@@ -19453,13 +19339,7 @@ const LESSONS = [
       "duration": "1:39",
       "pause": {
         "at": 13.59,
-        "question": "Почему в «раненный в бою боец» две Н?",
-        "options": [
-          "Есть зависимое слово «в бою»",
-          "Это слово-исключение",
-          "Во всех причастиях на -ен- две Н"
-        ],
-        "answer": 0
+        "question": "Почему в «раненный в бою боец» две Н?"
       }
     }
   },
@@ -19889,13 +19769,7 @@ const LESSONS = [
       "duration": "1:41",
       "pause": {
         "at": 14.18,
-        "question": "Какая буква в «стро_щийся дом»?",
-        "options": [
-          "я — строить, II спряжение",
-          "ю — как в «тающий»",
-          "у — как в «колышущийся»"
-        ],
-        "answer": 0
+        "question": "Какая буква в «стро_щийся дом»?"
       }
     }
   },
@@ -22194,13 +22068,7 @@ const LESSONS = [
       "duration": "1:46",
       "pause": {
         "at": 17.8,
-        "question": "Почему запятые есть не во всех трёх предложениях?",
-        "options": [
-          "Оборот перед существительным не выделяют, а при личном местоимении «он» — выделяют всегда",
-          "Запятые ставят только вокруг одного слова",
-          "Оборот выделяют, только если он стоит в начале предложения"
-        ],
-        "answer": 0
+        "question": "Почему запятые есть не во всех трёх предложениях?"
       }
     }
   },
@@ -22457,13 +22325,7 @@ const LESSONS = [
       "duration": "1:44",
       "pause": {
         "at": 14.31,
-        "question": "Почему «внизу под горой» выделяют запятыми, а «вечером в парке» — нет?",
-        "options": [
-          "«Под горой» уточняет «внизу», а «вечером» и «в парке» отвечают на разные вопросы",
-          "Обстоятельства времени никогда не выделяют запятыми",
-          "Запятые ставят только после первого слова предложения"
-        ],
-        "answer": 0
+        "question": "Почему «внизу под горой» выделяют запятыми, а «вечером в парке» — нет?"
       }
     }
   },
@@ -24425,6 +24287,122 @@ function renderLessons() {
   updateUrl();
 }
 
+// speed and the spot each lesson was left at: per-device conveniences, fine to lose
+const VIDEO_SPEEDS = [0.75, 1, 1.25, 1.5, 2];
+const SPEED_KEY = "intclass_video_speed";
+const SPOT_KEY = "intclass_video_spot";
+const readLocal = (key, fallback) => {
+  try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch (e) { return fallback; }
+};
+const writeLocal = (key, value) => {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) { /* private mode: not remembered */ }
+};
+const clock = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+let activeVideo = null; // the lesson video the keys control
+
+/**
+ * The bar under a lesson video: −10 s / +10 s, speed (remembered for all videos), and «С начала» when
+ * the lesson picks up where the pupil left it last time.
+ */
+function playerBar(media, video, lessonId) {
+  const bar = document.createElement("div");
+  bar.className = "vbar";
+  bar.innerHTML = `
+    <div class="vbar-skips">
+      <button type="button" class="vbar-btn" data-skip="-10" aria-label="Назад на 10 секунд" title="Назад на 10 с (J)">−10 с</button>
+      <button type="button" class="vbar-btn" data-skip="10" aria-label="Вперёд на 10 секунд" title="Вперёд на 10 с (L)">+10 с</button>
+    </div>
+    <div class="vbar-speeds" role="radiogroup" aria-label="Скорость видео">${VIDEO_SPEEDS
+      .map((s) => `<button type="button" class="vbar-speed" role="radio" data-speed="${s}">${String(s).replace(".", ",")}×</button>`).join("")}</div>`;
+  media.after(bar);
+  const setSpeed = (s) => {
+    video.defaultPlaybackRate = s;
+    video.playbackRate = s;
+    bar.querySelectorAll(".vbar-speed").forEach((b) => {
+      const on = Number(b.dataset.speed) === s;
+      b.classList.toggle("is-on", on);
+      b.setAttribute("aria-checked", String(on));
+    });
+  };
+  const saved = readLocal(SPEED_KEY, 1);
+  setSpeed(VIDEO_SPEEDS.includes(saved) ? saved : 1);
+  // a new source resets the rate in some browsers
+  video.addEventListener("loadedmetadata", () => setSpeed(VIDEO_SPEEDS.includes(readLocal(SPEED_KEY, 1)) ? readLocal(SPEED_KEY, 1) : 1));
+  bar.addEventListener("click", (event) => {
+    const b = event.target.closest("button");
+    if (!b) return;
+    if (b.dataset.skip) skipVideo(video, Number(b.dataset.skip));
+    else if (b.dataset.speed) {
+      setSpeed(Number(b.dataset.speed));
+      writeLocal(SPEED_KEY, Number(b.dataset.speed));
+    } else if (b.classList.contains("vbar-restart")) {
+      video.currentTime = 0;
+      b.remove();
+    }
+  });
+  bar.speed = (step) => {
+    const i = VIDEO_SPEEDS.indexOf(video.playbackRate);
+    const s = VIDEO_SPEEDS[Math.max(0, Math.min(VIDEO_SPEEDS.length - 1, (i < 0 ? 1 : i) + step))];
+    setSpeed(s);
+    writeLocal(SPEED_KEY, s);
+  };
+
+  // pick up where the lesson was left, unless that was the very start or the very end
+  if (!lessonId) return;
+  const spot = readLocal(SPOT_KEY, {})[lessonId];
+  if (spot > 5) {
+    video.addEventListener("loadedmetadata", () => {
+      if (spot >= video.duration - 8) return;
+      video.currentTime = spot;
+      const again = document.createElement("button");
+      again.type = "button";
+      again.className = "vbar-btn vbar-restart";
+      again.textContent = `Продолжаем с ${clock(spot)} · с начала ↺`;
+      bar.prepend(again);
+    }, { once: true });
+  }
+  let lastSave = 0;
+  video.addEventListener("timeupdate", () => {
+    if (Math.abs(video.currentTime - lastSave) < 3) return;
+    lastSave = video.currentTime;
+    writeLocal(SPOT_KEY, { ...readLocal(SPOT_KEY, {}), [lessonId]: Math.round(video.currentTime) });
+  });
+  video.addEventListener("ended", () => {
+    const spots = readLocal(SPOT_KEY, {});
+    delete spots[lessonId];
+    writeLocal(SPOT_KEY, spots);
+  });
+}
+
+function skipVideo(video, seconds) {
+  video.currentTime = Math.max(0, Math.min((video.duration || 0) - 0.3, video.currentTime + seconds));
+}
+
+// Keys for the lesson video in play: space / K — pause, ← → — 5 s, J / L — 10 s, < > — speed.
+// They stay out of the way of fields, tasks, open dialogs and the player's own focused controls.
+document.addEventListener("keydown", (event) => {
+  const video = activeVideo;
+  if (!video || !video.isConnected || event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey) return;
+  const t = event.target;
+  if (t === video || t.closest?.("input, textarea, select, [contenteditable], .task, .modal-backdrop:not([hidden])")) return;
+  if (document.body.classList.contains("modal-open")) return;
+  const onButton = Boolean(t.closest?.("button, a, [role='button']"));
+  const bar = video.closest(".lesson-media")?.nextElementSibling;
+  let handled = true;
+  switch (event.code) {
+    case "Space": if (onButton) return; // fallthrough
+    case "KeyK": video.paused ? video.play()?.catch(() => {}) : video.pause(); break;
+    case "ArrowLeft": skipVideo(video, -5); break;
+    case "ArrowRight": skipVideo(video, 5); break;
+    case "KeyJ": skipVideo(video, -10); break;
+    case "KeyL": skipVideo(video, 10); break;
+    case "Comma": bar?.speed?.(-1); break;
+    case "Period": bar?.speed?.(1); break;
+    default: handled = false;
+  }
+  if (handled) event.preventDefault();
+});
+
 /**
  * Video player: native <video> for self-hosted lessons, YouTube embed for legacy ids
  */
@@ -24451,15 +24429,16 @@ function playVideo(media) {
       document.querySelectorAll(".lesson-media video").forEach((other) => {
         if (other !== video) other.pause();
       });
+      activeVideo = video;
     });
+    const lessonId = card?.querySelector(".quiz-unlock-btn")?.dataset.unlock;
     video.addEventListener("ended", () => {
-      const lessonId = card?.querySelector(".quiz-unlock-btn")?.dataset.unlock;
       window.IntStats?.track("video_end", lessonId);
       if (lessonId) openQuizAfterVideo(lessonId);
     });
-    const lessonId = card?.querySelector(".quiz-unlock-btn")?.dataset.unlock;
-    const stop = LESSONS.find((l) => l.id === lessonId)?.video?.pause;
-    if (stop) videoStop(media, video, stop);
+    playerBar(media, video, lessonId);
+    const lesson = LESSONS.find((l) => l.id === lessonId);
+    if (lesson?.video?.pause) videoStop(media, video, lesson.video.pause, lesson);
     video.play()?.catch(() => {});
   } else {
     media.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&enablejsapi=1&rel=0&origin=${encodeURIComponent(location.origin)}" title="Видеоурок YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
@@ -24475,13 +24454,15 @@ function playVideo(media) {
 }
 
 /**
- * Pause on the puzzle: the video stops once, right after its opening puzzle is asked, and offers three
- * answers to guess from. «Смотреть решение» plays on; seeking past the moment (or pressing play) skips it.
- * lesson.video.pause = { at: seconds, question, options: [...], answer: index }
+ * Pause on the puzzle: the video stops once, right after its opening puzzle is asked, and the pupil
+ * solves it by hand first — the lesson's first task, the same puzzle as in the video with other numbers.
+ * «Проверить» grades it (a nudge after the first miss, the answer after the second); «Смотреть решение»
+ * plays on. Seeking past the moment (or pressing play) skips it. lesson.video.pause = { at: seconds, question }
  */
-function videoStop(media, video, stop) {
+function videoStop(media, video, stop, lesson) {
   let done = false;
   let last = 0;
+  let jumped = false;
   let panel = null;
   const close = () => {
     if (!panel) return;
@@ -24490,10 +24471,13 @@ function videoStop(media, video, stop) {
     p.classList.add("is-out");
     setTimeout(() => p.remove(), motionOn() ? 220 : 0);
   };
+  // a seek (the timeline, −10/+10 s, the keys) is a jump, whatever the speed of playback
+  video.addEventListener("seeking", () => { jumped = true; });
   video.addEventListener("timeupdate", () => {
     const t = video.currentTime;
     // only when playback runs into the moment, not when the viewer jumps over it
-    const crossed = !done && last < stop.at && t >= stop.at && t - last < 1.5;
+    const crossed = !done && !jumped && last < stop.at && t >= stop.at;
+    jumped = false;
     last = t;
     if (!crossed) return;
     done = true;
@@ -24505,43 +24489,75 @@ function videoStop(media, video, stop) {
   video.addEventListener("play", close);
 
   function show() {
+    const list = variantsOf(lesson.quiz[0]);
+    const k = Math.floor(Math.random() * list.length);
+    const task = list[k].gen && window.IntGen ? window.IntGen.make(list[k]) : list[k];
+    const hands = Boolean(task.type && window.IntTasks);
     panel = document.createElement("div");
     panel.className = "vstop";
     panel.setAttribute("role", "group");
     panel.setAttribute("aria-label", "Задачка из видео");
     panel.innerHTML = `
-      <p class="vstop-label"><span class="vstop-icon" aria-hidden="true"></span>Пауза — попробуйте ответить сами</p>
+      <p class="vstop-label"><span class="vstop-icon" aria-hidden="true"></span>Пауза — решите сами, потом посмотрите решение</p>
       <p class="vstop-q"></p>
-      <div class="vstop-opts"></div>
+      ${hands ? `<p class="vstop-ask"></p><div class="task task-${task.type}" data-task="${task.type}"></div>` : ""}
       <p class="vstop-msg" aria-live="polite" hidden></p>
-      <button class="btn vstop-go" type="button">Пропустить и смотреть ▶</button>`;
-    panel.querySelector(".vstop-q").textContent = stop.question;
-    const opts = panel.querySelector(".vstop-opts");
+      <div class="vstop-actions">
+        ${hands ? `<button class="btn vstop-check" type="button">Проверить</button>` : ""}
+        <button class="btn ${hands ? "btn-ghost " : ""}vstop-go" type="button">${hands ? "Пропустить" : "Смотреть решение"} ▶</button>
+      </div>`;
+    panel.querySelector(".vstop-q").textContent = `В видео: ${stop.question}`;
     const msg = panel.querySelector(".vstop-msg");
     const go = panel.querySelector(".vstop-go");
-    shuffledIndices(stop.options.length).forEach((i) => {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.className = "vstop-opt";
-      b.textContent = stop.options[i];
-      b.addEventListener("click", () => {
-        const right = i === stop.answer;
-        opts.querySelectorAll("button").forEach((x) => { x.disabled = true; });
-        b.classList.add(right ? "is-right" : "is-wrong");
-        opts.children[[...opts.children].findIndex((x) => x.textContent === stop.options[stop.answer])]?.classList.add("is-right");
-        msg.hidden = false;
-        msg.className = `vstop-msg ${right ? "is-right" : "is-wrong"}`;
-        msg.textContent = right ? "Верно! Теперь посмотрим, как это решить." : `Не совсем: ответ — ${stop.options[stop.answer]}. Сейчас разберёмся почему.`;
+    const say = (kind, html) => {
+      msg.hidden = false;
+      msg.className = `vstop-msg is-${kind}`;
+      msg.innerHTML = html;
+    };
+    if (hands) {
+      panel.querySelector(".vstop-ask").textContent = task.question;
+      const box = panel.querySelector(".task");
+      const ctl = window.IntTasks.mount(box, task);
+      if (!box.querySelector(".task-hint")) {
+        const how = document.createElement("p");
+        how.className = "task-hint";
+        how.textContent = task.hint || HOW_TO[task.type] || "Выполните задание на рисунке";
+        box.prepend(how);
+      }
+      // the quiz after the video starts this puzzle with other numbers
+      if (list.length > 1) quizDialog.avoid(lesson.id, 0, k);
+      const check = panel.querySelector(".vstop-check");
+      let missed = false;
+      check.addEventListener("click", () => {
+        const v = ctl.value();
+        if (v === null) return say("info", "Сначала выполните задание на рисунке.");
+        const ok = window.IntTasks.check(task, v);
+        if (!ok && !missed) {
+          missed = true;
+          box.classList.remove("is-shake");
+          void box.offsetWidth;
+          box.classList.add("is-shake");
+          const nudge = task.tryHint || firstSentence(lesson.takeaway);
+          check.textContent = "Проверить ещё раз";
+          return say("info", `<strong>Почти!</strong> ${escapeHtml(nudge || "Подумайте ещё раз.")}`);
+        }
+        if (ok) ctl.celebrate?.();
+        else ctl.reveal();
+        ctl.lock(true);
+        say(ok ? "right" : "wrong", `<strong>${ok ? (missed ? "Верно со второй попытки!" : "Верно!") : "Ответ — на рисунке."}</strong> ${escapeHtml(task.explanation)} Теперь посмотрим, как это объясняют в видео.`);
+        check.remove();
         go.textContent = "Смотреть решение ▶";
+        go.classList.remove("btn-ghost");
         go.focus();
       });
-      opts.appendChild(b);
-    });
+    }
     go.addEventListener("click", () => {
       close();
       video.play()?.catch(() => {});
     });
-    media.after(panel);
+    // under the speed bar when there is one
+    const bar = media.nextElementSibling?.classList.contains("vbar") ? media.nextElementSibling : media;
+    bar.after(panel);
     panel.scrollIntoView({ block: "nearest", behavior: motionOn() ? "smooth" : "auto" });
   }
 }
@@ -24854,6 +24870,12 @@ const quizDialog = (() => {
     try { localStorage.setItem(DRAW_KEY, JSON.stringify(lastDraw)); } catch (e) { /* private mode: only this visit rotates */ }
   }
 
+  // the video's pause already showed variant k of this slot: the quiz after the video draws another one
+  function avoid(lessonId, slot, k) {
+    lastDraw[`${lessonId}:${slot}`] = k;
+    rememberDraw();
+  }
+
   function start() {
     questions = draw();
     window.IntStats?.track("quiz_start", lesson.id);
@@ -24905,7 +24927,7 @@ const quizDialog = (() => {
     if (event.key === "Escape" && !root.hidden) close();
   });
 
-  return { open, close };
+  return { open, close, avoid };
 })();
 
 function motionOn() {

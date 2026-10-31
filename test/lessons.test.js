@@ -76,14 +76,15 @@ describe("Lessons Dataset Validation", () => {
     assert.strictEqual(new Set(srcs).size, srcs.length, "The same video is attached to two lessons");
   });
 
-  test("A pause on the puzzle stops inside the video and has one right option", () => {
+  test("A pause on the puzzle stops inside the video and hands the pupil the puzzle to solve", () => {
     LESSONS.filter((l) => l.video && l.video.pause).forEach((lesson) => {
-      const { at, question, options, answer } = lesson.video.pause;
+      const { at, question, options } = lesson.video.pause;
       const [m, sec] = lesson.video.duration.split(":").map(Number);
       assert.ok(at > 2 && at < m * 60 + sec - 5, `${lesson.id}: pause time ${at} is outside the video`);
       assert.ok(question && question.length > 5, `${lesson.id}: pause has no question`);
-      assert.ok(options.length >= 2 && new Set(options).size === options.length, `${lesson.id}: pause options repeat`);
-      assert.ok(Number.isInteger(answer) && answer >= 0 && answer < options.length, `${lesson.id}: bad pause answer`);
+      assert.strictEqual(options, undefined, `${lesson.id}: the pause shows a hands-on task, not options to guess from`);
+      // the pause mounts a variant of the first quiz slot: the video's puzzle with other numbers
+      assert.ok(variantsOf(lesson.quiz[0]).every((t) => t.type || t.gen), `${lesson.id}: the first task is not hands-on`);
     });
   });
 

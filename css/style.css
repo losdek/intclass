@@ -4237,29 +4237,47 @@ html:has(> body.home-page) {
 }
 .vstop-icon { width: 0.7rem; height: 0.8rem; border-left: 0.22rem solid currentColor; border-right: 0.22rem solid currentColor; }
 .vstop-q { margin: 0; font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; line-height: 1.3; color: var(--ink); }
-.vstop-opts { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-.vstop-opt {
-  flex: 1 1 8rem;
-  min-height: 46px;
-  padding: 0.55rem 0.9rem;
-  border: 1.5px solid var(--border-strong);
-  border-radius: var(--radius);
+.vstop-ask { margin: 0; font-weight: 600; line-height: 1.45; color: var(--ink); }
+.vstop .task { padding: 0.75rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+.vstop .task.is-shake { animation: q-shake 420ms ease; }
+.vstop-msg { margin: 0; font-weight: 600; line-height: 1.45; }
+.vstop-msg.is-right { color: var(--success); }
+.vstop-msg.is-wrong { color: var(--danger); }
+.vstop-msg.is-info { color: var(--ink); }
+.vstop-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+/* under a lesson video: −10 / +10 s and the speed */
+.vbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--border);
   background: var(--surface);
+}
+.vbar-skips, .vbar-speeds { display: flex; gap: 0.3rem; }
+.vbar-btn, .vbar-speed {
+  min-height: 36px;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: transparent;
   color: var(--ink);
   font: inherit;
+  font-size: 0.82rem;
   font-weight: 700;
   cursor: pointer;
   transition: border-color var(--fast) var(--ease), background var(--fast) var(--ease), transform var(--fast) var(--ease);
 }
-.vstop-opt:hover:not(:disabled) { border-color: var(--accent); }
-.vstop-opt:active:not(:disabled) { transform: scale(0.97); }
-.vstop-opt:disabled { cursor: default; opacity: 0.6; }
-.vstop-opt.is-right { opacity: 1; border-color: var(--success); background: var(--success-soft); color: var(--success); }
-.vstop-opt.is-wrong { opacity: 1; border-color: var(--danger); background: var(--danger-soft); color: var(--danger); }
-.vstop-msg { margin: 0; font-weight: 600; }
-.vstop-msg.is-right { color: var(--success); }
-.vstop-msg.is-wrong { color: var(--danger); }
-.vstop-go { justify-self: start; }
+.vbar-btn:hover, .vbar-speed:hover { border-color: var(--accent); }
+.vbar-btn:active, .vbar-speed:active { transform: scale(0.95); }
+.vbar-speed.is-on { border-color: var(--accent); background: var(--accent); color: #ffffff; }
+.vbar-restart { flex-basis: 100%; border-style: dashed; color: var(--accent-text); }
+@media (max-width: 420px) {
+  .vbar-speed { padding-inline: 0.45rem; }
+}
 @media (prefers-reduced-motion: reduce) { .vstop, .vstop.is-out { animation: none; } }
 
 /* ===================================================================
