@@ -1,0 +1,7 @@
+# downloads and outputs: rebuilt by the scripts
+node_modules/
+.venv/
+cache/
+out/
+*.wav
+*.mp3
