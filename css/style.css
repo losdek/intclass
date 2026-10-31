@@ -2074,6 +2074,11 @@ html:has(> body.home-page) {
   pointer-events: none;
 }
 
+/* a line whose point slides: horizontal moves drag the point, vertical swipes still scroll the page */
+.is-slidable { touch-action: pan-y; cursor: grab; }
+.is-slidable:active { cursor: grabbing; }
+.is-slidable:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; border-radius: 12px; }
+
 .task.is-locked .task-controls {
   opacity: 0.6;
 }

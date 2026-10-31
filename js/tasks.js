@@ -224,9 +224,14 @@
   }
 
   // Taps anywhere on the figure set the value; dragging starts only on the handle,
-  // so a finger that scrolls the page over the figure never changes the answer
-  function drag(target, svgEl, onPoint) {
-    svgEl.addEventListener("click", (event) => onPoint(pointer(svgEl, event)));
+  // so a finger that scrolls the page over the figure never changes the answer.
+  // { anywhere: true } — for a horizontal line: a press anywhere on the figure grabs the point and slides it;
+  // the figure keeps vertical swipes for scrolling the page (touch-action: pan-y).
+  function drag(target, svgEl, onPoint, opts) {
+    if (opts?.anywhere) {
+      target = svgEl;
+      svgEl.classList.add("is-slidable");
+    } else svgEl.addEventListener("click", (event) => onPoint(pointer(svgEl, event)));
     target.addEventListener("pointerdown", (event) => {
       if (event.button !== 0) return;
       target.setPointerCapture?.(event.pointerId);
@@ -2564,16 +2569,34 @@
       const handle = svg("circle", { cx: 0, cy: Y, r: 22, class: "f-place-hit" }, marker);
       let value = null;
       const steps = Math.round((t.max - t.min) / t.step);
-      const set = (p) => {
-        const k = clamp(Math.round(((p.x - X0) / (X1 - X0)) * steps), 0, steps);
+      const show = (k) => {
         value = t.min + k * t.step;
         marker.setAttribute("visibility", "visible");
         marker.setAttribute("transform", `translate(${at(value)} 0)`);
+        fig.setAttribute("aria-valuenow", String(value));
+        fig.setAttribute("aria-valuetext", num(Math.round(value * 1e6) / 1e6));
       };
-      drag(handle, fig, set);
+      const set = (p) => show(clamp(Math.round(((p.x - X0) / (X1 - X0)) * steps), 0, steps));
+      // a press anywhere on the line grabs the point, and it slides with the finger or mouse
+      drag(handle, fig, set, { anywhere: true });
+      // and from the keyboard: the line is a slider, ← → move the point one step
+      fig.setAttribute("tabindex", "0");
+      fig.setAttribute("role", "slider");
+      fig.setAttribute("aria-valuemin", String(t.min));
+      fig.setAttribute("aria-valuemax", String(t.max));
+      fig.addEventListener("keydown", (event) => {
+        if (el.classList.contains("is-locked")) return;
+        const k = value === null ? null : Math.round((value - t.min) / t.step);
+        const next = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1 }[event.key];
+        if (next !== undefined) show(clamp(k === null ? (next > 0 ? 0 : steps) : k + next, 0, steps));
+        else if (event.key === "Home") show(0);
+        else if (event.key === "End") show(steps);
+        else return;
+        event.preventDefault();
+      });
       const hint = document.createElement("p");
       hint.className = "task-hint";
-      hint.textContent = t.hint || "Нажмите на прямую или перетащите точку";
+      hint.textContent = t.hint || "Нажмите на прямую и ведите точку пальцем или мышью";
       el.appendChild(hint);
       const lock = lockable(el);
       return {
