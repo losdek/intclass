@@ -24,6 +24,8 @@ fs.copyFileSync(path.join(outDir, "voice.wav"), path.join(publicDir, "audio", `$
 
 const inputProps = { spec, timings: timings.scenes, audio: `audio/${id}.wav` };
 const serveUrl = await bundle({ entryPoint: path.join(here, "src", "index.ts"), publicDir });
+// the bundle copies every voice file (~0.5 GB): delete it afterwards, or batches fill /tmp
+try {
 const composition = await selectComposition({ serveUrl, id: "Lesson", inputProps });
 
 await renderMedia({
@@ -48,3 +50,6 @@ await renderStill({
 });
 const mb = (fs.statSync(path.join(outDir, "video.mp4")).size / 1e6).toFixed(1);
 console.log(`\n${id}: video.mp4 ${mb} MB, ${(composition.durationInFrames / composition.fps).toFixed(1)} s`);
+} finally {
+  fs.rmSync(serveUrl, { recursive: true, force: true });
+}

@@ -10,12 +10,15 @@ import { fileURLToPath } from "node:url";
 
 const studio = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(studio, "..");
-const python = path.join(studio, ".venv", "Scripts", "python.exe");
+// Windows uses studio/.venv; Linux/macOS get their own venv so the two can share one checkout
+const python = process.platform === "win32"
+  ? path.join(studio, ".venv", "Scripts", "python.exe")
+  : path.join(studio, ".venv-posix", "bin", "python");
 const TAIL = 1.2; // keep in sync with remotion/src/theme.ts
 const force = process.argv.includes("--force");
 const ids = process.argv.slice(2).filter((a) => !a.startsWith("--"));
 const newer = (a, b) => fs.existsSync(a) && fs.existsSync(b) && fs.statSync(a).mtimeMs > fs.statSync(b).mtimeMs;
-const clock = (s) => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, "0")}`;
+const clock = (s) => { const t = Math.round(s); return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, "0")}`; };
 
 const lessonsFile = path.join(root, "js", "lessons.js");
 

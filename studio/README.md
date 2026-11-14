@@ -42,4 +42,12 @@ node studio/remotion/render.mjs math-5-13                               # out/<i
 - Node.js 18+ → `cd studio/remotion && npm install` (при первом рендере Remotion скачает Chrome Headless Shell).
 - Python 3.12 → `python -m venv studio/.venv` и `studio/.venv/Scripts/pip install torch --index-url https://download.pytorch.org/whl/cpu num2words numpy omegaconf`. Модель Silero скачается в `studio/cache/` при первом запуске.
 
-`out/`, `cache/`, `.venv/`, `node_modules/` и звук в git не попадают.
+## Установка на Linux (рядом с Windows в той же папке)
+
+`build.mjs` на Linux/macOS берёт Python из `studio/.venv-posix/`, так что Windows-окружение `studio/.venv/` не мешает.
+
+- `python3 -m venv studio/.venv-posix` и `studio/.venv-posix/bin/pip install torch --index-url https://download.pytorch.org/whl/cpu`, потом `num2words numpy omegaconf`.
+- Если `node_modules` установлен с Windows, не переустанавливайте его, а доложите Linux-бинарники той же версии:
+  `npm pack @remotion/compositor-linux-x64-gnu@<версия @remotion/renderer>` и `npm pack @esbuild/linux-x64@<версия esbuild>`; каждый архив распакуйте с `--strip-components=1` в `node_modules/@remotion/compositor-linux-x64-gnu/` и в `node_modules/@esbuild/linux-x64/`.
+
+`out/`, `cache/`, `.venv/`, `.venv-posix/`, `node_modules/` и звук в git не попадают.
